@@ -1,0 +1,3 @@
+# NOT a proper requirements file, just for reference
+neo4j
+python-dotenv

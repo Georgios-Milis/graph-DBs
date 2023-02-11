@@ -1,6 +1,7 @@
 import os
-from neo4j import GraphDatabase
+import time
 import logging
+from neo4j import GraphDatabase
 from neo4j.exceptions import ServiceUnavailable
 from dotenv import load_dotenv
 
@@ -12,10 +13,7 @@ def parse_mtx(path):
     """
     with open(path, "r", encoding="utf-8") as f:
         data = f.readlines()
-        N = int(data[1].split()[0])
-        K = int(data[1].split()[2])
-        print(f"Found {N} people with {K} friendships.")
-
+ 
         people = []
         friendships = []
         # Read adjacency data from each line
@@ -93,8 +91,7 @@ class Connection:
     def find_person(self, person_id):
         with self.driver.session(database="neo4j") as session:
             result = session.execute_read(self._find_and_return_person, person_id)
-            for row in result:
-                print(f"Found person: {row}")
+            return result
 
     @staticmethod
     def _find_and_return_person(tx, person_id):
@@ -122,10 +119,8 @@ if __name__ == "__main__":
     # Parse dataset
     people, friendships = parse_mtx(os.path.join(path, 'data', 'socfb-Haverford76.mtx'))
 
-    print(len(people), len(friendships))
-
     # CREATE
-
+    start_time = time.time()
     # It is commented out because it takes a long time to run!
     # for person in people:
     #     connection.create_person(person)
@@ -135,7 +130,13 @@ if __name__ == "__main__":
     #     connection.create_friendship(p1, p2)
 
     # Test query
-    connection.find_person("42")
+    result = connection.find_person("42")
+
+    duration = time.time() - start_time
+
+    # Print so that subprocess.check_output gets the result
+    print(duration)
+
 
     # Close
     connection.close()

@@ -5,6 +5,9 @@ from neo4j import GraphDatabase
 from neo4j.exceptions import ServiceUnavailable
 from dotenv import load_dotenv
 
+import read_queries
+import delete_queries
+
 
 def parse_mtx(path):
     """
@@ -56,6 +59,14 @@ class Connection:
         except ServiceUnavailable as exception:
             logging.error(f"{query} raised an error: \n {exception}")
             raise
+
+    neighbours = read_queries.neigbours
+
+    delete_person = delete_queries.delete_person
+    delete_relationship = delete_queries.delete_relationship
+
+    
+ 
 
     def create_friendship(self, person1_id, person2_id):
         with self.driver.session(database="neo4j") as session:
@@ -119,6 +130,9 @@ if __name__ == "__main__":
     # Parse dataset
     people, friendships = parse_mtx(os.path.join(path, 'data', 'socfb-Haverford76.mtx'))
 
+    #print(len(people))
+    #print(len(friendships))
+
     # CREATE
     start_time = time.time()
     # It is commented out because it takes a long time to run!
@@ -130,7 +144,21 @@ if __name__ == "__main__":
     #     connection.create_friendship(p1, p2)
 
     # Test query
-    result = connection.find_person("42")
+    result = connection.find_person("32")
+    print(result)
+
+    #connection.delete_person('1')
+    #connection.delete_person('76')
+
+    #connection.delete_relationship(('76', '1'))
+    #connection.delete_relationship(('1', '76'), False)
+
+    #connection.neighbours('76', 'all')
+
+
+    #connection.create_person('1')
+    #connection.create_person('76')
+    #connection.create_friendship('76', '1')
 
     duration = time.time() - start_time
 

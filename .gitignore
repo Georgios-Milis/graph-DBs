@@ -1,2 +1,4 @@
 __pycache__/
-data/
+data/dblp_p*
+data/*.zip
+data/*.mtx

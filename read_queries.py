@@ -4,7 +4,7 @@ def neigbours(self, id, direction='all'):
     """
     assert direction == 'in' or direction == 'out' or direction == 'all'
 
-    def delete_relationship_tx(tx, id, direction):
+    def neigbours_tx(tx, id, direction):
         if direction == 'in':
             query = (
                 "MATCH (p1:Person)-[r]->(p2:Person) "
@@ -27,5 +27,5 @@ def neigbours(self, id, direction='all'):
         return [row['id'] for row in result]
     
     with self.driver.session(database="neo4j") as session:
-        result = session.execute_read(delete_relationship_tx, id, direction)
+        result = session.execute_read(neigbours_tx, id, direction)
         print(result)

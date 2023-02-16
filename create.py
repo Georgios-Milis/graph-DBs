@@ -1,9 +1,9 @@
 import os
 import time
 import logging
+from dotenv import load_dotenv
 from neo4j import GraphDatabase
 from neo4j.exceptions import ServiceUnavailable
-from dotenv import load_dotenv
 
 import read_queries
 import delete_queries

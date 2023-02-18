@@ -4,31 +4,7 @@ from neo4j import GraphDatabase
 import os
 from dotenv import load_dotenv
 
-import create_queries
-import read_queries
-import update_queries
-import delete_queries
-
-class Connection:
-    def __init__(self, uri, user, password):
-        self.driver = GraphDatabase.driver(uri, auth=(user, password))
-
-    def close(self):
-        self.driver.close()
-
-    create_paper = create_queries.create_paper
-    create_author = create_queries.create_author
-    create_reference = create_queries.create_reference
-    create_authorship = create_queries.create_authorship
-
-    find_paper = read_queries.find_paper
-    find_author = read_queries.find_author
-    references_of = read_queries.references_of
-    references_to = read_queries.references_to
-    papers_of = read_queries.papers_of
-    authors_of = read_queries.authors_of
-
-
+from connection import Connection
 
 if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
@@ -64,7 +40,8 @@ if __name__ == "__main__":
     # d = {"id": "101335", "title": "Ontologies in HYDRA - Middleware for Ambient Intelligent Devices.", "year": 2009, "n_citation": 2, "test": 123, "test2": 123}
 
     data = {
-        "Papers": []
+        "Papers": [],
+        "Authors": []
     }
 
     for i in range(50000):

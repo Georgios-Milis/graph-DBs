@@ -17,13 +17,13 @@ if __name__ == "__main__":
     INSTANCE = os.getenv('AURA_INSTANCENAME')
 
     # For local instance
-    URI = "bolt://localhost:7687/scale-1"
+    URI = "bolt://localhost:7687"
     USERNAME = "neo4j"
     PASSWORD = "12345678"
-    INSTANCE = "scale-1"
+    INSTANCE = "scale-2"
 
     # Initialize connection to database
-    connection = Connection(URI, USERNAME, PASSWORD)
+    connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
 
 
     # CREATE
@@ -35,6 +35,7 @@ if __name__ == "__main__":
             data = json.loads(line)
             filtered_data = {k: v for k, v in data.items() if k in ['id', 'title', 'year', 'n_citation']}
             connection.create_paper(filtered_data)
+            if i == 5: break
 
     duration = time.time() - start_time
 

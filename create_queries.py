@@ -25,7 +25,7 @@ def create_paper(self, attributes):
 
 def create_papers(self, papers):
     """
-    Insert all papers to database
+    Insert all papers to database.
     """
     def create_papers_tx(tx, papers):
         query = (
@@ -91,9 +91,10 @@ def create_reference(self, id, ref_id):
         result = session.execute_write(create_reference_tx, id, ref_id)
         for row in result: print(f"Created reference of {row['p1']['id']} to {row['p2']['id']}.")
 
+
 def create_references(self, references):
     """
-    Insert all references to database
+    Insert all references to database.
     """
     def create_references_tx(tx, references):
         query = (

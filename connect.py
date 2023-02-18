@@ -1,10 +1,9 @@
 import os
 from time import time
-from neo4j import GraphDatabase
-import os
 from dotenv import load_dotenv
 
 from connection import Connection
+
 
 if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))

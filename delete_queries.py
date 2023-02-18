@@ -61,9 +61,10 @@ def delete_authorship(self, authorship):
     with self.driver.session(database="neo4j") as session:
         session.execute_write(delete_authorship_tx, authorship)
 
+
 def clear_database(self):
     """
-    Clear the whole database
+    Clear the whole database.
     """
     def clear_database_tx(tx):
         tx.run("MATCH (n) DETACH DELETE n")

@@ -5,6 +5,7 @@ import read_queries
 import update_queries
 import delete_queries
 
+
 class Connection:
     def __init__(self, uri, user, password):
         self.driver = GraphDatabase.driver(uri, auth=(user, password))

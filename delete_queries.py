@@ -1,38 +1,62 @@
-def delete_person(self, id):
+def delete_paper(self, id):
     """
-    Delete the node corresponding to the person with the 
-    id passed as argument and all the incident edges.
+    Delete a paper and its associated references.
     """
-    def delete_person_tx(tx, id):
+    def delete_paper_tx(tx, id):
         query = (
-            "MATCH (p:Person) "
+            "MATCH (p:Paper) "
             "WHERE p.id = $id "
             "DETACH DELETE p"
         )
         tx.run(query, id=id)
     
     with self.driver.session(database="neo4j") as session:
-        session.execute_write(delete_person_tx, id)
+        session.execute_write(delete_paper_tx, id)
 
 
-def delete_relationship(self, relationship, directed=True):
+def delete_author(self, id):
     """
-    Delete the edge corresponding to the relationship passed as argument.
-    If directed is True, then the edge is deleted only if input direction 
-    matches the existing one in the graph. Else, the edge is deleted
-    irrespective of direction.
+    Delete an author and their associated authorships.
     """
-    def delete_relationship_tx(tx, relationship, directed):
+    def delete_author_tx(tx, id):
         query = (
-            "MATCH (p1:Person)-[r]->(p2:Person) "
-            "WHERE p1.id = $relationship[0] AND p2.id = $relationship[1] "
-            "DELETE r"
-        ) if directed else (
-            "MATCH (p1:Person)-[r]-(p2:Person) "
-            "WHERE p1.id = $relationship[0] AND p2.id = $relationship[1] "
-            "DELETE r"
+            "MATCH (a:Author) "
+            "WHERE a.id = $id "
+            "DETACH DELETE a"
         )
-        tx.run(query, relationship=relationship, directed=directed)
+        tx.run(query, id=id)
     
     with self.driver.session(database="neo4j") as session:
-        session.execute_write(delete_relationship_tx, relationship, directed)
+        session.execute_write(delete_author_tx, id)
+
+
+def delete_reference(self, reference):
+    """
+    Delete the edge corresponding to the relationship passed as argument.
+    """
+    def delete_reference_tx(tx, reference):
+        query = (
+            "MATCH (p1:Paper)-[r]->(p2:Paper) "
+            "WHERE p1.id = $reference[0] AND p2.id = $reference[1] "
+            "DELETE r"
+        )
+        tx.run(query, reference=reference)
+    
+    with self.driver.session(database="neo4j") as session:
+        session.execute_write(delete_reference_tx, reference)
+
+
+def delete_authorship(self, authorship):
+    """
+    Delete the edge corresponding to the relationship passed as argument.
+    """
+    def delete_authorship_tx(tx, authorship):
+        query = (
+            "MATCH (a:Author)-[r]-(p:Paper) "
+            "WHERE a.id = $authorship[0] AND p.id = $authorship[1] "
+            "DELETE r"
+        )
+        tx.run(query, authorship=authorship)
+    
+    with self.driver.session(database="neo4j") as session:
+        session.execute_write(delete_authorship_tx, authorship)

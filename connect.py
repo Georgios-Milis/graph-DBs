@@ -21,7 +21,7 @@ if __name__ == "__main__":
     INSTANCE = "scale-1"
 
     # Initialize connection to database
-    connection = Connection(URI, USERNAME, PASSWORD)
+    connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
 
     # Parse dataset
     # people, friendships = parse_mtx(os.path.join(path, 'data', 'socfb-Haverford76.mtx'))

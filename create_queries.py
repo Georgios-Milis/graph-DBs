@@ -18,7 +18,7 @@ def create_paper(self, attributes):
         #     logging.error(f"{query} raised an error: \n {exception}")
         #     raise
 
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_paper_tx, attributes)
         # for row in result: print(f"Created paper: {row['p']}")
 
@@ -41,7 +41,7 @@ def create_papers(self, papers):
         #     logging.error(f"{query} raised an error: \n {exception}")
         #     raise
 
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_papers_tx, papers)
         # for row in result: print(f"Created paper: {row['p']}")
 
@@ -62,7 +62,7 @@ def create_author(self, attributes):
             logging.error(f"{query} raised an error: \n {exception}")
             raise
 
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_author_tx, attributes)
         for row in result: print(f"Created author: {row['a']}")
 
@@ -87,7 +87,7 @@ def create_reference(self, id, ref_id):
             logging.error(f"{query} raised an error: \n {exception}")
             raise
 
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_reference_tx, id, ref_id)
         for row in result: print(f"Created reference of {row['p1']['id']} to {row['p2']['id']}.")
 
@@ -113,7 +113,7 @@ def create_references(self, references):
         #     logging.error(f"{query} raised an error: \n {exception}")
         #     raise
 
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_references_tx, references)
         # for row in result: print(f"Created reference of {row['p1']['id']} to {row['p2']['id']}.")
 
@@ -138,6 +138,6 @@ def create_authorship(self, author_id, paper_id):
             logging.error(f"{query} raised an error: \n {exception}")
             raise
 
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_authorship_tx, author_id, paper_id)
         for row in result: print(f"Created authorship between {row['a']['id']} and {row['p']['id']}.")

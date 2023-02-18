@@ -11,7 +11,7 @@ def find_paper(self, id):
         result = tx.run(query, id=id)
         return [row['id'] for row in result]
     
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_read(find_paper_tx, id)
         print(result)
 
@@ -29,7 +29,7 @@ def find_author(self, id):
         result = tx.run(query, id=id)
         return [row['id'] for row in result]
     
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_read(find_author_tx, id)
         print(result)
 
@@ -47,7 +47,7 @@ def references_of(self, id):
         result = tx.run(query, id=id)
         return [row['id'] for row in result]
     
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_read(references_of_tx, id)
         print(result)
 
@@ -65,7 +65,7 @@ def references_to(self, id):
         result = tx.run(query, id=id)
         return [row['id'] for row in result]
     
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_read(references_to_tx, id)
         print(result)
 
@@ -83,7 +83,7 @@ def papers_of(self, id):
         result = tx.run(query, id=id)
         return [row['id'] for row in result]
     
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_read(papers_of_tx, id)
         print(result)
 
@@ -101,6 +101,6 @@ def authors_of(self, id):
         result = tx.run(query, id=id)
         return [row['id'] for row in result]
     
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_read(authors_of_tx, id)
         print(result)

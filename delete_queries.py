@@ -10,7 +10,7 @@ def delete_paper(self, id):
         )
         tx.run(query, id=id)
     
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         session.execute_write(delete_paper_tx, id)
 
 
@@ -26,7 +26,7 @@ def delete_author(self, id):
         )
         tx.run(query, id=id)
     
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         session.execute_write(delete_author_tx, id)
 
 
@@ -42,7 +42,7 @@ def delete_reference(self, reference):
         )
         tx.run(query, reference=reference)
     
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         session.execute_write(delete_reference_tx, reference)
 
 
@@ -58,7 +58,7 @@ def delete_authorship(self, authorship):
         )
         tx.run(query, authorship=authorship)
     
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         session.execute_write(delete_authorship_tx, authorship)
 
 
@@ -69,5 +69,5 @@ def clear_database(self):
     def clear_database_tx(tx):
         tx.run("MATCH (n) DETACH DELETE n")
         
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         session.execute_write(clear_database_tx)

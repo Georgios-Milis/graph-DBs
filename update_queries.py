@@ -11,6 +11,6 @@ def rename_paper(self, id, title):
         result = tx.run(query, id=id, title=title)
         return [row['id'] for row in result]
     
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         result = session.execute_read(rename_paper_tx, id, title)
         print(result)

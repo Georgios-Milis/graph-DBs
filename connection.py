@@ -7,7 +7,8 @@ import delete_queries
 
 
 class Connection:
-    def __init__(self, uri, user, password):
+    def __init__(self, uri, user, password, instance):
+        self.instance = instance
         self.driver = GraphDatabase.driver(uri, auth=(user, password))
 
     def close(self):

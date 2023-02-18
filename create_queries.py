@@ -29,21 +29,34 @@ def create_papers(self, papers):
     """
     def create_papers_tx(tx, papers):
         query = (
-            "UNWIND $papers AS map "
-            "CREATE (p:Papers) "
-            "SET p = map"
+            """
+            UNWIND $papers AS map
+            CREATE (p:Paper)
+            SET p = map
+            """
         )
-        result = tx.run(query, papers=papers)
-        return result
-        # try:
-        #     return [{'p': row['p']['id']} for row in result]
-        # except ServiceUnavailable as exception:
-        #     logging.error(f"{query} raised an error: \n {exception}")
-        #     raise
+        tx.run(query, papers=papers)
 
     with self.driver.session(database="neo4j") as session:
-        result = session.execute_write(create_papers_tx, papers)
-        # for row in result: print(f"Created paper: {row['p']}")
+        session.execute_write(create_papers_tx, papers)
+
+
+def create_authors(self, authors):
+    """
+    Insert all papers to database.
+    """
+    def create_authors_tx(tx, authors):
+        query = (
+            """
+            UNWIND $authors AS map
+            CREATE (a:Author)
+            SET a = map
+            """
+        )
+        tx.run(query, authors=authors)
+
+    with self.driver.session(database="neo4j") as session:
+        session.execute_write(create_authors_tx, authors)
 
 
 def create_author(self, attributes):
@@ -99,23 +112,16 @@ def create_references(self, references):
     def create_references_tx(tx, references):
         query = (
             """
-            UNWIND references AS edge
+            UNWIND $references AS edge
             MATCH (p1:Paper), (p2:Paper)
-            WHERE p1.id = $edge[0] AND p2.id = $edge[1]
+            WHERE p1.id = edge.from AND p2.id = edge.to
             CREATE (p1)-[r:REFERENCE]->(p2)
-            """
+            """  
         )
-        result = tx.run(query, references=references)
-        return result
-        # try:
-        #     return [{'p1': row['p1']['id'], 'p2': row['p2']['id']} for row in result]
-        # except ServiceUnavailable as exception:
-        #     logging.error(f"{query} raised an error: \n {exception}")
-        #     raise
+        tx.run(query, references=references)
 
     with self.driver.session(database="neo4j") as session:
-        result = session.execute_write(create_references_tx, references)
-        # for row in result: print(f"Created reference of {row['p1']['id']} to {row['p2']['id']}.")
+        session.execute_write(create_references_tx, references)
 
 
 def create_authorship(self, author_id, paper_id):
@@ -141,3 +147,22 @@ def create_authorship(self, author_id, paper_id):
     with self.driver.session(database="neo4j") as session:
         result = session.execute_write(create_authorship_tx, author_id, paper_id)
         for row in result: print(f"Created authorship between {row['a']['id']} and {row['p']['id']}.")
+
+
+def create_authorships(self, authorships):
+    """
+    Insert all references to database.
+    """
+    def create_authorships_tx(tx, authorships):
+        query = (
+            """
+            UNWIND $authorships AS edge
+            MATCH (a:Author), (p:Paper)
+            WHERE a.id = edge.author AND p.id = edge.paper
+            CREATE (a)-[r:AUTHORSHIP]->(p)
+            """  
+        )
+        tx.run(query, authorships=authorships)
+
+    with self.driver.session(database="neo4j") as session:
+        session.execute_write(create_authorships_tx, authorships)

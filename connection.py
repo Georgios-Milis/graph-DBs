@@ -15,8 +15,13 @@ class Connection:
 
     create_paper = create_queries.create_paper
     create_author = create_queries.create_author
+
+    create_authors = create_queries.create_authors
     create_reference = create_queries.create_reference
     create_authorship = create_queries.create_authorship
+    
+    create_authorships = create_queries.create_authorships
+    create_references = create_queries.create_references
 
     create_papers = create_queries.create_papers
 

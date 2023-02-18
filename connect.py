@@ -14,11 +14,11 @@ if __name__ == "__main__":
     PASSWORD = os.getenv('NEO4J_PASSWORD')
     INSTANCE = os.getenv('AURA_INSTANCENAME')
 
-    # For local instance
-    URI = "bolt://localhost:7687/scale-1"
-    USERNAME = "neo4j"
-    PASSWORD = "12345678"
-    INSTANCE = "scale-1"
+    # # For local instance
+    # URI = "bolt://localhost:7687/scale-1"
+    # USERNAME = "neo4j"
+    # PASSWORD = "12345678"
+    # INSTANCE = "scale-1"
 
     # Initialize connection to database
     connection = Connection(URI, USERNAME, PASSWORD)
@@ -39,12 +39,14 @@ if __name__ == "__main__":
     # d = {"id": "101335", "title": "Ontologies in HYDRA - Middleware for Ambient Intelligent Devices.", "year": 2009, "n_citation": 2, "test": 123, "test2": 123}
 
     data = {
-        "Papers": [],
-        "Authors": []
+        "papers": [],
+        "authors": [],
+        "references": [],
+        "authorships": []
     }
 
-    for i in range(50000):
-        data["Papers"].append(
+    for i in range(10000):
+        data["papers"].append(
             {
                 'id': i,
                 'title': "Ontologies in HYDRA - Middleware for Ambient Intelligent Devices.",
@@ -53,12 +55,42 @@ if __name__ == "__main__":
             }
         )
 
+    for i in range(10000):
+        data["authors"].append(
+            {
+                'id': i,
+                'name': "Peter Kostelnik",
+            }
+        )
+    
+    for i in range(1000):
+        data["references"].append(
+            {
+                'from': i,
+                'to': i + 1
+            }
+        )
+    
+    for i in range(1000):
+        data["authorships"].append(
+            {
+                'author': i,
+                'paper': i + 5
+            }
+        )
+
     connection.clear_database()
     print("Creating papers...")
 
     start_time = time()
     
-    connection.create_papers(data["Papers"])
+    connection.create_papers(data["papers"])
+    connection.create_authors(data["authors"])
+
+    connection.find_paper(3)
+
+    connection.create_references(data["references"])
+    connection.create_authorships(data["authorships"])
 
     duration = time() - start_time
     print("Duration:", duration)

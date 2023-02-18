@@ -15,10 +15,18 @@ fields_kept = [
     'n_citation'
 ]
 
-# Filter original raw data - no need to run again
-def process_raw(data_file, processed_file, fields_kept=fields_kept):
-    with open(processed_file, 'w', encoding='utf-8') as fw:
-        with open(data_file, 'r', encoding='utf-8') as fr:
+# Paths
+path = os.path.dirname(os.path.realpath(__file__))
+data_file = pjoin(path, 'data', 'dblp_papers_v11.txt')
+processed_file = pjoin(path, 'data', 'dblp_processed.txt') # ~ 1.3M papers
+sample_file = pjoin(path, 'data', 'dblp_sample.txt')       # ~ 100 papers
+categories = pjoin(path, 'data', 'categories.txt')
+
+
+# Filter original raw data
+def process_raw(infile, outfile, fields_kept=fields_kept):
+    with open(outfile, 'w', encoding='utf-8') as fw:
+        with open(infile, 'r', encoding='utf-8') as fr:
             for i, paper in enumerate(fr):
                 # Load paper JSONs line by line
                 original = json.loads(paper)
@@ -30,30 +38,41 @@ def process_raw(data_file, processed_file, fields_kept=fields_kept):
                 # Uncomment this to process the whole dataset
                 if i == 100: break
 
-# Paths
-path = os.path.dirname(os.path.realpath(__file__))
-data_file = pjoin(path, 'data', 'dblp_papers_v11.txt')
-processed_file = pjoin(path, 'data', 'dblp_processed.txt') # ~ 1.3M papers
-sample_file = pjoin(path, 'data', 'dblp_sample.txt')       # ~ 100 papers
-categories = pjoin(path, 'data', 'categories.txt')
+
+# Get all categories and their frequency
+def get_gategories(infile, outfile=categories):
+    all_fields = []
+    # Split into categories
+    with open(infile, 'r', encoding='utf-8') as f:
+        for paper in f:
+            data = json.loads(paper)
+            try:
+                fields = data['fos']
+                all_fields += [fos['name'] for fos in fields]
+            except KeyError: # Some data is missing
+                continue
+    # Count categories and sort them according to frequency
+    counts = sorted(Counter(all_fields).items(), key=lambda tup: tup[1], reverse=True)
+    with open(outfile, 'w', encoding='utf-8') as f:
+        for category, count in counts:
+            f.write(f"{category}, {count}\n")
 
 
-# Process by field
-all_fields = []
+# Construct smalled datasets by category
+def get_papers_by_category(infile, outfile, category):
+    with open(outfile, 'w', encoding='utf-8') as fw:
+        with open(infile, 'r', encoding='utf-8') as fr:
+            for paper in fr:
+                data = json.loads(paper)
+                try:
+                    for fos in data['fos']:
+                        if fos['name'] == category:
+                            json.dump(data, fw)
+                            fw.write('\n')
+                            break
+                except KeyError: # Some data is missing
+                    continue
 
-# Split into categories
-with open(processed_file, 'r', encoding='utf-8') as f:
-    for paper in f:
-        data = json.loads(paper)
-        try:
-            fields = data['fos']
-            all_fields += [fos['name'] for fos in fields]
-        except KeyError: # Some data is missing
-            pass
 
-# Count categories and sort them according to frequency
-counts = sorted(Counter(all_fields).items(), key=lambda tup: tup[1], reverse=True)
-
-with open(categories, 'w', encoding='utf-8') as f:
-    for category, count in counts:
-        f.write(f"{category}, {count}\n")
+outfile = pjoin(path, 'data', 'food_technology.txt')
+get_papers_by_category(processed_file, outfile, 'Food technology')

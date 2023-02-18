@@ -1,7 +1,33 @@
 import os
 from time import time
+from neo4j import GraphDatabase
+import os
 from dotenv import load_dotenv
-from connection import Connection
+
+import create_queries
+import read_queries
+import update_queries
+import delete_queries
+
+class Connection:
+    def __init__(self, uri, user, password):
+        self.driver = GraphDatabase.driver(uri, auth=(user, password))
+
+    def close(self):
+        self.driver.close()
+
+    create_paper = create_queries.create_paper
+    create_author = create_queries.create_author
+    create_reference = create_queries.create_reference
+    create_authorship = create_queries.create_authorship
+
+    find_paper = read_queries.find_paper
+    find_author = read_queries.find_author
+    references_of = read_queries.references_of
+    references_to = read_queries.references_to
+    papers_of = read_queries.papers_of
+    authors_of = read_queries.authors_of
+
 
 
 if __name__ == "__main__":
@@ -12,6 +38,12 @@ if __name__ == "__main__":
     USERNAME = os.getenv('NEO4J_USERNAME')
     PASSWORD = os.getenv('NEO4J_PASSWORD')
     INSTANCE = os.getenv('AURA_INSTANCENAME')
+
+    # For local instance
+    URI = "bolt://localhost:7687/scale-1"
+    USERNAME = "neo4j"
+    PASSWORD = "12345678"
+    INSTANCE = "scale-1"
 
     # Initialize connection to database
     connection = Connection(URI, USERNAME, PASSWORD)

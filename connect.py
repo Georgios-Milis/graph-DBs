@@ -1,6 +1,5 @@
 import os
 from time import time
-from dotenv import load_dotenv
 
 from connection import Connection
 
@@ -8,17 +7,20 @@ from connection import Connection
 if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
 
-    load_dotenv()
-    URI = os.getenv('NEO4J_URI')
-    USERNAME = os.getenv('NEO4J_USERNAME')
-    PASSWORD = os.getenv('NEO4J_PASSWORD')
-    INSTANCE = os.getenv('AURA_INSTANCENAME')
+    LOCAL = False
 
-    # For local instance
-    URI = "bolt://localhost:7687/scale-1"
-    USERNAME = "neo4j"
-    PASSWORD = "12345678"
-    INSTANCE = "scale-1"
+    if not LOCAL:
+        from dotenv import load_dotenv
+        load_dotenv()
+        URI = os.getenv('NEO4J_URI')
+        USERNAME = os.getenv('NEO4J_USERNAME')
+        PASSWORD = os.getenv('NEO4J_PASSWORD')
+        INSTANCE = os.getenv('AURA_INSTANCENAME')
+    else:
+        URI = "bolt://localhost:7687"
+        USERNAME = "neo4j"
+        PASSWORD = "12345678"
+        INSTANCE = "scale-2"
 
     # Initialize connection to database
     connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
@@ -45,6 +47,7 @@ if __name__ == "__main__":
             {
                 'id': i,
                 'name': "Peter Kostelnik",
+                'org': 'University of Munich'
             }
         )
     

@@ -1,12 +1,13 @@
-from time import time
-from neo4j import GraphDatabase
 import os
+from time import time
 from dotenv import load_dotenv
+from neo4j import GraphDatabase
 
 import create_queries
 import read_queries
 import update_queries
 import delete_queries
+
 
 class Connection:
     def __init__(self, uri, user, password):
@@ -32,6 +33,7 @@ class Connection:
     delete_reference = delete_queries.delete_reference
     delete_authorship = delete_queries.delete_authorship
 
+
 if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
 
@@ -40,6 +42,12 @@ if __name__ == "__main__":
     USERNAME = os.getenv('NEO4J_USERNAME')
     PASSWORD = os.getenv('NEO4J_PASSWORD')
     INSTANCE = os.getenv('AURA_INSTANCENAME')
+
+    # For local instance
+    URI = "bolt://localhost:7687/scale-1"
+    USERNAME = "neo4j"
+    PASSWORD = "12345678"
+    INSTANCE = "scale-1"
 
     # Initialize connection to database
     connection = Connection(URI, USERNAME, PASSWORD)

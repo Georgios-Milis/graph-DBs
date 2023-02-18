@@ -4,7 +4,7 @@ from neo4j.exceptions import ServiceUnavailable
 
 def create_paper(self, attributes):
     """
-    Create and return a paper
+    Create and return a paper.
     """
     def create_paper_tx(tx, attributes):
         query = (
@@ -25,7 +25,7 @@ def create_paper(self, attributes):
 
 def create_author(self, attributes):
     """
-    Create and return a paper
+    Create and return an author.
     """
     def create_author_tx(tx, attributes):
         query = (
@@ -46,7 +46,7 @@ def create_author(self, attributes):
 
 def create_reference(self, id, ref_id):
     """
-    Create a reference
+    Create a reference.
     """
     def create_reference_tx(tx, id, ref_id):
         query = (
@@ -71,7 +71,7 @@ def create_reference(self, id, ref_id):
 
 def create_authorship(self, author_id, paper_id):
     """
-    Create a reference
+    Create an authorship.
     """
     def create_authorship_tx(tx, author_id, paper_id):
         query = (

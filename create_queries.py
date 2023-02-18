@@ -37,7 +37,7 @@ def create_papers(self, papers):
         )
         tx.run(query, papers=papers)
 
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         session.execute_write(create_papers_tx, papers)
 
 
@@ -55,7 +55,7 @@ def create_authors(self, authors):
         )
         tx.run(query, authors=authors)
 
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         session.execute_write(create_authors_tx, authors)
 
 
@@ -120,7 +120,7 @@ def create_references(self, references):
         )
         tx.run(query, references=references)
 
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         session.execute_write(create_references_tx, references)
 
 
@@ -164,5 +164,5 @@ def create_authorships(self, authorships):
         )
         tx.run(query, authorships=authorships)
 
-    with self.driver.session(database="neo4j") as session:
+    with self.driver.session(database=self.instance) as session:
         session.execute_write(create_authorships_tx, authorships)

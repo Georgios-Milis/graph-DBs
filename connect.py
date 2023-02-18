@@ -14,29 +14,14 @@ if __name__ == "__main__":
     PASSWORD = os.getenv('NEO4J_PASSWORD')
     INSTANCE = os.getenv('AURA_INSTANCENAME')
 
-    # # For local instance
-    # URI = "bolt://localhost:7687/scale-1"
-    # USERNAME = "neo4j"
-    # PASSWORD = "12345678"
-    # INSTANCE = "scale-1"
+    # For local instance
+    URI = "bolt://localhost:7687/scale-1"
+    USERNAME = "neo4j"
+    PASSWORD = "12345678"
+    INSTANCE = "scale-1"
 
     # Initialize connection to database
     connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
-
-    # Parse dataset
-    # people, friendships = parse_mtx(os.path.join(path, 'data', 'socfb-Haverford76.mtx'))
-
-    #print(len(people))
-    #print(len(friendships))
-
-    # CREATE
-    
-
-    # for friendship in friendships:
-    #     p1, p2 = friendship
-    #     connection.create_friendship(p1, p2)
-
-    # d = {"id": "101335", "title": "Ontologies in HYDRA - Middleware for Ambient Intelligent Devices.", "year": 2009, "n_citation": 2, "test": 123, "test2": 123}
 
     data = {
         "papers": [],

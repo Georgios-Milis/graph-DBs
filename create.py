@@ -58,7 +58,7 @@ def get_citations_data(datafile):
     with open(datafile, 'r', encoding='utf-8') as f:
         for line in f:
             data = json.loads(line)
-            ref_from = data['n_citation']
+            ref_from = data['id']
             try:
                 refs = data['references']
                 for ref in refs:

@@ -50,6 +50,48 @@ def get_authors_data(datafile):
     return authors
 
 
+def get_citations_data(datafile):
+    """
+    Read from dataset and return citation data.
+    """
+    citations = []
+    with open(datafile, 'r', encoding='utf-8') as f:
+        for line in f:
+            data = json.loads(line)
+            ref_from = data['n_citation']
+            try:
+                refs = data['references']
+                for ref in refs:
+                    # Convert ids to integers
+                    citations.append({
+                        "from": int(ref_from),
+                        "to": int(ref)
+                    })
+            except KeyError:
+                continue
+    return citations
+
+
+def get_authorships_data(datafile):
+    """
+    Read from dataset and return authorship data.
+    """
+    authorships = []
+    with open(datafile, 'r', encoding='utf-8') as f:
+        for line in f:
+            data = json.loads(line)
+            paper_id = int(data['id'])
+            for author in data['authors']:
+                # Convert ids to integers
+                auth_id = int(author['id'])
+                # Convert ids to integers
+                authorships.append({
+                    "author": auth_id,
+                    "paper": paper_id
+                })
+    return authorships
+
+
 if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
 
@@ -76,11 +118,20 @@ if __name__ == "__main__":
     start_time = time.time()
 
     # Dataset
-    datafile = pjoin(path, 'data', 'food_technology.txt')
+    datafile = pjoin(path, 'data', 'documentation.txt')
 
     # Data
     papers = get_papers_data(datafile)
+    print("Papers:", len(papers))
     authors = get_authors_data(datafile)
+    citations = get_citations_data(datafile)
+    authorships = get_authorships_data(datafile)
+    
+    paper_ids = [int(paper['id']) for paper in papers]
+
+    print("Citations:", len(citations))
+    print("In-data citations:", len([cite for cite in citations if cite['to'] in paper_ids]))
+    print("Authorships:", len(authorships))
 
 
     # CREATE - stop timer

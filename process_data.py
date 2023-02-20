@@ -74,5 +74,5 @@ def get_papers_by_category(infile, outfile, category):
                     continue
 
 
-outfile = pjoin(path, 'data', 'food_technology.txt')
-get_papers_by_category(processed_file, outfile, 'Food technology')
+outfile = pjoin(path, 'data', 'documentation.txt')
+get_papers_by_category(processed_file, outfile, 'Documentation')

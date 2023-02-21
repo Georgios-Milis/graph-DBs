@@ -3,3 +3,4 @@ data/*
 !data/categories.txt
 !data/dblp_sample.txt
 !data/data_specs.txt
+!data/Magnetism.txt

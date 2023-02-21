@@ -40,7 +40,7 @@ def process_raw(infile, outfile, fields_kept=fields_kept):
 
 
 # Get all categories and their frequency
-def get_gategories(infile, outfile=categories):
+def write_gategories(infile, outfile=categories):
     all_fields = []
     # Split into categories
     with open(infile, 'r', encoding='utf-8') as f:
@@ -59,7 +59,7 @@ def get_gategories(infile, outfile=categories):
 
 
 # Construct smalled datasets by category
-def get_papers_by_category(infile, outfile, category):
+def write_papers_by_category(infile, outfile, category):
     with open(outfile, 'w', encoding='utf-8') as fw:
         with open(infile, 'r', encoding='utf-8') as fr:
             for paper in fr:
@@ -74,5 +74,14 @@ def get_papers_by_category(infile, outfile, category):
                     continue
 
 
-outfile = pjoin(path, 'data', 'documentation.txt')
-get_papers_by_category(processed_file, outfile, 'Documentation')
+def write_paper_IDs(infile, outfile):
+    with open(outfile, 'w', encoding='utf-8') as fw:
+        with open(infile, 'r', encoding='utf-8') as fr:
+            for paper in fr:
+                data = json.loads(paper)['id']
+                fw.write(data)
+                fw.write('\n')
+
+
+outfile = pjoin(path, 'data', 'nlp.txt')
+write_papers_by_category(processed_file, outfile, 'Natural language processing')

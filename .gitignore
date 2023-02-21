@@ -1,4 +1,5 @@
 __pycache__/
 data/*
-!data/categories/.txt
+!data/categories.txt
 !data/dblp_sample.txt
+!data/data_specs.txt

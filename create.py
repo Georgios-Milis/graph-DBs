@@ -6,6 +6,17 @@ from os.path import join as pjoin
 from connection import Connection
 
 
+def get_paper_IDs(datafile):
+    """
+    Read from dataset and return all paper IDs.
+    """
+    ids = []
+    with open(datafile, 'r', encoding='utf-8') as f:
+        for line in f:
+            ids.append(int(json.loads(line)))
+    return ids
+
+
 def get_papers_data(datafile):
     """
     Read from dataset and return paper data.
@@ -45,8 +56,8 @@ def get_authors_data(datafile):
                 if auth_id not in ids:
                     ids.append(auth_id)
                     authors.append(author)
-    print("Non-unique authors:", count)
-    print("Unique authors:", len(authors))
+    print("Authors:", len(authors))
+    print("Authorships:", count)
     return authors
 
 
@@ -118,20 +129,20 @@ if __name__ == "__main__":
     start_time = time.time()
 
     # Dataset
-    datafile = pjoin(path, 'data', 'documentation.txt')
+    datafile = pjoin(path, 'data', 'nlp.txt')
 
     # Data
     papers = get_papers_data(datafile)
     print("Papers:", len(papers))
     authors = get_authors_data(datafile)
     citations = get_citations_data(datafile)
-    authorships = get_authorships_data(datafile)
     
     paper_ids = [int(paper['id']) for paper in papers]
 
     print("Citations:", len(citations))
     print("In-data citations:", len([cite for cite in citations if cite['to'] in paper_ids]))
-    print("Authorships:", len(authorships))
+    # ids = get_paper_IDs(pjoin(path, 'data', 'ids.txt'))
+    # print("In-dataset citations:", len([cite for cite in citations if cite['to'] in ids]))
 
 
     # CREATE - stop timer

@@ -110,7 +110,7 @@ Papers: 93129
 Authors: 107723
 Authorships: 261124
 Citations: 865074
-In-data citations: TODO
+In-data citations: 425665
 
 
 10^6 ================================================================

@@ -56,8 +56,6 @@ def get_authors_data(datafile):
                 if auth_id not in ids:
                     ids.append(auth_id)
                     authors.append(author)
-    print("Authors:", len(authors))
-    print("Authorships:", count)
     return authors
 
 
@@ -135,6 +133,7 @@ if __name__ == "__main__":
     papers = get_papers_data(datafile)
     print("Papers:", len(papers))
     authors = get_authors_data(datafile)
+    print("Authors:", len(authors))
     citations = get_citations_data(datafile)
     
     paper_ids = [int(paper['id']) for paper in papers]

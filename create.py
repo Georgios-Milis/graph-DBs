@@ -1,9 +1,10 @@
 import os
 import sys
-from time import time
 from dotenv import load_dotenv
+from os.path import join as pjoin
 
-from connection import Connection
+import data
+from connection import Connection, transact_and_time
 
 
 if __name__ == "__main__":
@@ -15,9 +16,11 @@ if __name__ == "__main__":
 
     # This file path
     path = os.path.dirname(os.path.realpath(__file__))
+    # Dataset TODO scale 
+    datafile = pjoin(path, 'data', 'Magnetism.txt')
 
-    LOCAL = False
-
+    # Config
+    LOCAL = True
     if not LOCAL:
         from dotenv import load_dotenv
         load_dotenv()
@@ -34,56 +37,28 @@ if __name__ == "__main__":
     # Initialize connection to database
     connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
 
-    data = {
-        "papers": [],
-        "authors": [],
-        "references": [],
-        "authorships": []
-    }
+    # Durations dictionary
+    durations = {}
 
-    for i in range(10):
-        data["papers"].append({
-            'id': i,
-            'title': "Ontologies in HYDRA - Middleware for Ambient Intelligent Devices.",
-            'year': 2009,
-            'n_citation': 2
-        })
+    # Load data one at a time, execute transaction and then delete it
+    papers = data.get_papers_data(datafile)
+    durations.update(transact_and_time(connection.create_papers, papers))
+    del papers
 
-    for i in range(10):
-        data["authors"].append({
-            'id': i,
-            'name': "Peter Kostelnik",
-            'org': 'University of Munich'
-        })
-    
-    for i in range(10):
-        data["references"].append({
-            'from': i,
-            'to': i + 1
-        })
-    
-    for i in range(10):
-        data["authorships"].append({
-            'author': i,
-            'paper': i + 5
-        })
+    authors = data.get_authors_data(datafile)
+    durations.update(transact_and_time(connection.create_authors, authors))
+    del authors
 
-    start_time = time()
-    
+    citations = data.get_citations_data(datafile)
+    durations.update(transact_and_time(connection.create_references, citations))
+    del citations
 
-    # TODO: return data in dict for different queries
+    authorships = data.get_authorships_data(datafile)
+    durations.update(transact_and_time(connection.create_authorships, authorships))
+    del authorships
 
-    
-    connection.create_papers(data["papers"])
-    connection.create_authors(data["authors"])
-
-    connection.create_references(data["references"])
-    connection.create_authorships(data["authorships"])
-
-    duration = time() - start_time
-
-    # Close
+    # Close connection
     connection.close()
 
     # Print so that subprocess.check_output gets the result
-    print(duration)
+    print(durations)

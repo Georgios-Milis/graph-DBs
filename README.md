@@ -3,7 +3,9 @@
 
 ### Environment
 conda create --name graphs python=3.10
+
 conda activate graphs
+
 pip install -r requirements.txt
 
 ### Temporary links

@@ -166,3 +166,35 @@ def create_authorships(self, authorships):
 
     with self.driver.session(database=self.instance) as session:
         session.execute_write(create_authorships_tx, authorships)
+
+
+def create_graph(self, data):
+    """
+    Insert all data to database
+    """
+    def create_graph_tx(tx, data):
+        query = (
+            """
+            UNWIND $data['papers'] AS map
+            CREATE (p:Paper)
+            SET p = map
+
+            UNWIND $data['authors'] AS map
+            CREATE (a:Author)
+            SET a = map
+
+            UNWIND $data['references'] AS edge
+            MATCH (p1:Paper), (p2:Paper)
+            WHERE p1.id = edge.from AND p2.id = edge.to
+            CREATE (p1)-[r:REFERENCE]->(p2)
+
+            UNWIND $data['authorships'] AS edge
+            MATCH (a:Author), (p:Paper)
+            WHERE a.id = edge.author AND p.id = edge.paper
+            CREATE (a)-[r:AUTHORSHIP]-(p)
+            """
+        )
+        tx.run(query, data=data)
+
+    with self.driver.session(database=self.instance) as session:
+        session.execute_write(create_graph_tx, data)

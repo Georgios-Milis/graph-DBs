@@ -7,12 +7,12 @@ import update_queries
 import delete_queries
 
 
-def transact_and_time(transaction, arg):
+def transact_and_time(transaction, arg=None):
     """
     Run a transaction and return its duration.
     """
     start_time = time()
-    transaction(arg)
+    transaction(arg) if arg != None else transaction()
     duration = time() - start_time
     return {transaction.__name__: duration}
 

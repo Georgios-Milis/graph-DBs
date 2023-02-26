@@ -1,10 +1,10 @@
 from time import time
 from neo4j import GraphDatabase
 
-import create_queries
-import read_queries
-import update_queries
-import delete_queries
+import queries.create_queries as create_queries
+import queries.read_queries as read_queries
+import queries.update_queries as update_queries
+import queries.delete_queries as delete_queries
 
 
 def transact_and_time(transaction, *args):
@@ -25,12 +25,13 @@ class Connection:
     def close(self):
         self.driver.close()
 
-    # Single CREATE
+    # CREATE
+    # Single
     create_paper = create_queries.create_paper
     create_author = create_queries.create_author
     create_reference = create_queries.create_reference
     create_authorship = create_queries.create_authorship
-    # Batch CREATE
+    # Batch
     create_papers = create_queries.create_papers
     create_authors = create_queries.create_authors
     create_references = create_queries.create_references
@@ -38,7 +39,6 @@ class Connection:
 
     
     # READ
-
     # Simple Queries
     find_paper = read_queries.find_paper
     find_author = read_queries.find_author
@@ -60,6 +60,7 @@ class Connection:
     # UPDATE
     rename_paper = update_queries.rename_paper
     change_org = update_queries.change_org
+
 
     # DELETE
     delete_paper = delete_queries.delete_paper

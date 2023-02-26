@@ -25,7 +25,7 @@ def change_org(self, id, org):
         query = (
             """
             MATCH (a:Author)
-            WHERE a.org = $org
+            WHERE a.id = $id
             SET a.org = $org
             """
         )

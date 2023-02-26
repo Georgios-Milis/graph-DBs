@@ -32,6 +32,24 @@ def title_of_paper(self, id):
     with self.driver.session(database=self.instance) as session:
         result = session.execute_read(title_of_paper_tx, id)
         return result
+    
+
+def org_of_author(self, id):
+    """
+    Return the title of the paper with given id.
+    """
+    def org_of_author_tx(tx, id):
+        query = (
+            "MATCH (a:Author)"
+            "WHERE a.id = $id "
+            "RETURN a.org AS org"
+        )
+        result = tx.run(query, id=id)
+        return [row['org'] for row in result]
+    
+    with self.driver.session(database=self.instance) as session:
+        result = session.execute_read(org_of_author_tx, id)
+        return result
 
 
 def find_author(self, id):

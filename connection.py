@@ -43,6 +43,7 @@ class Connection:
     find_paper = read_queries.find_paper
     find_author = read_queries.find_author
     title_of_paper = read_queries.title_of_paper
+    org_of_author = read_queries.org_of_author
 
     # Adjacency Queries
     references_of = read_queries.references_of

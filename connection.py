@@ -7,12 +7,12 @@ import update_queries
 import delete_queries
 
 
-def transact_and_time(transaction, arg=None):
+def transact_and_time(transaction, *args):
     """
     Run a transaction and return its duration.
     """
     start_time = time()
-    transaction(arg) if arg != None else transaction()
+    transaction(*args)
     duration = time() - start_time
     return {transaction.__name__: duration}
 
@@ -35,22 +35,37 @@ class Connection:
     create_authors = create_queries.create_authors
     create_references = create_queries.create_references
     create_authorships = create_queries.create_authorships
+
     
     # READ
+
+    # Simple Queries
     find_paper = read_queries.find_paper
     find_author = read_queries.find_author
+    title_of_paper = read_queries.title_of_paper
+
+    # Adjacency Queries
     references_of = read_queries.references_of
     references_to = read_queries.references_to
     papers_of = read_queries.papers_of
     authors_of = read_queries.authors_of
 
+    # Reachability Queries
+    are_collaborators = read_queries.are_collaborators
+
+    # Analytical Queries
+    mean_authors_per_paper = read_queries.mean_authors_per_paper
+
+
     # UPDATE
     rename_paper = update_queries.rename_paper
+    change_org = update_queries.change_org
 
     # DELETE
     delete_paper = delete_queries.delete_paper
     delete_author = delete_queries.delete_author
     delete_reference = delete_queries.delete_reference
     delete_authorship = delete_queries.delete_authorship
+
     # Clear
     clear_database = delete_queries.clear_database

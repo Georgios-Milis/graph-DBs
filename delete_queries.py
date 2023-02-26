@@ -4,9 +4,11 @@ def delete_paper(self, id):
     """
     def delete_paper_tx(tx, id):
         query = (
-            "MATCH (p:Paper) "
-            "WHERE p.id = $id "
-            "DETACH DELETE p"
+            """
+            MATCH (p:Paper)
+            WHERE p.id = $id
+            DETACH DELETE p
+            """
         )
         tx.run(query, id=id)
     
@@ -20,9 +22,11 @@ def delete_author(self, id):
     """
     def delete_author_tx(tx, id):
         query = (
-            "MATCH (a:Author) "
-            "WHERE a.id = $id "
-            "DETACH DELETE a"
+            """
+            MATCH (a:Author)
+            WHERE a.id = $id
+            DETACH DELETE a
+            """
         )
         tx.run(query, id=id)
     
@@ -36,9 +40,11 @@ def delete_reference(self, reference):
     """
     def delete_reference_tx(tx, reference):
         query = (
-            "MATCH (p1:Paper)-[r]->(p2:Paper) "
-            "WHERE p1.id = $reference[0] AND p2.id = $reference[1] "
-            "DELETE r"
+            """
+            MATCH (p1:Paper)-[r]->(p2:Paper)
+            WHERE p1.id = $reference[0] AND p2.id = $reference[1]
+            DELETE r
+            """
         )
         tx.run(query, reference=reference)
     
@@ -52,9 +58,11 @@ def delete_authorship(self, authorship):
     """
     def delete_authorship_tx(tx, authorship):
         query = (
-            "MATCH (a:Author)-[r]-(p:Paper) "
-            "WHERE a.id = $authorship[0] AND p.id = $authorship[1] "
-            "DELETE r"
+            """
+            MATCH (a:Author)-[r]-(p:Paper)
+            WHERE a.id = $authorship[0] AND p.id = $authorship[1]
+            DELETE r
+            """
         )
         tx.run(query, authorship=authorship)
     

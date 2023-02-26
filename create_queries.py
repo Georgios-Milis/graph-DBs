@@ -8,18 +8,17 @@ def create_paper(self, attributes):
     """
     def create_paper_tx(tx, attributes):
         query = (
-            "CREATE (p:Paper $attributes) "
+            """
+            CREATE (p:Paper $attributes)
+            RETURN p
+            """
         )
         result = tx.run(query, attributes=attributes)
         return result
-        # try:
-        #     return [{'p': row['p']['id']} for row in result]
-        # except ServiceUnavailable as exception:
-        #     logging.error(f"{query} raised an error: \n {exception}")
-        #     raise
 
     with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_paper_tx, attributes)
+        return result
         # for row in result: print(f"Created paper: {row['p']}")
 
 
@@ -65,8 +64,10 @@ def create_author(self, attributes):
     """
     def create_author_tx(tx, attributes):
         query = (
-            "CREATE (a:Author $attributes) "
-            "RETURN a"
+            """
+            CREATE (a:Author $attributes)
+            RETURN a
+            """
         )
         result = tx.run(query, attributes=attributes)
         try:
@@ -77,7 +78,8 @@ def create_author(self, attributes):
 
     with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_author_tx, attributes)
-        for row in result: print(f"Created author: {row['a']}")
+        return result
+        # for row in result: print(f"Created author: {row['a']}")
 
 
 def create_reference(self, id, ref_id):
@@ -102,7 +104,8 @@ def create_reference(self, id, ref_id):
 
     with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_reference_tx, id, ref_id)
-        for row in result: print(f"Created reference of {row['p1']['id']} to {row['p2']['id']}.")
+        return result
+        # for row in result: print(f"Created reference of {row['p1']['id']} to {row['p2']['id']}.")
 
 
 def create_references(self, references):
@@ -133,7 +136,7 @@ def create_authorship(self, author_id, paper_id):
             """
             MATCH (a:Author), (p:Paper)
             WHERE a.id = $author_id AND p.id = $paper_id
-            CREATE (a)-[r:AUTHORSHIP]-(p)
+            CREATE (a)-[r:AUTHORSHIP]->(p)
             RETURN a, p
             """
         )
@@ -146,7 +149,8 @@ def create_authorship(self, author_id, paper_id):
 
     with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_authorship_tx, author_id, paper_id)
-        for row in result: print(f"Created authorship between {row['a']['id']} and {row['p']['id']}.")
+        return result
+        # for row in result: print(f"Created authorship between {row['a']['id']} and {row['p']['id']}.")
 
 
 def create_authorships(self, authorships):
@@ -166,35 +170,3 @@ def create_authorships(self, authorships):
 
     with self.driver.session(database=self.instance) as session:
         session.execute_write(create_authorships_tx, authorships)
-
-
-def create_graph(self, data):
-    """
-    Insert all data to database
-    """
-    def create_graph_tx(tx, data):
-        query = (
-            """
-            UNWIND $data['papers'] AS map
-            CREATE (p:Paper)
-            SET p = map
-
-            UNWIND $data['authors'] AS map
-            CREATE (a:Author)
-            SET a = map
-
-            UNWIND $data['references'] AS edge
-            MATCH (p1:Paper), (p2:Paper)
-            WHERE p1.id = edge.from AND p2.id = edge.to
-            CREATE (p1)-[r:REFERENCE]->(p2)
-
-            UNWIND $data['authorships'] AS edge
-            MATCH (a:Author), (p:Paper)
-            WHERE a.id = edge.author AND p.id = edge.paper
-            CREATE (a)-[r:AUTHORSHIP]-(p)
-            """
-        )
-        tx.run(query, data=data)
-
-    with self.driver.session(database=self.instance) as session:
-        session.execute_write(create_graph_tx, data)

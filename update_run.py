@@ -9,7 +9,9 @@ from connection import Connection, transact_and_time
 import numpy as np
 import pandas as pd
 
+
 if __name__ == "__main__":
+
     # This file path
     path = os.path.dirname(os.path.realpath(__file__))
     # Dataset TODO scale 
@@ -22,34 +24,38 @@ if __name__ == "__main__":
     PASSWORD = os.getenv('NEO4J_PASSWORD')
     INSTANCE = os.getenv('AURA_INSTANCENAME')
 
-
     # Initialize connection to database
     connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
 
+    # Durations dictionary
+    durations = {}
+
+    connection.clear_database()
+
+    # Load data one at a time, execute transaction and then delete it
     papers = data.get_papers_data(datafile)
     authors = data.get_authors_data(datafile)
     citations = data.get_citations_data(datafile)
     authorships = data.get_authorships_data(datafile)
 
-    trials = []
+    connection.create_papers(papers)
+    connection.create_authors(authors)
+    connection.create_references(citations)
+    connection.create_authorships(authorships)
+
     N_TRIALS = 10
-    N_QUERIES = 6
+    N_QUERIES = 2
+
+    paper_ids = [paper['id'] for paper in papers][:N_TRIALS]
+    author_ids = [author['id'] for author in authors][:N_TRIALS]
+
     trials = np.empty((N_TRIALS, N_QUERIES))
 
-    # Let's start clean :)
-    connection.clear_database()
-
-    for i in range(N_TRIALS):
-        # Durations dictionary
+    for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
         durations = {}
-        
-        # Load data on database
-        durations.update(transact_and_time(connection.create_papers, papers))
-        durations.update(transact_and_time(connection.create_authors, authors))
-        durations.update(transact_and_time(connection.create_references, citations))
-        durations.update(transact_and_time(connection.create_authorships, authorships))
-        durations.update({'fill_database': np.sum(list(durations.values()))})
-        durations.update(transact_and_time(connection.clear_database))
+
+        durations.update(transact_and_time(connection.rename_paper, paper_id, "New Title"))
+        durations.update(transact_and_time(connection.change_org, author_id, "New Organization"))
 
         trials[i] = list(durations.values())
 
@@ -60,9 +66,12 @@ if __name__ == "__main__":
     ))
 
     df = pd.DataFrame(result, columns=durations.keys(), index=['min', 'max', 'mean'])
-    df.to_csv('neo4j_fill_and_empty_scale2.csv')
+    df.to_csv('neo4j_update_scale2.csv')
 
     print(df)
-    
+
     # Close connection
     connection.close()
+
+    # Print so that subprocess.check_output gets the result
+    print(durations)

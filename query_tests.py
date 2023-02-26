@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-from os.path import join as pjoin
 from connection import Connection
 
 
@@ -198,19 +197,12 @@ def test_change_org():
 
 
 if __name__ == "__main__":
-    # This file path
-    path = os.path.dirname(os.path.realpath(__file__))
-    # Dataset TODO scale 
-    datafile = pjoin(path, 'data', 'Magnetism.txt')
-
-    from dotenv import load_dotenv
     load_dotenv()
     URI = os.getenv('NEO4J_URI')
     USERNAME = os.getenv('NEO4J_USERNAME')
     PASSWORD = os.getenv('NEO4J_PASSWORD')
     INSTANCE = os.getenv('AURA_INSTANCENAME')
 
-    # Initialize connection to database
     connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
 
     tests = [

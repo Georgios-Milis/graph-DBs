@@ -1,13 +1,7 @@
 import os
-import sys
 from dotenv import load_dotenv
 from os.path import join as pjoin
-
-import data
 from connection import Connection
-
-import numpy as np
-import pandas as pd
 
 
 def run_test(test):

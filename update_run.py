@@ -13,7 +13,7 @@ if __name__ == "__main__":
     # This file path
     path = os.path.dirname(os.path.realpath(__file__))
     # Dataset TODO scale 
-    datafile = pjoin(path, 'data', 'Magnetism.txt')
+    datafile = pjoin(path, 'data', 'Sloth.txt')
 
     from dotenv import load_dotenv
     load_dotenv()
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     ))
 
     df = pd.DataFrame(result, columns=durations.keys(), index=['min', 'max', 'mean'])
-    df.to_csv('neo4j_update_scale2.csv')
+    df.to_csv(pjoin(path, 'results', 'neo4j_update_scale2.csv'))
 
     print(df)
 

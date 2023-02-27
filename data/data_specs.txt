@@ -50,4 +50,6 @@ In-data citations: 110304
 
 Machine learning:
 Papers: 482423
-TODO: 
+Papers: 482423
+Authors: 575660
+Citations: 6153298

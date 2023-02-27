@@ -1,121 +1,53 @@
-Info about each subset of data, produced by process_data.py for a specific category.
+Info about each subset of data, produced by process_data.py 
+for a specific category ("fos.name").
 Papers: number of papers
 Authors: unique authors
-Authorships: number of authorships
 Citations: total number of citations
 In-data citations: citations to papers in the subset
-In-dataset citations: citations to papers in the entire dataset (should be equal to total citations)
 
 
-10^1 ================================================================
-
-
-Neurophysics:
-Papers: 10
-Authors: 36
-Authorships: 38
-Citations: 80
-In-data citations: 1
+10^1 ======================================================
 
 Sloth:
 Papers: 10
 Authors: 27
-Authorships: 34
 Citations: 95
 In-data citations: 1
 
-Foyer:
-Papers: 10
-Authors: 27
-Authorships: 34
-Citations: 95
-In-data citations: 1
+10^2 ======================================================
 
-Topography:
-Papers: 10
-Authors: 32
-Authorships: 35
-Citations: 29
-In-data citations: 1
+Aeroacoustics:
+Papers: 57
+Authors: 158
+Citations: 185
+In-data citations: 8
 
+10^3 ======================================================
 
-10^2 ================================================================
+Spambot:
+Papers: 449
+Authors: 1053
+Citations: 6680
+In-data citations: 1665
 
+10^4 ======================================================
 
-Food technology:
-Papers: 41
-Authors: 126
-Authorships: 130
-Citations: 157
-In-data citations: 3
-In-dataset citations: 157
+Malware:
+Papers: 5970
+Authors: 11826
+Citations: 82872
+In-data citations: 27475
 
-Silicone:
-Papers: 102
-Authors: 390
-Authorships: 431
-Citations: 478
-In-data citations: 10
+10^5 ======================================================
 
-Magnetism:
-Papers: 103
-Authors: 321
-Authorships: 378
-Citations: 489
-In-data citations: 24
+Statistics:
+Papers: 67438
+Authors: 106906
+Citations: 433809
+In-data citations: 110304
 
+10^6 ======================================================
 
-10^3 ================================================================
-
-
-Polymer:
-Papers: 1001
-Authors: 3404
-Authorships: 3948
-Citations: 1271
-In-data citations: 124
-In-dataset citations: 1271
-
-Bigram:
-Papers: 1009
-Authors: 2357
-Authorships: 3009
-Citations: 11058
-In-data citations: 548
-
-
-10^4 ================================================================
-
-
-Documentation:
-Papers: 10061
-Authors: 24394
-Authorships: 31113
-Citations: 80638
-In-data citations: 5847
-
-Beamforming:
-Papers: 10246
-Authors: 15705
-Authorships: 34321
-Citations: 111810
-In-data citations: 32025
-
-
-10^5 ================================================================
-
-
-Natural language processing:
-Papers: 93129
-Authors: 107723
-Authorships: 261124
-Citations: 865074
-In-data citations: 425665
-
-
-10^6 ================================================================
-
-
-Artificial intelligence:
-tried to run it but took forever :(
-
+Machine learning:
+Papers: 482423
+TODO: 

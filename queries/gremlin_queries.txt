@@ -1,0 +1,69 @@
+###### INITIALIZATION ######
+
+./gremlin_server.sh start
+./gremlin.sh
+graph = TinkerGraph.open()
+g = graph.traversal()
+
+
+###### CREATE ######
+
+# Create paper
+g.addV('paper').property('id', 1).property('title', "Title").property('year', 2154).property('n_citation', 0)
+
+# Create author
+g.addV('author').property('id', 1).property('name', "Name").property('org', "Organization")
+
+# Create reference from author with id_1 to paper with id_2
+g.addE('reference').from(g.V().has('paper', 'id', id_1)).to(g.V().has('paper', 'id', id_2))
+
+# Create authorship from author with id_1 to paper with id_2
+g.addE('authorship').from(g.V().has('author', 'id', id_1)).to(g.V().has('paper', 'id', id_2))
+
+
+###### DELETE ######
+
+# Clear database
+g.V().drop().iterate()
+
+# Delete paper with id
+g.V().has('paper', 'id', id).drop()
+
+# Delete author with id
+g.V().has('author', 'id', id).drop()
+
+# Delete reference from paper with id_1 to paper with id_2
+g.V().has('paper', 'id', id_1).outE('reference').where(otherV().has('paper', 'id', id_2)).drop()
+
+# Delete authorship from author with id_1 to paper with id_2
+g.V().has('author', 'id', id_1).outE('authorship').where(otherV().has('paper', 'id', id_2)).drop()
+
+
+###### READ ######
+
+# Get title of paper with id
+g.V().has('paper', 'id', id).values('title')
+
+# Get organization of author with id
+g.V().has('author', 'id', id).values('org')
+
+# Get references of paper with id
+g.V().has('paper', 'id', id).out('reference').values('id')
+
+# Get references to paper with id
+g.V().has('paper', 'id', id).in('reference').values('id')
+
+# Get authors of paper with id
+g.V().has('paper', 'id', id).in('authorship').values('id')
+
+# Get papers of author with id
+g.V().has('author', 'id', id).out('authorship').values('id')
+
+
+###### UPDATE ######
+
+# Rename paper with given id
+g.V().has('paper', 'id', id).property('title', "New Title")
+
+# Change organization of author with given id
+g.V().has('author', 'id', id).property('org', "New Organization")

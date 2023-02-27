@@ -1,13 +1,12 @@
 import os
-import sys
+import numpy as np
+import pandas as pd
 from dotenv import load_dotenv
 from os.path import join as pjoin
 
 import data
 from connection import Connection, transact_and_time
 
-import numpy as np
-import pandas as pd
 
 
 if __name__ == "__main__":
@@ -76,7 +75,7 @@ if __name__ == "__main__":
     ))
 
     df = pd.DataFrame(result, columns=durations.keys(), index=['min', 'max', 'mean'])
-    df.to_csv('neo4j_create_scale2.csv')
+    df.to_csv('results/neo4j_create_scale2.csv')
 
     print(df)
 

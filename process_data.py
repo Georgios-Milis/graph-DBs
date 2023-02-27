@@ -19,7 +19,6 @@ fields_kept = [
 path = os.path.dirname(os.path.realpath(__file__))
 data_file = pjoin(path, 'data', 'dblp_papers_v11.txt')
 processed_file = pjoin(path, 'data', 'dblp_processed.txt') # ~ 1.3M papers
-sample_file = pjoin(path, 'data', 'dblp_sample.txt')       # ~ 100 papers
 categories = pjoin(path, 'data', 'categories.txt')
 
 
@@ -74,14 +73,6 @@ def write_papers_by_category(infile, outfile, category):
                     continue
 
 
-def write_paper_IDs(infile, outfile):
-    with open(outfile, 'w', encoding='utf-8') as fw:
-        with open(infile, 'r', encoding='utf-8') as fr:
-            for paper in fr:
-                data = json.loads(paper)['id']
-                fw.write(data)
-                fw.write('\n')
-
-
-outfile = pjoin(path, 'data', 'nlp.txt')
-write_papers_by_category(processed_file, outfile, 'Natural language processing')
+if __name__ == "__main__":
+    outfile = pjoin(path, 'data', 'Aeroacoustics.txt')
+    write_papers_by_category(processed_file, outfile, 'Aeroacoustics')

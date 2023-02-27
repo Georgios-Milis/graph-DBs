@@ -1,9 +1,6 @@
 import os
 import json
-import time
 from os.path import join as pjoin
-
-from connection import Connection
 
 
 def get_paper_IDs(datafile):
@@ -104,30 +101,8 @@ def get_authorships_data(datafile):
 if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
 
-    LOCAL = False
-
-    if not LOCAL:
-        from dotenv import load_dotenv
-        load_dotenv()
-        URI = os.getenv('NEO4J_URI')
-        USERNAME = os.getenv('NEO4J_USERNAME')
-        PASSWORD = os.getenv('NEO4J_PASSWORD')
-        INSTANCE = os.getenv('AURA_INSTANCENAME')
-    else:
-        URI = "bolt://localhost:7687"
-        USERNAME = "neo4j"
-        PASSWORD = "12345678"
-        INSTANCE = "scale-2"
-
-    # Initialize connection to database
-    connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
-
-
-    # CREATE - start timer
-    start_time = time.time()
-
     # Dataset
-    datafile = pjoin(path, 'data', 'nlp.txt')
+    datafile = pjoin(path, 'data', 'Machine_learning.txt')
 
     # Data
     papers = get_papers_data(datafile)
@@ -140,15 +115,3 @@ if __name__ == "__main__":
 
     print("Citations:", len(citations))
     print("In-data citations:", len([cite for cite in citations if cite['to'] in paper_ids]))
-    # ids = get_paper_IDs(pjoin(path, 'data', 'ids.txt'))
-    # print("In-dataset citations:", len([cite for cite in citations if cite['to'] in ids]))
-
-
-    # CREATE - stop timer
-    duration = time.time() - start_time
-
-    # Print so that subprocess.check_output gets the result
-    print(duration)
-
-    # Close
-    connection.close()

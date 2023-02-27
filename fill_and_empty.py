@@ -1,13 +1,12 @@
 import os
-import sys
+import numpy as np
+import pandas as pd
 from dotenv import load_dotenv
 from os.path import join as pjoin
 
 import data
 from connection import Connection, transact_and_time
 
-import numpy as np
-import pandas as pd
 
 if __name__ == "__main__":
     # This file path

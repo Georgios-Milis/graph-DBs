@@ -59,6 +59,9 @@ g.V().has('paper', 'id', id).in('authorship').values('id')
 # Get papers of author with id
 g.V().has('author', 'id', id).out('authorship').values('id')
 
+# Get common papers of authors with id_1 and id_2
+g.V().and(inE('authorship').where(otherV().has('author', 'id', id_1)), inE('authorship').where(otherV().has('author', 'id', id_2))).values('id')
+
 
 ###### UPDATE ######
 

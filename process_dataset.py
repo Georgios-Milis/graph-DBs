@@ -79,5 +79,5 @@ def write_papers_by_category(infile, outfile, category):
 
 
 if __name__ == "__main__":
-    outfile = pjoin(path, 'data', 'Aeroacoustics.txt')
+    outfile = pjoin(path, 'data', 'scale2_Aeroacoustics.txt')
     write_papers_by_category(processed_file, outfile, 'Aeroacoustics')

@@ -107,7 +107,7 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
 
     # Dataset
-    datafile = pjoin(path, 'data', 'Aeroacoustics.txt')
+    datafile = pjoin(path, 'data', 'scale2_Aeroacoustics.txt')
 
     # Data info
     papers = get_papers_data(datafile)

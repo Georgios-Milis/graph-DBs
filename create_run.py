@@ -32,10 +32,10 @@ if __name__ == "__main__":
     # Dataset files
     datafiles = sorted([
         pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-        if re.search("^scale[1-6].*\.txt", f)
+        if re.search("^scale[5-6].*\.txt", f)
     ])
 
-    for scale, datafile in enumerate(datafiles, 1):
+    for scale, datafile in enumerate(datafiles, 5):
         if not LOCAL:
             INSTANCE = os.getenv('AURA_INSTANCENAME')
         else:
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         # Measurements
         # Use fewer trials as datasets grow, for efficiency
         # TODO: run the same #tests finally
-        N_TRIALS = 10 - scale
+        N_TRIALS = 8 - scale
         N_QUERIES_fill_empty = 6
         trials_fill_empty = np.empty((N_TRIALS, N_QUERIES_fill_empty))
         N_QUERIES = 4
@@ -59,26 +59,22 @@ if __name__ == "__main__":
 
         print("Trying to CREATE data in scale:", scale)
 
+        # Data
+        papers = data.get_papers_data(datafile)
+        authors = data.get_authors_data(datafile)
+        citations = data.get_citations_data(datafile)
+        authorships = data.get_authorships_data(datafile)
+
         for i in range(N_TRIALS):
+            print(f"Trial {i+1}/{N_TRIALS}")
             # Let's start clean :)
             durations_fill_empty.update(transact_and_time(connection.clear_database))
 
             # Load data one at a time, execute transaction and then delete it
-            papers = data.get_papers_data(datafile)
             durations_fill_empty.update(transact_and_time(connection.create_papers, papers))
-            del papers
-
-            authors = data.get_authors_data(datafile)
-            durations_fill_empty.update(transact_and_time(connection.create_authors, authors))
-            del authors
-
-            citations = data.get_citations_data(datafile)
+            durations_fill_empty.update(transact_and_time(connection.create_authors, authors))      
             durations_fill_empty.update(transact_and_time(connection.create_references, citations))
-            del citations
-
-            authorships = data.get_authorships_data(datafile)
             durations_fill_empty.update(transact_and_time(connection.create_authorships, authorships))
-            del authorships
 
             # Log those measurements as the time required to fill the database
             durations_fill_empty.update({'fill_database': np.sum(list(durations_fill_empty.values()))})

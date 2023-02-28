@@ -33,7 +33,7 @@ if __name__ == "__main__":
     # Dataset files
     datafiles = sorted([
         pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-        if re.search("^scale[1-6].*\.txt", f)
+        if re.search("^scale[1-4].*\.txt", f)
     ])
 
     for scale, datafile in enumerate(datafiles, 1):
@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
         # Measurements
         N_TRIALS = 10
-        N_QUERIES = 3
+        N_QUERIES = 2
         trials = np.empty((N_TRIALS, N_QUERIES))
 
         # Node data
@@ -63,12 +63,10 @@ if __name__ == "__main__":
         author_ids = [author['id'] for author in authors][:N_TRIALS]
 
         for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
-            durations = {}
-
-            durations.update(transact_and_time(
-                connection.delete_authorship, 
-                (connection.authors_of(paper_id)[0], paper_id)
-            ))
+            # durations.update(transact_and_time(
+            #     connection.delete_authorship, 
+            #     (connection.authors_of(paper_id)[0], paper_id)
+            # ))
             durations.update(transact_and_time(connection.delete_paper, paper_id))
             durations.update(transact_and_time(connection.delete_author, author_id))
 

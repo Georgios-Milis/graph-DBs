@@ -22,6 +22,9 @@ def transact_and_time(transaction, *args):
 
 
 class Connection:
+    """
+    Handles connection to neo4j and contains methods for transactions.
+    """
     def __init__(self, uri, user, password, instance):
         self.instance = instance
         self.driver = GraphDatabase.driver(uri, auth=(user, password))

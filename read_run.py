@@ -1,5 +1,5 @@
 """
-Runs all READ-related queries and stores the results in csv files.
+Runs all READ queries and stores the results in csv files.
 """
 import os
 import re
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
 
     # Config
-    LOCAL = False
+    LOCAL = True
     if not LOCAL:
         from dotenv import load_dotenv
         load_dotenv()
@@ -43,35 +43,24 @@ if __name__ == "__main__":
 
         # Initialize connection to database
         connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
-        # Let's start clean :)
-        connection.clear_database()
+        # # Let's start clean :)
+        # connection.clear_database()
 
         # Durations dictionary
         durations = {}
 
-        # Fill database
-        papers = data.get_papers_data(datafile)
-        connection.create_papers(papers)
-        del papers
-        authors = data.get_authors_data(datafile)
-        connection.create_authors(authors)
-        del authors
-        citations = data.get_citations_data(datafile)
-        connection.create_references(citations)
-        del citations
-        authorships = data.get_authorships_data(datafile)
-        connection.create_authorships(authorships)
-        del authorships
-
+        # Measurements
         N_TRIALS = 10
         N_QUERIES = 4
+        trials = np.empty((N_TRIALS, N_QUERIES))
 
+        # Node data
+        papers = data.get_papers_data(datafile)
+        authors = data.get_authors_data(datafile)
         # TODO: randomize
         paper_ids = [paper['id'] for paper in papers][:N_TRIALS]
         author_ids = [author['id'] for author in authors][:N_TRIALS]
-
-        trials = np.empty((N_TRIALS, N_QUERIES))
-
+        
         for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
             durations.update(transact_and_time(connection.title_of_paper, paper_id))
             durations.update(transact_and_time(connection.authors_of, paper_id))

@@ -1,5 +1,5 @@
 """
-Runs all CREATE-related queries and stores the results in csv files.
+Runs CREATE-related queries and stores the results in csv files.
 """
 import os
 import re
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
 
     # Config
-    LOCAL = False
+    LOCAL = True
     if not LOCAL:
         from dotenv import load_dotenv
         load_dotenv()
@@ -43,20 +43,26 @@ if __name__ == "__main__":
 
         # Initialize connection to database
         connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
-        # Let's start clean :)
-        connection.clear_database()
 
         # Write results in dictionaries
         durations_fill_empty = {}
         durations = {}
 
-        N_TRIALS = 10
+        # Measurements
+        # Use fewer trials as datasets grow, for efficiency
+        # TODO: run the same #tests finally
+        N_TRIALS = 10 - scale
         N_QUERIES_fill_empty = 6
         trials_fill_empty = np.empty((N_TRIALS, N_QUERIES_fill_empty))
         N_QUERIES = 4
         trials = np.empty((N_TRIALS, N_QUERIES))
 
+        print("Trying to CREATE data in scale:", scale)
+
         for i in range(N_TRIALS):
+            # Let's start clean :)
+            durations_fill_empty.update(transact_and_time(connection.clear_database))
+
             # Load data one at a time, execute transaction and then delete it
             papers = data.get_papers_data(datafile)
             durations_fill_empty.update(transact_and_time(connection.create_papers, papers))
@@ -76,7 +82,8 @@ if __name__ == "__main__":
 
             # Log those measurements as the time required to fill the database
             durations_fill_empty.update({'fill_database': np.sum(list(durations_fill_empty.values()))})
-            
+            trials_fill_empty[i] = list(durations_fill_empty.values())
+
 
             # Now CREATE on filled database
             dummy_paper = {
@@ -94,10 +101,6 @@ if __name__ == "__main__":
             durations.update(transact_and_time(connection.create_reference, i, i))
             durations.update(transact_and_time(connection.create_authorship, i, i+1))
             trials[i] = list(durations.values())
-
-            # Clear database and log that duration too
-            durations_fill_empty.update(transact_and_time(connection.clear_database))
-            trials_fill_empty[i] = list(durations_fill_empty.values())
 
 
         # Aggregate CREATE results
@@ -125,3 +128,6 @@ if __name__ == "__main__":
 
         # Close connection
         connection.close()
+
+
+        #TODO: ignore 1st clear

@@ -1,3 +1,7 @@
+"""
+Contains the connection to neo4j databse and should 
+be imported in order to connect.
+"""
 from time import time
 from neo4j import GraphDatabase
 
@@ -25,12 +29,13 @@ class Connection:
     def close(self):
         self.driver.close()
 
-    # CREATE
+    # CREATE ========================================================
     # Single
     create_paper = create_queries.create_paper
     create_author = create_queries.create_author
     create_reference = create_queries.create_reference
     create_authorship = create_queries.create_authorship
+
     # Batch
     create_papers = create_queries.create_papers
     create_authors = create_queries.create_authors
@@ -38,7 +43,7 @@ class Connection:
     create_authorships = create_queries.create_authorships
 
     
-    # READ
+    # READ ========================================================
     # Simple Queries
     find_paper = read_queries.find_paper
     find_author = read_queries.find_author
@@ -58,12 +63,13 @@ class Connection:
     mean_authors_per_paper = read_queries.mean_authors_per_paper
 
 
-    # UPDATE
+    # UPDATE ========================================================
     rename_paper = update_queries.rename_paper
     change_org = update_queries.change_org
 
 
-    # DELETE
+    # DELETE ========================================================
+    # Single
     delete_paper = delete_queries.delete_paper
     delete_author = delete_queries.delete_author
     delete_reference = delete_queries.delete_reference

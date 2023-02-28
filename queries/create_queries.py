@@ -19,7 +19,6 @@ def create_paper(self, attributes):
     with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_paper_tx, attributes)
         return result
-        # for row in result: print(f"Created paper: {row['p']}")
 
 
 def create_papers(self, papers):
@@ -79,7 +78,6 @@ def create_author(self, attributes):
     with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_author_tx, attributes)
         return result
-        # for row in result: print(f"Created author: {row['a']}")
 
 
 def create_reference(self, id, ref_id):
@@ -105,7 +103,6 @@ def create_reference(self, id, ref_id):
     with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_reference_tx, id, ref_id)
         return result
-        # for row in result: print(f"Created reference of {row['p1']['id']} to {row['p2']['id']}.")
 
 
 def create_references(self, references):
@@ -150,7 +147,6 @@ def create_authorship(self, author_id, paper_id):
     with self.driver.session(database=self.instance) as session:
         result = session.execute_write(create_authorship_tx, author_id, paper_id)
         return result
-        # for row in result: print(f"Created authorship between {row['a']['id']} and {row['p']['id']}.")
 
 
 def create_authorships(self, authorships):

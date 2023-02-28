@@ -1,3 +1,8 @@
+"""
+This file contains utility functions that return data attributes ready 
+to be inserted into the databases, read from a dataset (text file) 
+written by process_DBLP_dataset.py
+"""
 import os
 import json
 from os.path import join as pjoin

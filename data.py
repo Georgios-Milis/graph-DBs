@@ -102,16 +102,20 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
 
     # Dataset
-    datafile = pjoin(path, 'data', 'Machine_learning.txt')
+    datafile = pjoin(path, 'data', 'Aeroacoustics.txt')
 
-    # Data
+    # Data info
     papers = get_papers_data(datafile)
     print("Papers:", len(papers))
+
     authors = get_authors_data(datafile)
     print("Authors:", len(authors))
-    citations = get_citations_data(datafile)
-    
-    paper_ids = [int(paper['id']) for paper in papers]
 
+    authorships = get_authorships_data(datafile)
+    print("Authorships:", len(authorships))
+    
+    citations = get_citations_data(datafile)
     print("Citations:", len(citations))
+
+    paper_ids = [int(paper['id']) for paper in papers]
     print("In-data citations:", len([cite for cite in citations if cite['to'] in paper_ids]))

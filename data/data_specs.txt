@@ -11,6 +11,7 @@ In-data citations: citations to papers in the subset
 Sloth:
 Papers: 10
 Authors: 27
+Authorships: 34
 Citations: 95
 In-data citations: 1
 
@@ -19,6 +20,7 @@ In-data citations: 1
 Aeroacoustics:
 Papers: 57
 Authors: 158
+Authorships: 163
 Citations: 185
 In-data citations: 8
 
@@ -27,6 +29,7 @@ In-data citations: 8
 Spambot:
 Papers: 449
 Authors: 1053
+Authorships: 1499
 Citations: 6680
 In-data citations: 1665
 
@@ -35,6 +38,7 @@ In-data citations: 1665
 Malware:
 Papers: 5970
 Authors: 11826
+Authorships: 20974
 Citations: 82872
 In-data citations: 27475
 
@@ -43,6 +47,7 @@ In-data citations: 27475
 Statistics:
 Papers: 67438
 Authors: 106906
+Authorships: 182722
 Citations: 433809
 In-data citations: 110304
 
@@ -50,6 +55,7 @@ In-data citations: 110304
 
 Machine learning:
 Papers: 482423
-Papers: 482423
 Authors: 575660
+Authorships: 1476347
 Citations: 6153298
+In-data citations: 3192286

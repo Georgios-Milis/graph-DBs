@@ -96,7 +96,7 @@ if __name__ == "__main__":
         ))
 
         df = pd.DataFrame(result, columns=durations.keys(), index=['min', 'max', 'mean'])
-        df.to_csv(pjoin(path, 'results', f' neo4j_create_scale{scale}.csv'))
+        df.to_csv(pjoin(path, 'results', f'neo4j_create_scale{scale}.csv'))
 
         print(df)
 

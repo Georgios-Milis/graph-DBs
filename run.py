@@ -1,7 +1,6 @@
 import os
 import csv
 import json
-import pandas
 import subprocess
 from os.path import join as pjoin
 

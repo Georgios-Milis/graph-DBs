@@ -51,21 +51,29 @@ if __name__ == "__main__":
 
         # Measurements
         N_TRIALS = 10
-        N_QUERIES = 2
+        N_QUERIES = 3
         trials = np.empty((N_TRIALS, N_QUERIES))
 
         # Node data
         papers = data.get_papers_data(datafile)
         authors = data.get_authors_data(datafile)
+
         # TODO: randomize
-        paper_ids = [paper['id'] for paper in papers][:N_TRIALS]
-        author_ids = [author['id'] for author in authors][:N_TRIALS]
+        papers = papers[:N_TRIALS]
+        authors = authors[:N_TRIALS]
+        
+        connection.create_papers(papers)
+        connection.create_authors(authors)
+        
+        paper_ids = [paper['id'] for paper in papers]
+        author_ids = [author['id'] for author in authors]
 
         for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
-            # durations.update(transact_and_time(
-            #     connection.delete_authorship, 
-            #     (connection.authors_of(paper_id)[0], paper_id)
-            # ))
+            connection.create_authorship(author_id, paper_id)
+            durations.update(transact_and_time(
+                connection.delete_authorship, 
+                (connection.authors_of(paper_id)[0], paper_id)
+            ))
             durations.update(transact_and_time(connection.delete_paper, paper_id))
             durations.update(transact_and_time(connection.delete_author, author_id))
 

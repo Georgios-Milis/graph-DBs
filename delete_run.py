@@ -5,7 +5,6 @@ import os
 import re
 import numpy as np
 import pandas as pd
-from dotenv import load_dotenv
 from os.path import join as pjoin
 
 import data

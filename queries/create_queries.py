@@ -29,7 +29,7 @@ def create_papers(self, papers):
         query = (
             """
             UNWIND $papers AS map
-            CREATE (p:Paper)
+            CREATE UNIQUE (p:Paper)
             SET p = map
             """
         )
@@ -47,7 +47,7 @@ def create_authors(self, authors):
         query = (
             """
             UNWIND $authors AS map
-            CREATE (a:Author)
+            CREATE UNIQUE (a:Author)
             SET a = map
             """
         )
@@ -115,7 +115,7 @@ def create_references(self, references):
             UNWIND $references AS edge
             MATCH (p1:Paper), (p2:Paper)
             WHERE p1.id = edge.from AND p2.id = edge.to
-            CREATE (p1)-[r:REFERENCE]->(p2)
+            CREATE UNIQUE (p1)-[r:REFERENCE]->(p2)
             """  
         )
         tx.run(query, references=references)
@@ -159,7 +159,7 @@ def create_authorships(self, authorships):
             UNWIND $authorships AS edge
             MATCH (a:Author), (p:Paper)
             WHERE a.id = edge.author AND p.id = edge.paper
-            CREATE (a)-[r:AUTHORSHIP]->(p)
+            CREATE UNIQUE (a)-[r:AUTHORSHIP]->(p)
             """  
         )
         tx.run(query, authorships=authorships)

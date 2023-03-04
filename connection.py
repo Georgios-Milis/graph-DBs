@@ -45,6 +45,10 @@ class Connection:
     create_references = create_queries.create_references
     create_authorships = create_queries.create_authorships
 
+    # Constraints
+
+    paper_constraints = create_queries.paper_constraints
+    author_constraints = create_queries.author_constraints
     
     # READ ========================================================
     # Simple Queries
@@ -80,3 +84,4 @@ class Connection:
 
     # Clear
     clear_database = delete_queries.clear_database
+    remove_constraints = delete_queries.remove_constraints

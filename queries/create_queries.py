@@ -9,8 +9,9 @@ def create_paper(self, attributes):
     def create_paper_tx(tx, attributes):
         query = (
             """
-            MERGE (p:Paper $attributes)
-            RETURN p
+            WITH $attributes AS params
+            MERGE (p:Paper {id: params.id})
+            ON CREATE SET p = properties(params)
             """
         )
         result = tx.run(query, attributes=attributes)
@@ -28,16 +29,9 @@ def create_papers(self, papers):
     def create_papers_tx(tx, papers):
         query = (
             """
-            UNWIND $papers AS map
-            CREATE UNIQUE (p:Paper)
-            SET p = map
-            """
-        )
-        query = (
-            """
-            UNWIND $papers AS map
-            MERGE (p:Person {id: map.id})
-            ON CREATE SET p = map
+            UNWIND $papers AS params
+            MERGE (p:Paper {id: params.id})
+            ON CREATE SET p = properties(params)
             """
         )
         tx.run(query, papers=papers)
@@ -53,16 +47,9 @@ def create_authors(self, authors):
     def create_authors_tx(tx, authors):
         query = (
             """
-            UNWIND $authors AS map
-            CREATE UNIQUE (a:Author)
-            SET a = map
-            """
-        )
-        query = (
-            """
-            UNWIND $authors AS map
-            MERGE (a:Author {id: map.id})
-            ON CREATE SET a = map
+            UNWIND $authors AS params
+            MERGE (a:Author {id: params.id})
+            ON CREATE SET a = properties(params)
             """
         )
         tx.run(query, authors=authors)
@@ -78,8 +65,9 @@ def create_author(self, attributes):
     def create_author_tx(tx, attributes):
         query = (
             """
-            MERGE (a:Author $attributes)
-            RETURN a
+            WITH $attributes AS params
+            MERGE (a:Author {id: params.id})
+            ON CREATE SET a = properties(params)
             """
         )
         result = tx.run(query, attributes=attributes)
@@ -130,7 +118,7 @@ def create_references(self, references):
             MATCH (p1:Paper), (p2:Paper)
             WHERE p1.id = edge.from AND p2.id = edge.to
             MERGE (p1)-[r:REFERENCE]->(p2)
-            """  
+            """
         )
         tx.run(query, references=references)
 
@@ -174,7 +162,7 @@ def create_authorships(self, authorships):
             MATCH (a:Author), (p:Paper)
             WHERE a.id = edge.author AND p.id = edge.paper
             MERGE (a)-[r:AUTHORSHIP]->(p)
-            """  
+            """
         )
         tx.run(query, authorships=authorships)
 

@@ -16,7 +16,7 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
 
     # Config
-    LOCAL = True
+    LOCAL = False
     if not LOCAL:
         from dotenv import load_dotenv
         load_dotenv()

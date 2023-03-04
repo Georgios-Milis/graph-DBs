@@ -7,6 +7,8 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 from os.path import join as pjoin
+from matplotlib.lines import Line2D
+import matplotlib.patches as mpatches
 
 
 # This file's absolute path
@@ -21,8 +23,16 @@ scales = [i+1 for i in range(4)]
 x = [10**scale for scale in scales]
 
 
+# Legend utilities for all plots
+blue_patch = mpatches.Patch(color='blue', label='Neo4j')
+red_patch = mpatches.Patch(color='red', label='JanusGraph')
+line = Line2D([0], [0], label='Nodes', color='k')
+dashed_line = Line2D([0], [0], label='Edges', color='k', linestyle='--')
+
+
 def generic_plot(op, title, savename):
-    plt.figure()
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
     for dbms in DBMSs:
         min_ = []
         max_ = []
@@ -37,13 +47,13 @@ def generic_plot(op, title, savename):
             mean_.append(data.iloc[2, 1:].mean())
         # Plot
         colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
-        plt.plot(x, mean_, colors[0], linewidth=2)
-        plt.fill_between(x, min_, max_, color=colors[0], alpha=0.2)
+        ax.plot(x, mean_, colors[0], linewidth=2)
+        ax.fill_between(x, min_, max_, color=colors[0], alpha=0.2)
     plt.xscale('log')
     plt.title(title)
     plt.xlabel('Dataset node scale')
     plt.ylabel('Time (sec)')
-    # plt.legend()
+    plt.legend(handles=[blue_patch, red_patch, line, dashed_line])
     plt.grid()
     plt.savefig(pjoin(path, 'plots', savename))
 

@@ -9,7 +9,7 @@ def create_paper(self, attributes):
     def create_paper_tx(tx, attributes):
         query = (
             """
-            CREATE UNIQUE (p:Paper $attributes)
+            MERGE (p:Paper $attributes)
             RETURN p
             """
         )
@@ -78,7 +78,7 @@ def create_author(self, attributes):
     def create_author_tx(tx, attributes):
         query = (
             """
-            CREATE UNIQUE (a:Author $attributes)
+            MERGE (a:Author $attributes)
             RETURN a
             """
         )
@@ -103,7 +103,7 @@ def create_reference(self, id, ref_id):
             """
             MATCH (p1:Paper), (p2:Paper)
             WHERE p1.id = $id AND p2.id = $ref_id
-            CREATE UNIQUE (p1)-[r:REFERENCE]->(p2)
+            MERGE (p1)-[r:REFERENCE]->(p2)
             RETURN p1, p2
             """
         )
@@ -147,7 +147,7 @@ def create_authorship(self, author_id, paper_id):
             """
             MATCH (a:Author), (p:Paper)
             WHERE a.id = $author_id AND p.id = $paper_id
-            CREATE UNIQUE (a)-[r:AUTHORSHIP]->(p)
+            MERGE (a)-[r:AUTHORSHIP]->(p)
             RETURN a, p
             """
         )

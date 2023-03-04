@@ -16,7 +16,7 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
 
     # Config
-    LOCAL = False
+    LOCAL = True
     if not LOCAL:
         from dotenv import load_dotenv
         load_dotenv()
@@ -32,10 +32,10 @@ if __name__ == "__main__":
     # Dataset files
     datafiles = sorted([
         pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-        if re.search("^scale[5-6].*\.txt", f)
+        if re.search("^scale[1-4].*\.txt", f)
     ])
 
-    for scale, datafile in enumerate(datafiles, 5):
+    for scale, datafile in enumerate(datafiles, 1):
         if not LOCAL:
             INSTANCE = os.getenv('AURA_INSTANCENAME')
         else:
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         # Measurements
         # Use fewer trials as datasets grow, for efficiency
         # TODO: run the same #tests finally
-        N_TRIALS = 8 - scale
+        N_TRIALS = 1
         N_QUERIES_fill_empty = 6
         trials_fill_empty = np.empty((N_TRIALS, N_QUERIES_fill_empty))
         N_QUERIES = 4

@@ -13,12 +13,39 @@ from os.path import join as pjoin
 path = os.path.dirname(os.path.realpath(__file__))
 
 # DBMS names
-DBMSs = ['neo4j']#, 'janus']
+DBMSs = ['neo4j', 'janus']
 # Data scales
 scales = [i+1 for i in range(4)]
 
 # Horizontal axis for plots
 x = [10**scale for scale in scales]
+
+
+def generic_plot(op, title, savename):
+    plt.figure()
+    for dbms in DBMSs:
+        min_ = []
+        max_ = []
+        mean_ = []
+        for scale in scales:
+            # Read results file
+            datafile = pjoin(path, 'results', f'{dbms}_{op}_scale{scale}.csv')
+            data = pd.read_csv(datafile)
+            # Isolate metrics
+            min_.append(data.iloc[0, 1:].min())
+            max_.append(data.iloc[1, 1:].max())
+            mean_.append(data.iloc[2, 1:].mean())
+        # Plot
+        colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
+        plt.plot(x, mean_, colors[0], linewidth=2)
+        plt.fill_between(x, min_, max_, color=colors[0], alpha=0.2)
+    plt.xscale('log')
+    plt.title(title)
+    plt.xlabel('Dataset node scale')
+    plt.ylabel('Time (sec)')
+    # plt.legend()
+    plt.grid()
+    plt.savefig(pjoin(path, 'plots', savename))
 
 
 # # fill_and_empty plot =========================================================
@@ -57,7 +84,7 @@ x = [10**scale for scale in scales]
 # plt.savefig(pjoin(path, 'plots', 'fill_and_empty.pdf'))
 
 
-# # CREATE plot =================================================================
+# CREATE plot =================================================================
 # plt.figure()
 # for dbms in DBMSs:
 #     min_node = []
@@ -92,7 +119,7 @@ x = [10**scale for scale in scales]
 # plt.savefig(pjoin(path, 'plots', 'create.pdf'))
 
 
-# # READ plot ===================================================================
+# READ plot ===================================================================
 # plt.figure()
 # for dbms in DBMSs:
 #     min_simple = []
@@ -128,62 +155,8 @@ x = [10**scale for scale in scales]
 
 
 # UPDATE plot =================================================================
-plt.figure()
-for dbms in DBMSs:
-    min_ = []
-    max_ = []
-    mean_ = []
-    for scale in scales:
-        # Read results file
-        datafile = pjoin(path, 'results', f'{dbms}_update_scale{scale}.csv')
-        data = pd.read_csv(datafile)
-        # Isolate metrics
-        min_.append(data.loc[0, ['rename_paper', 'change_org']].min())
-        max_.append(data.loc[1, ['rename_paper', 'change_org']].max())
-        mean_.append(data.loc[2, ['rename_paper', 'change_org']].mean())
-    # Plot
-    colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
-    plt.plot(x, mean_, colors[0], linewidth=2)
-    plt.fill_between(x, min_, max_, color=colors[0], alpha=0.2)
-plt.xscale('log')
-plt.title('Transaction duration of UPDATE')
-plt.xlabel('Dataset node scale')
-plt.ylabel('Time (sec)')
-# plt.legend()
-plt.grid()
-plt.savefig(pjoin(path, 'plots', 'update.pdf'))
+generic_plot('update', 'Transaction duration of UPDATE', 'update.pdf')
 
 
-# DELETE plot =================================================================
-plt.figure()
-for dbms in DBMSs:
-    min_node = []
-    max_node = []
-    mean_node = []
-    min_edge = []
-    max_edge = []
-    mean_edge = []
-    for scale in scales:
-        # Read results file
-        datafile = pjoin(path, 'results', f'{dbms}_delete_scale{scale}.csv')
-        data = pd.read_csv(datafile)
-        # Isolate metrics
-        min_node.append(data.loc[0, ['delete_author', 'delete_paper']].min())
-        max_node.append(data.loc[1, ['delete_author', 'delete_paper']].max())
-        mean_node.append(data.loc[2, ['delete_author', 'delete_paper']].mean())
-        # min_edge.append(data.loc[0, 'delete_authorship'])
-        # max_edge.append(data.loc[1, 'delete_authorship'])
-        # mean_edge.append(data.loc[2, 'delete_authorship'])
-    # Plot
-    colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
-    plt.plot(x, mean_node, colors[0], label='Nodes', linewidth=2)
-    plt.fill_between(x, min_node, max_node, color=colors[0], alpha=0.2)
-    # plt.plot(x, mean_edge, colors[1] + '--', label='Edges', linewidth=2)
-    # plt.fill_between(x, min_edge, max_edge, color=colors[1], linestyle='--', alpha=0.2)
-plt.xscale('log')
-plt.title('Transaction duration of DELETE')
-plt.xlabel('Dataset node scale')
-plt.ylabel('Time (sec)')
-plt.legend()
-plt.grid()
-plt.savefig(pjoin(path, 'plots', 'delete.pdf'))
+# # DELETE plot =================================================================
+# generic_plot('delete', 'Transaction duration of DELETE', 'delete.pdf')

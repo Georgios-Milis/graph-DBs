@@ -1,9 +1,9 @@
 from gremlin_python.driver import client
 from tornado import httpclient
-import read_queries_janus
-import create_queries
-import delete_queries_janus
-import update_queries_janus
+from queries import read_queries_janus
+from queries import create_queries
+from queries import delete_queries_janus
+from queries import update_queries_janus
 import data
 import json
 import os
@@ -20,7 +20,7 @@ query1 = "g = graph.traversal()"
 gremlin_conn.submit(query1)
 
 
-datafile = './Desktop/scale3_Spambot.txt'
+datafile = './data/scale3_Spambot.txt'
 papers = data.get_papers_data(datafile)
 authors = data.get_authors_data(datafile)
 refs = data.get_citations_data(datafile)

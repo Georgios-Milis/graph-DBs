@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # Dataset files
     datafiles = sorted([
         pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-        if re.search("^scale4.*\.txt", f)
+        if re.search("^scale[1-4].*\.txt", f)
     ])
 
     for scale, datafile in enumerate(datafiles, 4):
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         # Measurements
         # Use fewer trials as datasets grow, for efficiency
         # TODO: run the same #tests finally
-        N_TRIALS = 1
+        N_TRIALS = 2
         N_QUERIES_fill_empty = 6
         trials_fill_empty = np.empty((N_TRIALS, N_QUERIES_fill_empty))
         N_QUERIES = 4

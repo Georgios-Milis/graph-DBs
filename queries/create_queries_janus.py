@@ -1,5 +1,5 @@
 def create_paper(gremlin_conn,id,Title,year,n_citation):
-    query = f"g.addV('paper').property('id', {id}).property('title', {Title}).property('year', {year}).property('n_citation', {n_citation})"
+    query = f"g.addV('paper').property('id', {id}).property('title', '{Title}').property('year', {year}).property('n_citation', {n_citation})"
     try:
         response = gremlin_conn.submit(query).next()
     except:
@@ -8,7 +8,7 @@ def create_paper(gremlin_conn,id,Title,year,n_citation):
 
 
 def create_author(gremlin_conn, id , name , org):
-    query = f"g.addV('author').property('id', {id}).property('name', {name}).property('org', {org})"
+    query = f"g.addV('author').property('id', {id}).property('name', '{name}').property('org', '{org}')"
     try:
         response = gremlin_conn.submit(query).next()
     except:

@@ -32,10 +32,10 @@ if __name__ == "__main__":
     # Dataset files
     datafiles = sorted([
         pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-        if re.search("^scale[5-6].*\.txt", f)
+        if re.search("^scale[1-4].*\.txt", f)
     ])
 
-    for scale, datafile in enumerate(datafiles, 5):
+    for scale, datafile in enumerate(datafiles, 1):
         if not LOCAL:
             INSTANCE = os.getenv('AURA_INSTANCENAME')
         else:
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         # Measurements
         # Use fewer trials as datasets grow, for efficiency
         # TODO: run the same #tests finally
-        N_TRIALS = 8 - scale
+        N_TRIALS = 1
         N_QUERIES_fill_empty = 6
         trials_fill_empty = np.empty((N_TRIALS, N_QUERIES_fill_empty))
         N_QUERIES = 4
@@ -69,8 +69,11 @@ if __name__ == "__main__":
             print(f"Trial {i+1}/{N_TRIALS}")
             # Let's start clean :)
             durations_fill_empty.update(transact_and_time(connection.clear_database))
+            connection.remove_constraints()
 
             # Load data one at a time, execute transaction and then delete it
+            connection.author_constraints()
+            connection.paper_constraints()
             durations_fill_empty.update(transact_and_time(connection.create_papers, papers))
             durations_fill_empty.update(transact_and_time(connection.create_authors, authors))      
             durations_fill_empty.update(transact_and_time(connection.create_references, citations))

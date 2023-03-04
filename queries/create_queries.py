@@ -9,8 +9,9 @@ def create_paper(self, attributes):
     def create_paper_tx(tx, attributes):
         query = (
             """
-            CREATE (p:Paper $attributes)
-            RETURN p
+            WITH $attributes AS params
+            MERGE (p:Paper {id: params.id})
+            ON CREATE SET p = properties(params)
             """
         )
         result = tx.run(query, attributes=attributes)
@@ -28,9 +29,9 @@ def create_papers(self, papers):
     def create_papers_tx(tx, papers):
         query = (
             """
-            UNWIND $papers AS map
-            CREATE (p:Paper)
-            SET p = map
+            UNWIND $papers AS params
+            MERGE (p:Paper {id: params.id})
+            ON CREATE SET p = properties(params)
             """
         )
         tx.run(query, papers=papers)
@@ -46,9 +47,9 @@ def create_authors(self, authors):
     def create_authors_tx(tx, authors):
         query = (
             """
-            UNWIND $authors AS map
-            CREATE (a:Author)
-            SET a = map
+            UNWIND $authors AS params
+            MERGE (a:Author {id: params.id})
+            ON CREATE SET a = properties(params)
             """
         )
         tx.run(query, authors=authors)
@@ -64,8 +65,9 @@ def create_author(self, attributes):
     def create_author_tx(tx, attributes):
         query = (
             """
-            CREATE (a:Author $attributes)
-            RETURN a
+            WITH $attributes AS params
+            MERGE (a:Author {id: params.id})
+            ON CREATE SET a = properties(params)
             """
         )
         result = tx.run(query, attributes=attributes)
@@ -89,7 +91,7 @@ def create_reference(self, id, ref_id):
             """
             MATCH (p1:Paper), (p2:Paper)
             WHERE p1.id = $id AND p2.id = $ref_id
-            CREATE (p1)-[r:REFERENCE]->(p2)
+            MERGE (p1)-[r:REFERENCE]->(p2)
             RETURN p1, p2
             """
         )
@@ -115,8 +117,8 @@ def create_references(self, references):
             UNWIND $references AS edge
             MATCH (p1:Paper), (p2:Paper)
             WHERE p1.id = edge.from AND p2.id = edge.to
-            CREATE (p1)-[r:REFERENCE]->(p2)
-            """  
+            MERGE (p1)-[r:REFERENCE]->(p2)
+            """
         )
         tx.run(query, references=references)
 
@@ -133,7 +135,7 @@ def create_authorship(self, author_id, paper_id):
             """
             MATCH (a:Author), (p:Paper)
             WHERE a.id = $author_id AND p.id = $paper_id
-            CREATE (a)-[r:AUTHORSHIP]->(p)
+            MERGE (a)-[r:AUTHORSHIP]->(p)
             RETURN a, p
             """
         )
@@ -159,10 +161,24 @@ def create_authorships(self, authorships):
             UNWIND $authorships AS edge
             MATCH (a:Author), (p:Paper)
             WHERE a.id = edge.author AND p.id = edge.paper
-            CREATE (a)-[r:AUTHORSHIP]->(p)
-            """  
+            MERGE (a)-[r:AUTHORSHIP]->(p)
+            """
         )
         tx.run(query, authorships=authorships)
 
     with self.driver.session(database=self.instance) as session:
         session.execute_write(create_authorships_tx, authorships)
+
+
+def paper_constraints(self):
+    def paper_constraints_tx(tx):
+        tx.run("CREATE CONSTRAINT FOR (n:Paper) REQUIRE n.id IS UNIQUE")
+    with self.driver.session(database=self.instance) as session:
+        session.execute_write(paper_constraints_tx)
+
+
+def author_constraints(self):
+    def author_constraints_tx(tx):
+        tx.run("CREATE CONSTRAINT FOR (n:Author) REQUIRE n.id IS UNIQUE")
+    with self.driver.session(database=self.instance) as session:
+        session.execute_write(author_constraints_tx)

@@ -75,7 +75,25 @@ def clear_database(self):
     Clear the whole database.
     """
     def clear_database_tx(tx):
-        tx.run("MATCH (n) DETACH DELETE n")
+        tx.run(
+            """
+            MATCH (n) DETACH DELETE n
+            """
+        )
         
     with self.driver.session(database=self.instance) as session:
         session.execute_write(clear_database_tx)
+
+
+def remove_constraints(self):
+    """
+    Remove all constraints and indexes.
+    """
+    def remove_constraints_tx(tx):
+        tx.run(
+            """
+            CALL apoc.schema.assert({}, {})
+            """
+        ) 
+    with self.driver.session(database=self.instance) as session:
+        session.execute_write(remove_constraints_tx)

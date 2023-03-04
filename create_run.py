@@ -69,8 +69,11 @@ if __name__ == "__main__":
             print(f"Trial {i+1}/{N_TRIALS}")
             # Let's start clean :)
             durations_fill_empty.update(transact_and_time(connection.clear_database))
+            connection.remove_constraints()
 
             # Load data one at a time, execute transaction and then delete it
+            connection.author_constraints()
+            connection.paper_constraints()
             durations_fill_empty.update(transact_and_time(connection.create_papers, papers))
             durations_fill_empty.update(transact_and_time(connection.create_authors, authors))      
             durations_fill_empty.update(transact_and_time(connection.create_references, citations))

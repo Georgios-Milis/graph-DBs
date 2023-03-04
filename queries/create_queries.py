@@ -168,3 +168,17 @@ def create_authorships(self, authorships):
 
     with self.driver.session(database=self.instance) as session:
         session.execute_write(create_authorships_tx, authorships)
+
+
+def paper_constraints(self):
+    def paper_constraints_tx(tx):
+        tx.run("CREATE CONSTRAINT FOR (n:Paper) REQUIRE n.id IS UNIQUE")
+    with self.driver.session(database=self.instance) as session:
+        session.execute_write(paper_constraints_tx)
+
+
+def author_constraints(self):
+    def author_constraints_tx(tx):
+        tx.run("CREATE CONSTRAINT FOR (n:Author) REQUIRE n.id IS UNIQUE")
+    with self.driver.session(database=self.instance) as session:
+        session.execute_write(author_constraints_tx)

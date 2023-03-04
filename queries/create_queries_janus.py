@@ -6,6 +6,7 @@ def create_paper(gremlin_conn,id,Title,year,n_citation):
         response = "Something went wrong with vertice create" 
     return response
 
+
 def create_author(gremlin_conn, id , name , org):
     query = f"g.addV('author').property('id', {id}).property('name', {name}).property('org', {org})"
     try:
@@ -13,6 +14,7 @@ def create_author(gremlin_conn, id , name , org):
     except:
         response = "Something went wrong with vertice create" 
     return response
+
 
 def create_reference(gremlin_conn,id1,id2):
     query = f"g.addE('reference').from(g.V().has('paper', 'id', {id1})).to(g.V().has('paper', 'id', {id2}))"
@@ -22,6 +24,7 @@ def create_reference(gremlin_conn,id1,id2):
         response = "Something went wrong with edge create" 
     return response
 
+
 def create_authorship(gremlin_conn,id1,id2):
     query = f"g.addE('authorship').from(g.V().has('author', 'id', {id1})).to(g.V().has('paper', 'id', {id2}))"
     try:
@@ -29,4 +32,3 @@ def create_authorship(gremlin_conn,id1,id2):
     except:
         response = "Something went wrong with edge create" 
     return response
-

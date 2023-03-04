@@ -16,7 +16,7 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
 
     # Config
-    LOCAL = True
+    LOCAL = False
     if not LOCAL:
         from dotenv import load_dotenv
         load_dotenv()
@@ -32,10 +32,10 @@ if __name__ == "__main__":
     # Dataset files
     datafiles = sorted([
         pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-        if re.search("^scale[1-4].*\.txt", f)
+        if re.search("^scale4.*\.txt", f)
     ])
 
-    for scale, datafile in enumerate(datafiles, 1):
+    for scale, datafile in enumerate(datafiles, 4):
         if not LOCAL:
             INSTANCE = os.getenv('AURA_INSTANCENAME')
         else:

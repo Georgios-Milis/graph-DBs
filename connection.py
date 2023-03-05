@@ -1,14 +1,20 @@
 """
-Contains the connection to neo4j databse and should 
-be imported in order to connect.
+Contains connection classes for both databases 
+and should be imported in order to connect.
 """
 from time import time
+from tornado import httpclient
 from neo4j import GraphDatabase
+from gremlin_python.driver import client
 
-import queries.create_queries as create_queries
-import queries.read_queries as read_queries
-import queries.update_queries as update_queries
-import queries.delete_queries as delete_queries
+import queries.create_neo as create_neo
+import queries.read_neo as read_neo
+import queries.update_neo as update_neo
+import queries.delete_neo as delete_neo
+import queries.create_janus as create_janus
+import queries.read_janus as read_janus
+import queries.update_janus as update_janus
+import queries.delete_janus as delete_janus
 
 
 def transact_and_time(transaction, *args):
@@ -21,9 +27,9 @@ def transact_and_time(transaction, *args):
     return {transaction.__name__: duration}
 
 
-class Connection:
+class Neo4jConnection:
     """
-    Handles connection to neo4j and contains methods for transactions.
+    Handles connection to Neo4j and contains methods for transactions.
     """
     def __init__(self, uri, user, password, instance):
         self.instance = instance
@@ -34,54 +40,122 @@ class Connection:
 
     # CREATE ========================================================
     # Single
-    create_paper = create_queries.create_paper
-    create_author = create_queries.create_author
-    create_reference = create_queries.create_reference
-    create_authorship = create_queries.create_authorship
+    create_paper = create_neo.create_paper
+    create_author = create_neo.create_author
+    create_reference = create_neo.create_reference
+    create_authorship = create_neo.create_authorship
 
     # Batch
-    create_papers = create_queries.create_papers
-    create_authors = create_queries.create_authors
-    create_references = create_queries.create_references
-    create_authorships = create_queries.create_authorships
+    create_papers = create_neo.create_papers
+    create_authors = create_neo.create_authors
+    create_references = create_neo.create_references
+    create_authorships = create_neo.create_authorships
 
     # Constraints
-
-    paper_constraints = create_queries.paper_constraints
-    author_constraints = create_queries.author_constraints
+    paper_constraints = create_neo.paper_constraints
+    author_constraints = create_neo.author_constraints
     
     # READ ========================================================
     # Simple Queries
-    find_paper = read_queries.find_paper
-    find_author = read_queries.find_author
-    title_of_paper = read_queries.title_of_paper
-    org_of_author = read_queries.org_of_author
+    find_paper = read_neo.find_paper
+    find_author = read_neo.find_author
+    title_of_paper = read_neo.title_of_paper
+    org_of_author = read_neo.org_of_author
 
     # Adjacency Queries
-    references_of = read_queries.references_of
-    references_to = read_queries.references_to
-    papers_of = read_queries.papers_of
-    authors_of = read_queries.authors_of
+    references_of = read_neo.references_of
+    references_to = read_neo.references_to
+    papers_of = read_neo.papers_of
+    authors_of = read_neo.authors_of
 
     # Reachability Queries
-    are_collaborators = read_queries.are_collaborators
+    are_collaborators = read_neo.are_collaborators
 
     # Analytical Queries
-    mean_authors_per_paper = read_queries.mean_authors_per_paper
-
+    mean_authors_per_paper = read_neo.mean_authors_per_paper
 
     # UPDATE ========================================================
-    rename_paper = update_queries.rename_paper
-    change_org = update_queries.change_org
-
+    rename_paper = update_neo.rename_paper
+    change_org = update_neo.change_org
 
     # DELETE ========================================================
     # Single
-    delete_paper = delete_queries.delete_paper
-    delete_author = delete_queries.delete_author
-    delete_reference = delete_queries.delete_reference
-    delete_authorship = delete_queries.delete_authorship
+    delete_paper = delete_neo.delete_paper
+    delete_author = delete_neo.delete_author
+    delete_reference = delete_neo.delete_reference
+    delete_authorship = delete_neo.delete_authorship
 
     # Clear
-    clear_database = delete_queries.clear_database
-    remove_constraints = delete_queries.remove_constraints
+    clear_database = delete_neo.clear_database
+    remove_constraints = delete_neo.remove_constraints
+
+
+class JanusGraphConnection:
+    """
+    Handles connection to JanusGraph and contains methods for transactions.
+    """
+    def __init__(self, uri):
+        ws_conn = httpclient.HTTPRequest(uri)
+        self.gremlin_conn = client.Client(ws_conn, "g")
+        # TODO: why drop?
+        self.gremlin_conn.submit("g.V().drop().iterate()")
+        self.gremlin_conn.submit("graph = TinkerGraph.open()")
+        self.gremlin_conn.submit("g = graph.traversal()")
+
+
+    def close(self):
+        # TODO does it have a close method? I didn't find any
+        pass
+
+    # CREATE ========================================================
+    # Single
+    create_paper = create_janus.create_paper
+    create_author = create_janus.create_author
+    create_reference = create_janus.create_reference
+    create_authorship = create_janus.create_authorship
+
+    # Batch
+    # create_papers = create_janus.create_papers
+    # create_authors = create_janus.create_authors
+    # create_references = create_janus.create_references
+    # create_authorships = create_janus.create_authorships
+
+    # TODO:
+    # Constraints
+    # paper_constraints = create_janus.paper_constraints
+    # author_constraints = create_janus.author_constraints
+    
+    # READ ========================================================
+    # Simple Queries
+    find_paper = read_janus.find_paper
+    find_author = read_janus.find_author
+    title_of_paper = read_janus.title_of_paper
+    org_of_author = read_janus.org_of_author
+
+    # Adjacency Queries
+    references_of = read_janus.references_of
+    references_to = read_janus.references_to
+    papers_of = read_janus.papers_of
+    authors_of = read_janus.authors_of
+
+    # Reachability Queries
+    are_collaborators = read_janus.are_collaborators
+
+    # Analytical Queries
+    # TODO:
+    # mean_authors_per_paper = read_janus.mean_authors_per_paper
+
+    # UPDATE ========================================================
+    rename_paper = update_janus.rename_paper
+    change_org = update_janus.change_org
+
+    # DELETE ========================================================
+    # Single
+    delete_paper = delete_janus.delete_paper
+    delete_author = delete_janus.delete_author
+    delete_reference = delete_janus.delete_reference
+    delete_authorship = delete_janus.delete_authorship
+
+    # Clear
+    clear_database = delete_janus.clear_database
+    # remove_constraints = delete_janus.remove_constraints

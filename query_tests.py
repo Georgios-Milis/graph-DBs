@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from connection import Connection
+from connection import Neo4jConnection
 
 
 def run_test(test):
@@ -203,7 +203,7 @@ if __name__ == "__main__":
     PASSWORD = os.getenv('NEO4J_PASSWORD')
     INSTANCE = os.getenv('AURA_INSTANCENAME')
 
-    connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
+    connection = Neo4jConnection(URI, USERNAME, PASSWORD, INSTANCE)
 
     tests = [
         test_create_paper,

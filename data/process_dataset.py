@@ -22,9 +22,9 @@ fields_kept = [
 
 # Paths
 path = os.path.dirname(os.path.realpath(__file__))
-data_file = pjoin(path, 'data', 'dblp_papers_v11.txt')
-processed_file = pjoin(path, 'data', 'dblp_processed.txt') # ~ 1.3M papers
-categories = pjoin(path, 'data', 'categories.txt')
+data_file = pjoin(path, 'dblp_papers_v11.txt')
+processed_file = pjoin(path, 'dblp_processed.txt') # ~ 1.3M papers
+categories = pjoin(path, 'categories.txt')
 
 
 # Filter original raw data
@@ -79,5 +79,5 @@ def write_papers_by_category(infile, outfile, category):
 
 
 if __name__ == "__main__":
-    outfile = pjoin(path, 'data', 'scale2_Aeroacoustics.txt')
+    outfile = pjoin(path, 'Aeroacoustics.txt')
     write_papers_by_category(processed_file, outfile, 'Aeroacoustics')

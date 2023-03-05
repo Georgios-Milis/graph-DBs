@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from os.path import join as pjoin
 
 import data
-from connection import Connection, transact_and_time
+from connection import Neo4jConnection, transact_and_time
 
 
 if __name__ == "__main__":
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     INSTANCE = os.getenv('AURA_INSTANCENAME')
 
     # Initialize connection to database
-    connection = Connection(URI, USERNAME, PASSWORD, INSTANCE)
+    connection = Neo4jConnection(URI, USERNAME, PASSWORD, INSTANCE)
 
     # Durations dictionary
     # durations = {}

@@ -17,16 +17,17 @@ def create_author(gremlin_conn, id , name , org):
 
 
 def create_reference(gremlin_conn,id1,id2):
-    query = f"g.addE('reference').from(g.V().has('paper', 'id', {id1})).to(g.V().has('paper', 'id', {id2}))"
+    query = f"g.addE('reference').from(__.V().has('paper', 'id', {id1})).to(__.V().has('paper', 'id', {id2}))"
     try:
         response = gremlin_conn.submit(query).next()
-    except:
+    except Exception as e:
+        print(e)
         response = "Something went wrong with edge create" 
     return response
 
 
 def create_authorship(gremlin_conn,id1,id2):
-    query = f"g.addE('authorship').from(g.V().has('author', 'id', {id1})).to(g.V().has('paper', 'id', {id2}))"
+    query = f"g.addE('authorship').from(__.V().has('author', 'id', {id1})).to(__.V().has('paper', 'id', {id2}))"
     try:
         response = gremlin_conn.submit(query).next()
     except:

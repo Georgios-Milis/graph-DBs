@@ -1,6 +1,6 @@
 from gremlin_python.driver import client
 from tornado import httpclient
-import create_queries_janus
+from queries import create_queries_janus
 import data
 import json
 import os

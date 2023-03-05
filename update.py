@@ -1,5 +1,5 @@
 """
-Executes CREATE queries, stores the durations in csv files.
+Executes UPDATE queries, stores the durations in csv files.
 """
 import os
 import re
@@ -33,7 +33,7 @@ datafiles = sorted([
 
 for scale, datafile in enumerate(datafiles, 1):
     if not LOCAL:
-        INSTANCE = os.getenv('NEO4J_INSTANCENAME_REMOTE')
+        INSTANCE = os.getenv('AURA_INSTANCENAME')
     else:
         INSTANCE = 'scale-' + str(scale)
 
@@ -45,30 +45,20 @@ for scale, datafile in enumerate(datafiles, 1):
 
     # Measurements
     N_TRIALS = 10
-    N_QUERIES = 4
+    N_QUERIES = 2
     trials = np.empty((N_TRIALS, N_QUERIES))
 
-    # Load data one at a time, execute transaction and then delete it
+    # Node data
     papers = data.get_papers_data(datafile)
     authors = data.get_authors_data(datafile)
-    citations = data.get_citations_data(datafile)
-    authorships = data.get_authorships_data(datafile)
+    # TODO: randomize
+    paper_ids = [paper['id'] for paper in papers][:N_TRIALS]
+    author_ids = [author['id'] for author in authors][:N_TRIALS]   
 
 
-    for i in range(N_TRIALS):
-        dummy_paper = {
-            'id': i,
-            'title': 'Title',
-            'year': 2154,
-            'n_citation': 0
-        }
-        dummy_author = {'name': "Name", 'id': i + 1, 'org': "Organization"}
-
-        # Log CREATE durations
-        durations.update(transact_and_time(connection.create_paper, dummy_paper))
-        durations.update(transact_and_time(connection.create_author, dummy_author))
-        durations.update(transact_and_time(connection.create_reference, i, i))
-        durations.update(transact_and_time(connection.create_authorship, i, i + 1))
+    for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
+        durations.update(transact_and_time(connection.rename_paper, paper_id, "New Title"))
+        durations.update(transact_and_time(connection.change_org, author_id, "New Organization"))
         trials[i] = list(durations.values())
 
     # Aggregate results
@@ -79,7 +69,7 @@ for scale, datafile in enumerate(datafiles, 1):
     ))
 
     df = pd.DataFrame(result, columns=durations.keys(), index=['min', 'max', 'mean'])
-    df.to_csv(pjoin(path, 'results', f'neo4j_create_scale{scale}.csv'))
+    df.to_csv(pjoin(path, 'results', f'neo4j_update_scale{scale}.csv'))
     print(df)
 
     # Close connection

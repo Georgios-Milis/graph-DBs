@@ -197,11 +197,20 @@ def test_change_org():
 
 
 if __name__ == "__main__":
+    # Config
+    LOCAL = False
+    scale = 2
+
     load_dotenv()
-    URI = os.getenv('NEO4J_URI')
-    USERNAME = os.getenv('NEO4J_USERNAME')
-    PASSWORD = os.getenv('NEO4J_PASSWORD')
-    INSTANCE = os.getenv('AURA_INSTANCENAME')
+    suffix = 'LOCAL' if LOCAL else 'REMOTE'
+    URI = os.getenv(f'NEO4J_URI_{suffix}')
+    USERNAME = os.getenv(f'NEO4J_USERNAME_{suffix}')
+    PASSWORD = os.getenv(f'NEO4J_PASSWORD_{suffix}')
+    if not LOCAL:
+        INSTANCE = os.getenv('AURA_INSTANCENAME')
+    else:
+        INSTANCE = 'scale-' + str(scale)
+
 
     connection = Neo4jConnection(URI, USERNAME, PASSWORD, INSTANCE)
 

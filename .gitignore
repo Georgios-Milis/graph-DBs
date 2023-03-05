@@ -4,4 +4,3 @@ data/dblp_processed.txt
 data/scale5_Statistics.txt
 data/scale6_Machine_learning.txt
 results/
-config.py

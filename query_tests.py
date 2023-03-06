@@ -201,6 +201,8 @@ if __name__ == "__main__":
     LOCAL = False
     scale = 2
 
+    # TODO gkrinias: compare neo with janus, document tests.
+
     load_dotenv()
     suffix = 'LOCAL' if LOCAL else 'REMOTE'
     URI = os.getenv(f'NEO4J_URI_{suffix}')

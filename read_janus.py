@@ -10,6 +10,9 @@ import data
 from connection import JanusGraphConnection, transact_and_time
 
 
+# TODO atrosvat: make it like create_janus
+# TODO atsorvat: write delete and update janus
+
 # This file path
 path = os.path.dirname(os.path.realpath(__file__))
 

@@ -52,7 +52,7 @@ for scale, datafile in enumerate(datafiles, 1):
     papers = data.get_papers_data(datafile)
     authors = data.get_authors_data(datafile)
 
-    # TODO: randomize
+    # TODO milis: randomize
     papers = papers[:N_TRIALS]
     authors = authors[:N_TRIALS]
     paper_ids = [paper['id'] for paper in papers]

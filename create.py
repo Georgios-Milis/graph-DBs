@@ -54,6 +54,7 @@ for scale, datafile in enumerate(datafiles, 1):
     citations = data.get_citations_data(datafile)
     authorships = data.get_authorships_data(datafile)
 
+    # TODO gkrinias: insert in batches
 
     for i in range(N_TRIALS):
         dummy_paper = {

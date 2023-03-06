@@ -97,14 +97,14 @@ class JanusGraphConnection:
     def __init__(self, uri):
         ws_conn = httpclient.HTTPRequest(uri)
         self.gremlin_conn = client.Client(ws_conn, "g")
-        # TODO: why drop?
+        # TODO atsorvat: why drop?
         self.gremlin_conn.submit("g.V().drop().iterate()")
         self.gremlin_conn.submit("graph = TinkerGraph.open()")
         self.gremlin_conn.submit("g = graph.traversal()")
 
 
     def close(self):
-        # TODO does it have a close method? I didn't find any
+        # TODO atsorvat: does it have a close method? I didn't find any
         pass
 
     # CREATE ========================================================
@@ -120,7 +120,7 @@ class JanusGraphConnection:
     # create_references = create_janus.create_references
     # create_authorships = create_janus.create_authorships
 
-    # TODO:
+    # TODO atsorvat:
     # Constraints
     # paper_constraints = create_janus.paper_constraints
     # author_constraints = create_janus.author_constraints
@@ -142,7 +142,7 @@ class JanusGraphConnection:
     are_collaborators = read_janus.are_collaborators
 
     # Analytical Queries
-    # TODO:
+    # TODO atsorvat:
     # mean_authors_per_paper = read_janus.mean_authors_per_paper
 
     # UPDATE ========================================================

@@ -32,7 +32,7 @@ for scale, datafile in enumerate(datafiles, 1):
     durations = {}
 
     # Measurements
-    # TODO: run the same #tests finally
+    # TODO milis: run the same #tests finally
     N_TRIALS = 2
     N_QUERIES = 4
     trials = np.empty((N_TRIALS, N_QUERIES))
@@ -46,7 +46,7 @@ for scale, datafile in enumerate(datafiles, 1):
     for i in range(N_TRIALS):
         print(f"Trial {i+1}/{N_TRIALS}")
 
-        # TODO: what are those dicts and why do we need them?
+        # TODO atsorvat: what are those dicts and why do we need them?
         dict_papers = {}
         dict_authors = {}
         start_time = time()

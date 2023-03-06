@@ -51,7 +51,7 @@ for scale, datafile in enumerate(datafiles, 1):
     # Node data
     papers = data.get_papers_data(datafile)
     authors = data.get_authors_data(datafile)
-    # TODO: randomize
+    # TODO milis: randomize
     paper_ids = [paper['id'] for paper in papers][:N_TRIALS]
     author_ids = [author['id'] for author in authors][:N_TRIALS]
     

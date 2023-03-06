@@ -44,7 +44,7 @@ for scale, datafile in enumerate(datafiles, 1):
     durations = {}
 
     # Measurements
-    # TODO: run the same #tests finally
+    # TODO milis: run the same #tests finally
     N_TRIALS = 2
     N_QUERIES = 6
     trials = np.empty((N_TRIALS, N_QUERIES))
@@ -89,4 +89,4 @@ for scale, datafile in enumerate(datafiles, 1):
     connection.close()
 
 
-    #TODO: ignore 1st clear
+    #TODO milis: ignore 1st clear

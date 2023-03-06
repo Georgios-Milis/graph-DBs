@@ -20,7 +20,7 @@ operations = ['create', 'read', 'update', 'delete']
 duration_dict = {}
 
 
-# TODO: TEMPORARY
+# TODO milis: TEMPORARY
 DBMSs = DBMSs[:1]
 DBs = DBs[:1]
 operations = operations[:1]

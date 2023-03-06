@@ -88,7 +88,7 @@ for scale, datafile in enumerate(datafiles, 1):
     result[2][3] = np.mean(authorship_create_times)
 
 
-    # TODO: save
+    # TODO milis: save
 
     df = pd.DataFrame(result, columns = ['create_paper', 'create_author','create_reference','create_authorship'] , index=['min', 'max', 'mean'])
     print(df)

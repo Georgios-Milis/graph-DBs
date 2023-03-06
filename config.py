@@ -1,5 +1,5 @@
-# TODO: add parser to run as CLI
-# TODO: merge CRUD.py with CRUD_janus.py
+# TODO milis: add parser to run as CLI
+# TODO milis: merge CRUD.py with CRUD_janus.py
 
 
 import argparse

@@ -53,7 +53,7 @@ for scale, datafile in enumerate(datafiles, 1):
     # TODO milis: run the same #tests finally
     N_TRIALS = 2
     N_QUERIES = 6
-    trials = np.empty((N_TRIALS, N_QUERIES))
+    trials = [[] for _ in range(N_TRIALS)]
 
     # Data
     papers = data.get_papers_data(datafile)
@@ -102,6 +102,7 @@ for scale, datafile in enumerate(datafiles, 1):
 
 
     # Aggregate fill_and_empty results
+    trials = np.array(trials)
     result = np.vstack((
         np.min(trials, axis=0),
         np.max(trials, axis=0),

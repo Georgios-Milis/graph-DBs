@@ -21,7 +21,7 @@ URI = os.getenv('JANUSGRAPH_URI')
 # Dataset files
 datafiles = sorted([
     pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-    if re.search("^scale[1-2].*\.txt", f)
+    if re.search("^scale[2].*\.txt", f)
 ])
 
 for scale, datafile in enumerate(datafiles, 1):
@@ -33,7 +33,7 @@ for scale, datafile in enumerate(datafiles, 1):
 
     # Measurements
     # TODO milis: run the same #tests finally
-    N_TRIALS = 2
+    N_TRIALS = 1
     N_QUERIES = 4
     trials = np.empty((N_TRIALS, N_QUERIES))
 
@@ -47,18 +47,19 @@ for scale, datafile in enumerate(datafiles, 1):
         print(f"Trial {i+1}/{N_TRIALS}")
 
         # TODO atsorvat: what are those dicts and why do we need them?
-        dict_papers = {}
-        dict_authors = {}
+        #
+        #dict_papers = {}
+        #dict_authors = {}
         start_time = time()
         for i, paper in enumerate(papers):
-            dict_papers[paper['id']] = i 
-            paper['id'] = i
+            #dict_papers[paper['id']] = i 
+            paper['id'] = str(paper['id'])
             paper['title'] = paper['title'].replace('\'', '')
             print(connection.create_paper(paper['id'], paper['title'], paper['year'], paper['n_citation']))
 
         for i, author in enumerate(authors):
-            dict_authors[author['id']] = i
-            author['id'] = i
+            #dict_authors[author['id']] = i
+            author['id'] = str(author['id'])
             author['name'] = author['name'].replace('\'', '')
             if 'org' in author.keys():
                 author['org'] = author['org'].replace('\'', '')
@@ -67,12 +68,15 @@ for scale, datafile in enumerate(datafiles, 1):
             print(connection.create_author(author['id'], author['name'], author['org']))
 
         for ref in citations:
-            print(ref)
-            if ref['from'] in dict_papers.keys() and ref['to'] in dict_papers.keys():
-                print(connection.create_reference(dict_papers[ref['from']], dict_papers[ref['to']]))
+            ref['from'] = str(ref['from'])
+            ref['to'] = str(ref['to'])
+            #if ref['from'] in dict_papers.keys() and ref['to'] in dict_papers.keys():
+            print(connection.create_reference(ref['from'], ref['to']))
 
         for auth in authorships:
-            if auth['author'] in dict_authors.keys() and auth['paper'] in dict_papers.keys():
-                print(connection.create_authorship(dict_authors[auth['author']], dict_papers[auth['paper']]))
+            auth['auhtor'] = str(auth['author'])
+            auth['paper'] = str(auth['paper'])
+            #if auth['author'] in dict_authors.keys() and auth['paper'] in dict_papers.keys():
+            print(connection.create_authorship(auth['author'], auth['paper']))
 
         print(time() - start_time)

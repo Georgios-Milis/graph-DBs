@@ -15,7 +15,7 @@ def get_paper_IDs(datafile):
     ids = []
     with open(datafile, 'r', encoding='utf-8') as f:
         for line in f:
-            ids.append(int(json.loads(line)))
+            ids.append(int(json.loads(line)['id']))
     return ids
 
 
@@ -65,6 +65,7 @@ def get_citations_data(datafile):
     """
     Read from dataset and return citation data.
     """
+    paper_ids = get_paper_IDs(datafile)
     citations = []
     with open(datafile, 'r', encoding='utf-8') as f:
         for line in f:
@@ -73,11 +74,13 @@ def get_citations_data(datafile):
             try:
                 refs = data['references']
                 for ref in refs:
-                    # Convert ids to integers
-                    citations.append({
-                        "from": int(ref_from),
-                        "to": int(ref)
-                    })
+                    ref = int(ref)
+                    # Check if paper is in subset
+                    if ref in paper_ids:
+                        citations.append({
+                            "from": int(ref_from),
+                            "to": ref
+                        })
             except KeyError:
                 continue
     return citations

@@ -29,7 +29,7 @@ PASSWORD = os.getenv(f'NEO4J_PASSWORD_{suffix}')
 # Dataset files
 datafiles = sorted([
     pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-    if re.search("^scale[1-3].*\.txt", f)
+    if re.search("^scale[1-4].*\.txt", f)
 ])
 
 for scale, datafile in enumerate(datafiles, 1):
@@ -52,8 +52,8 @@ for scale, datafile in enumerate(datafiles, 1):
     # Node data
     papers = data.get_papers_data(datafile)
     authors = data.get_authors_data(datafile)
-    paper_ids = random.choice([paper['id'] for paper in papers], k=N_TRIALS)
-    author_ids = random.choice([author['id'] for author in authors], k=N_TRIALS)
+    paper_ids = random.choices([paper['id'] for paper in papers], k=N_TRIALS)
+    author_ids = random.choices([author['id'] for author in authors], k=N_TRIALS)
     
 
     for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):

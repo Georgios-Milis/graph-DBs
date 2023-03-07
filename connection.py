@@ -97,12 +97,11 @@ class JanusGraphConnection:
     def __init__(self, uri):
         ws_conn = httpclient.HTTPRequest(uri)
         self.gremlin_conn = client.Client(ws_conn, "g")
+        # print(self.gremlin_conn.submit("g.V().values('id')"))
         self.gremlin_conn.submit("graph = TinkerGraph.open()")
-        self.gremlin_conn.submit("g = graph.traversal()")
-
 
     def close(self):
-        # TODO atsorvat: does it have a close method? I didn't find any atsorvat: NO
+        # No close from gremlin_python, but we keep the same API
         pass
 
     # CREATE ========================================================

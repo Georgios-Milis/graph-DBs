@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
 from os.path import join as pjoin
+import collections, functools, operator
 
 import data
 from connection import Neo4jConnection, transact_and_time
@@ -16,7 +17,7 @@ from connection import Neo4jConnection, transact_and_time
 path = os.path.dirname(os.path.realpath(__file__))
 
 # Config
-LOCAL = False
+LOCAL = True
 
 load_dotenv()
 suffix = 'LOCAL' if LOCAL else 'REMOTE'
@@ -28,8 +29,13 @@ PASSWORD = os.getenv(f'NEO4J_PASSWORD_{suffix}')
 # Dataset files
 datafiles = sorted([
     pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-    if re.search("^scale[1-3].*\.txt", f)
+    if re.search("^scale[1-4].*\.txt", f)
 ])
+
+def minibatches(list, minibatch_size=1000):
+    for i in range(0, len(list), minibatch_size):
+        yield list[i:i + minibatch_size]
+
 
 for scale, datafile in enumerate(datafiles, 1):
     if not LOCAL:
@@ -64,10 +70,26 @@ for scale, datafile in enumerate(datafiles, 1):
         # Load data one at a time, execute transaction and then delete it
         connection.author_constraints()
         connection.paper_constraints()
-        durations.update(transact_and_time(connection.create_papers, papers))
-        durations.update(transact_and_time(connection.create_authors, authors))      
-        durations.update(transact_and_time(connection.create_references, citations))
-        durations.update(transact_and_time(connection.create_authorships, authorships))
+
+        durations.update(dict(functools.reduce(operator.add, map(
+            collections.Counter, 
+            [transact_and_time(connection.create_papers, minibatch) for minibatch in minibatches(papers)]
+        ))))
+
+        durations.update(dict(functools.reduce(operator.add, map(
+            collections.Counter, 
+            [transact_and_time(connection.create_authors, minibatch) for minibatch in minibatches(authors)]
+        ))))
+
+        durations.update(dict(functools.reduce(operator.add, map(
+            collections.Counter, 
+            [transact_and_time(connection.create_references, minibatch) for minibatch in minibatches(citations)]
+        ))))
+
+        durations.update(dict(functools.reduce(operator.add, map(
+            collections.Counter, 
+            [transact_and_time(connection.create_authorships, minibatch) for minibatch in minibatches(authorships)]
+        ))))
 
         # Log those measurements as the time required to fill the database
         durations.update({'fill_database': np.sum(list(durations.values()))})

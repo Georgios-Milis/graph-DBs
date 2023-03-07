@@ -29,7 +29,7 @@ PASSWORD = os.getenv(f'NEO4J_PASSWORD_{suffix}')
 # Dataset files
 datafiles = sorted([
     pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-    if re.search("^scale[1-3].*\.txt", f)
+    if re.search("^scale[1-4].*\.txt", f)
 ])
 
 for scale, datafile in enumerate(datafiles, 1):
@@ -46,21 +46,21 @@ for scale, datafile in enumerate(datafiles, 1):
 
     # Measurements
     N_TRIALS = 10
-    N_QUERIES = 4
+    N_QUERIES = 3
     trials = np.empty((N_TRIALS, N_QUERIES))
 
     # Node data
     papers = data.get_papers_data(datafile)
     authors = data.get_authors_data(datafile)
-    paper_ids = random.choice([paper['id'] for paper in papers], k=N_TRIALS)
-    author_ids = random.choice([author['id'] for author in authors], k=N_TRIALS)
+    paper_ids = random.choices([paper['id'] for paper in papers], k=N_TRIALS)
+    author_ids = random.choices([author['id'] for author in authors], k=N_TRIALS)
     
 
     for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
         durations.update(transact_and_time(connection.title_of_paper, paper_id))
         durations.update(transact_and_time(connection.authors_of, paper_id))
         durations.update(transact_and_time(connection.are_collaborators, author_id, author_id + 42))
-        durations.update(transact_and_time(connection.mean_authors_per_paper))
+        #durations.update(transact_and_time(connection.mean_authors_per_paper))
         trials[i] = list(durations.values())
 
     # Aggregate results

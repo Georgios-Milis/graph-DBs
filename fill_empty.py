@@ -61,15 +61,11 @@ for scale, datafile in enumerate(datafiles, 1):
     citations = data.get_citations_data(datafile)
     authorships = data.get_authorships_data(datafile)
 
+    # Let's start clean :)
+    connection.clear_database()
+
     for i in range(N_TRIALS):
         print(f"Trial {i+1}/{N_TRIALS}")
-        # Let's start clean :)
-        durations.update(transact_and_time(connection.clear_database))
-        connection.remove_constraints()
-
-        # Load data one at a time, execute transaction and then delete it
-        connection.author_constraints()
-        connection.paper_constraints()
 
         durations.update(dict(functools.reduce(operator.add, map(
             collections.Counter, 
@@ -93,12 +89,10 @@ for scale, datafile in enumerate(datafiles, 1):
 
         # Log those measurements as the time required to fill the database
         durations.update({'fill_database': np.sum(list(durations.values()))})
+
+        durations.update(transact_and_time(connection.clear_database))
         
-        # Ignore 1st clear because we don't have a full database
-        if i == 0:
-            trials[i] = [v for k, v in durations.items() if k != 'clear_database']
-        else:
-            trials[i] = list(durations.values())
+        trials[i] = list(durations.values())
 
 
     # Aggregate fill_and_empty results

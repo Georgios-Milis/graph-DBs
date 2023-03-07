@@ -97,8 +97,6 @@ class JanusGraphConnection:
     def __init__(self, uri):
         ws_conn = httpclient.HTTPRequest(uri)
         self.gremlin_conn = client.Client(ws_conn, "g")
-        # TODO atsorvat: why drop?
-        #self.gremlin_conn.submit("g.V().drop().iterate()")
         self.gremlin_conn.submit("graph = TinkerGraph.open()")
         self.gremlin_conn.submit("g = graph.traversal()")
 

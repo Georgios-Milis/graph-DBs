@@ -28,7 +28,7 @@ for scale, datafile in enumerate(datafiles, 1):
     # Initialize connection to database
     connection = JanusGraphConnection(URI)
 
-    # Durations dictionary
+    # Durations dictionary 
     durations = {}
 
     # Measurements
@@ -46,19 +46,13 @@ for scale, datafile in enumerate(datafiles, 1):
     for i in range(N_TRIALS):
         print(f"Trial {i+1}/{N_TRIALS}")
 
-        # TODO atsorvat: what are those dicts and why do we need them?
-        #
-        #dict_papers = {}
-        #dict_authors = {}
         start_time = time()
-        for i, paper in enumerate(papers):
-            #dict_papers[paper['id']] = i 
+        for i, paper in enumerate(papers): 
             paper['id'] = str(paper['id'])
             paper['title'] = paper['title'].replace('\'', '')
             print(connection.create_paper(paper['id'], paper['title'], paper['year'], paper['n_citation']))
 
         for i, author in enumerate(authors):
-            #dict_authors[author['id']] = i
             author['id'] = str(author['id'])
             author['name'] = author['name'].replace('\'', '')
             if 'org' in author.keys():
@@ -70,13 +64,11 @@ for scale, datafile in enumerate(datafiles, 1):
         for ref in citations:
             ref['from'] = str(ref['from'])
             ref['to'] = str(ref['to'])
-            #if ref['from'] in dict_papers.keys() and ref['to'] in dict_papers.keys():
             print(connection.create_reference(ref['from'], ref['to']))
 
         for auth in authorships:
             auth['auhtor'] = str(auth['author'])
             auth['paper'] = str(auth['paper'])
-            #if auth['author'] in dict_authors.keys() and auth['paper'] in dict_papers.keys():
             print(connection.create_authorship(auth['author'], auth['paper']))
 
         print(time() - start_time)

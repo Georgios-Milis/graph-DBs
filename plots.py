@@ -1,7 +1,7 @@
 """
 This file creates all the necessary plots that we use in the final report.
 It runs as a main and requires the measurements results to be written in 
-the 'results' folder, in the form specified by the {CRUD}_run.py files.
+the 'results' folder, in the form specified by the {CRUD}.py files.
 """
 import os
 import pandas as pd

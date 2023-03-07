@@ -3,6 +3,7 @@ Executes UPDATE queries, stores the durations in csv files.
 """
 import os
 import re
+import random
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
@@ -51,10 +52,9 @@ for scale, datafile in enumerate(datafiles, 1):
     # Node data
     papers = data.get_papers_data(datafile)
     authors = data.get_authors_data(datafile)
-    # TODO milis: randomize
-    paper_ids = [paper['id'] for paper in papers][:N_TRIALS]
-    author_ids = [author['id'] for author in authors][:N_TRIALS]   
-
+    paper_ids = random.choice([paper['id'] for paper in papers], k=N_TRIALS)
+    author_ids = random.choice([author['id'] for author in authors], k=N_TRIALS)
+    
 
     for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
         durations.update(transact_and_time(connection.rename_paper, paper_id, "New Title"))

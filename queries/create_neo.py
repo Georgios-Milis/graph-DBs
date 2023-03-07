@@ -1,4 +1,4 @@
-# TODO: imports unnecessary? Somw methods use them, some don't
+# TODO gkrinias: imports unnecessary? Somw methods use them, some don't
 import logging
 from neo4j.exceptions import ServiceUnavailable
 

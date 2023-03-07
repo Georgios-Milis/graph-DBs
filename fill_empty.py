@@ -71,7 +71,12 @@ for scale, datafile in enumerate(datafiles, 1):
 
         # Log those measurements as the time required to fill the database
         durations.update({'fill_database': np.sum(list(durations.values()))})
-        trials[i] = list(durations.values())
+        
+        # Ignore 1st clear because we don't have a full database
+        if i == 0:
+            trials[i] = [v for k, v in durations.items() if k != 'clear_database']
+        else:
+            trials[i] = list(durations.values())
 
 
     # Aggregate fill_and_empty results
@@ -87,6 +92,3 @@ for scale, datafile in enumerate(datafiles, 1):
 
     # Close connection
     connection.close()
-
-
-    #TODO milis: ignore 1st clear

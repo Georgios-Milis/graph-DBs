@@ -36,23 +36,6 @@ def create_references(self, references):
 
     with self.driver.session(database=self.instance) as session:
         session.execute_write(create_references_tx, references)
-
-def create_authorships(self, authorships):
-    """
-    Insert all references to database.
-    """
-    def create_authorships_tx(tx, authorships):
-        query = (
-            """
-            UNWIND $authorships AS edge
-            MATCH (a:Author {id: edge.author}), (p:Paper {id: edge.paper})
-            CREATE (a)-[r:AUTHORSHIP]->(p)
-            """
-        )
-        tx.run(query, authorships=authorships)
-
-    with self.driver.session(database=self.instance) as session:
-        session.execute_write(create_authorships_tx, authorships)
     
 
 def create_paper(self, attributes):
@@ -63,7 +46,7 @@ def create_paper(self, attributes):
         query = (
             """
             WITH $attributes AS params
-            CREATE (p:Paper {id: params.id})
+            MERGE (p:Paper {id: params.id})
             ON CREATE SET p = properties(params)
             """
         )
@@ -83,8 +66,8 @@ def create_papers(self, papers):
         query = (
             """
             UNWIND $papers AS params
-            CREATE (p:Paper)
-            SET p += params
+            MERGE (p:Paper {id: params.id})
+            ON CREATE SET p = properties(params)
             """
         )
         tx.run(query, papers=papers)
@@ -101,8 +84,8 @@ def create_authors(self, authors):
         query = (
             """
             UNWIND $authors AS params
-            CREATE (a:Author)
-            SET a += params
+            MERGE (a:Author {id: params.id})
+            ON CREATE SET a = properties(params)
             """
         )
         tx.run(query, authors=authors)
@@ -204,23 +187,23 @@ def create_authorship(self, author_id, paper_id):
         return result
 
 
-# def create_authorships(self, authorships):
-#     """
-#     Insert all references to database.
-#     """
-#     def create_authorships_tx(tx, authorships):
-#         query = (
-#             """
-#             UNWIND $authorships AS edge
-#             MATCH (a:Author), (p:Paper)
-#             WHERE a.id = edge.author AND p.id = edge.paper
-#             MERGE (a)-[r:AUTHORSHIP]->(p)
-#             """
-#         )
-#         tx.run(query, authorships=authorships)
+def create_authorships(self, authorships):
+    """
+    Insert all references to database.
+    """
+    def create_authorships_tx(tx, authorships):
+        query = (
+            """
+            UNWIND $authorships AS edge
+            MATCH (a:Author), (p:Paper)
+            WHERE a.id = edge.author AND p.id = edge.paper
+            MERGE (a)-[r:AUTHORSHIP]->(p)
+            """
+        )
+        tx.run(query, authorships=authorships)
 
-#     with self.driver.session(database=self.instance) as session:
-#         session.execute_write(create_authorships_tx, authorships)
+    with self.driver.session(database=self.instance) as session:
+        session.execute_write(create_authorships_tx, authorships)
 
 
 def paper_constraints(self):

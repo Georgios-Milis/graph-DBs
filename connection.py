@@ -45,11 +45,14 @@ class Neo4jConnection:
     create_reference = create_neo.create_reference
     create_authorship = create_neo.create_authorship
 
+    create_people = create_neo.create_people
+
     # Batch
     create_papers = create_neo.create_papers
     create_authors = create_neo.create_authors
     create_references = create_neo.create_references
     create_authorships = create_neo.create_authorships
+
 
     # Constraints
     paper_constraints = create_neo.paper_constraints

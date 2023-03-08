@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
 from os.path import join as pjoin
-import collections, functools, operator
 
 import data
 from connection import Neo4jConnection, transact_and_time
@@ -56,7 +55,7 @@ for scale, datafile in enumerate(datafiles, 1):
     elif scale >= 5:
         N_TRIALS = 3
     N_QUERIES = 6
-    trials = [[] for _ in range(N_QUERIES)]
+    trials = [[] for _ in range(N_TRIALS)]
 
     # Data
     papers = data.get_papers_data(datafile)
@@ -69,25 +68,25 @@ for scale, datafile in enumerate(datafiles, 1):
 
         durations.update(transact_and_time(connection.clear_database))
 
-        durations.update(dict(functools.reduce(operator.add, map(
-            collections.Counter, 
-            [transact_and_time(connection.create_papers, minibatch) for minibatch in minibatches(papers)]
-        ))))
+        transaction_time = 0
+        for minibatch in minibatches(papers):
+            transaction_time += transact_and_time(connection.create_papers, minibatch)['create_papers']
+        durations.update({'create_papers': transaction_time})
 
-        durations.update(dict(functools.reduce(operator.add, map(
-            collections.Counter, 
-            [transact_and_time(connection.create_authors, minibatch) for minibatch in minibatches(authors)]
-        ))))
+        transaction_time = 0
+        for minibatch in minibatches(authors):
+            transaction_time += transact_and_time(connection.create_authors, minibatch)['create_authors']
+        durations.update({'create_authors': transaction_time})
 
-        durations.update(dict(functools.reduce(operator.add, map(
-            collections.Counter, 
-            [transact_and_time(connection.create_references, minibatch) for minibatch in minibatches(citations)]
-        ))))
+        transaction_time = 0
+        for minibatch in minibatches(citations):
+            transaction_time += transact_and_time(connection.create_references, minibatch)['create_references']
+        durations.update({'create_references': transaction_time})
 
-        durations.update(dict(functools.reduce(operator.add, map(
-            collections.Counter, 
-            [transact_and_time(connection.create_authorships, minibatch) for minibatch in minibatches(authorships)]
-        ))))
+        transaction_time = 0
+        for minibatch in minibatches(authorships):
+            transaction_time += transact_and_time(connection.create_authorships, minibatch)['create_authorships']
+        durations.update({'create_authorships': transaction_time})
 
         # Log those measurements as the time required to fill the database
         durations.update({'fill_database': np.sum(list(durations.values()))})

@@ -16,5 +16,4 @@ parser.add_argument(
 
 
 def get_config():
-    config = parser.parse_args()
-    return config
+    return parser.parse_args()

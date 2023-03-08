@@ -1,5 +1,5 @@
 """
-Executes UPDATE queries, stores the durations in csv files.
+Executes READ queries, stores the durations in csv files.
 """
 import os
 import re
@@ -28,7 +28,7 @@ PASSWORD = os.getenv(f'NEO4J_PASSWORD_{suffix}')
 
 # Dataset files
 datafiles = sorted([
-    pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
+    pjoin(path, '..', 'data', f) for f in os.listdir(pjoin(path, 'data'))
     if re.search("^scale[1-4].*\.txt", f)
 ])
 
@@ -46,7 +46,7 @@ for scale, datafile in enumerate(datafiles, 1):
 
     # Measurements
     N_TRIALS = 10
-    N_QUERIES = 2
+    N_QUERIES = 3
     trials = np.empty((N_TRIALS, N_QUERIES))
 
     # Node data
@@ -57,8 +57,10 @@ for scale, datafile in enumerate(datafiles, 1):
     
 
     for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
-        durations.update(transact_and_time(connection.rename_paper, paper_id, "New Title"))
-        durations.update(transact_and_time(connection.change_org, author_id, "New Organization"))
+        durations.update(transact_and_time(connection.title_of_paper, paper_id))
+        durations.update(transact_and_time(connection.authors_of, paper_id))
+        durations.update(transact_and_time(connection.are_collaborators, author_id, author_id + 42))
+        #durations.update(transact_and_time(connection.mean_authors_per_paper))
         trials[i] = list(durations.values())
 
     # Aggregate results
@@ -69,7 +71,7 @@ for scale, datafile in enumerate(datafiles, 1):
     ))
 
     df = pd.DataFrame(result, columns=durations.keys(), index=['min', 'max', 'mean'])
-    df.to_csv(pjoin(path, 'results', f'neo4j_update_scale{scale}.csv'))
+    df.to_csv(pjoin(path, '..', 'results', f'neo4j_read_scale{scale}.csv'))
     print(df)
 
     # Close connection

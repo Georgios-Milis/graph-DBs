@@ -27,7 +27,7 @@ PASSWORD = os.getenv(f'NEO4J_PASSWORD_{suffix}')
 
 # Dataset files
 datafiles = sorted([
-    pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
+    pjoin(path, '..', 'data', f) for f in os.listdir(pjoin(path, 'data'))
     if re.search("^scale[1-3].*\.txt", f)
 ])
 
@@ -78,7 +78,7 @@ for scale, datafile in enumerate(datafiles, 1):
     ))
 
     df = pd.DataFrame(result, columns=durations.keys(), index=['min', 'max', 'mean'])
-    df.to_csv(pjoin(path, 'results', f'neo4j_create_scale{scale}.csv'))
+    df.to_csv(pjoin(path, '..', 'results', f'neo4j_create_scale{scale}.csv'))
     print(df)
 
     # Close connection

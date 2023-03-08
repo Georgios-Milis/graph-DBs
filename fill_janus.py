@@ -20,13 +20,14 @@ URI = os.getenv('JANUSGRAPH_URI')
 
 # Dataset files
 datafiles = sorted([
-    pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
+    pjoin(path, '..', 'data', f) for f in os.listdir(pjoin(path, 'data'))
     if re.search("^scale[2].*\.txt", f)
 ])
 
 for scale, datafile in enumerate(datafiles, 1):
+    INSTANCE = 'scale-' + str(scale)
     # Initialize connection to database
-    connection = JanusGraphConnection(URI)
+    connection = JanusGraphConnection(URI, instance=INSTANCE)
 
     # Durations dictionary 
     durations = {}

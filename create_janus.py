@@ -20,7 +20,7 @@ URI = os.getenv('JANUSGRAPH_URI')
 
 # Dataset files
 datafiles = sorted([
-    pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
+    pjoin(path, '..', 'data', f) for f in os.listdir(pjoin(path, 'data'))
     if re.search("^scale[1-2].*\.txt", f)
 ])
 
@@ -44,7 +44,7 @@ for scale, datafile in enumerate(datafiles, 1):
         time_start = time()
         connection.create_paper(paper_create_data[i][0], paper_create_data[i][1], paper_create_data[i][2], paper_create_data[i][3])
         time_end = time()
-        paper_create_times[i] = time_end-time_start
+        paper_create_times[i] = time_end - time_start
 
     result[0][0] = np.min(paper_create_times) 
     result[1][0] = np.max(paper_create_times) 
@@ -55,7 +55,7 @@ for scale, datafile in enumerate(datafiles, 1):
         time_start = time()
         connection.create_author(author_create_data[i][0], author_create_data[i][1], author_create_data[i][2])
         time_end = time()
-        author_create_times[i]= time_end-time_start
+        author_create_times[i] = time_end - time_start
 
 
     result[0][1] = np.min(author_create_times) 
@@ -70,7 +70,7 @@ for scale, datafile in enumerate(datafiles, 1):
         time_start = time()
         connection.create_reference(reference_create_data[i][0], reference_create_data[i][1])
         time_end = time()
-        reference_create_times[i]= time_end-time_start
+        reference_create_times[i] = time_end - time_start
 
 
     result[0][2] = np.min(reference_create_times) 
@@ -81,7 +81,7 @@ for scale, datafile in enumerate(datafiles, 1):
         time_start = time()
         connection.create_authorship(authorship_create_data[i][0], authorship_create_data[i][1])
         time_end = time()
-        authorship_create_times[i]= time_end-time_start
+        authorship_create_times[i] = time_end - time_start
 
     result[0][3] = np.min(authorship_create_times) 
     result[1][3] = np.max(authorship_create_times) 

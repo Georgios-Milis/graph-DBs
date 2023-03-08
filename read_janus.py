@@ -20,7 +20,7 @@ URI = os.getenv('JANUSGRAPH_URI')
 
 # Dataset files
 datafiles = sorted([
-    pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
+    pjoin(path, '..', 'data', f) for f in os.listdir(pjoin(path, 'data'))
     if re.search("^scale[1-2].*\.txt", f)
 ])
 

@@ -50,14 +50,13 @@ for scale, datafile in enumerate(datafiles, 1):
     durations = {}
 
     # Measurements
-    # TODO milis: run the same #tests finally
     N_TRIALS = 10
-    if scale == 5:
+    if scale == 4:
         N_TRIALS = 5
-    elif scale == 6:
+    elif scale >= 5:
         N_TRIALS = 3
     N_QUERIES = 6
-    trials = [[] for _ in range(N_TRIALS)]
+    trials = [[] for _ in range(N_QUERIES)]
 
     # Data
     papers = data.get_papers_data(datafile)

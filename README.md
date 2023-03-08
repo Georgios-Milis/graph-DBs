@@ -17,7 +17,7 @@ Run the image in a Docker container. Once launched, run
 ```bash
 docker run -it -p 8182:8182 janusgraph/janusgraph
 ``` 
-in some terminal to forward the port. If ypu want a Gremlin client console, run
+in some terminal to forward the port. If you want a Gremlin client console, run
 ```bash
 docker run --rm --link janusgraph-default:janusgraph -e GREMLIN_REMOTE_HOSTS=janusgraph -it janusgraph/janusgraph:latest ./bin/gremlin.sh
 ```

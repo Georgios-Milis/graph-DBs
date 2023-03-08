@@ -70,10 +70,13 @@ for db in DBs:
         
 
         for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
+            if db == 'janus':
+                paper_id = str(paper_id)
+                author_id = str(author_id)
+
             # The following lines have been added for safety purposes.
             # If (and only if), at any time of this loop, the author/paper
             # of the requested id does not exist, then a dummy entry will take its place.
-
             dummy_paper = {
                 'id': paper_id,
                 'title': 'Title',

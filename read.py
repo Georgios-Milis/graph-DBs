@@ -67,9 +67,16 @@ for db in DBs:
         
 
         for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
+            if db == 'neo4j':
+                next_author_id = author_id + 42
+            else:
+                paper_id = str(paper_id)
+                next_author_id = str(author_id + 42)
+                author_id = str(author_id)
+        
             durations.update(transact_and_time(connection.title_of_paper, paper_id))
             durations.update(transact_and_time(connection.authors_of, paper_id))
-            durations.update(transact_and_time(connection.are_collaborators, author_id, author_id + 42))
+            durations.update(transact_and_time(connection.are_collaborators, author_id, next_author_id))
             #durations.update(transact_and_time(connection.mean_authors_per_paper))
             trials[i] = list(durations.values())
 

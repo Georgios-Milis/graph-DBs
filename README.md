@@ -10,7 +10,7 @@ pip install -r requirements.txt
 ``` 
 
 #### Neo4j
-Download Noe4j Desktop and create a DBMS with 6 databases, named "scale-1" to "scale-6". Change the credentials in the `.env` file.
+Download Noe4j Desktop and create a DBMS with 6 databases, named "scale-1" to "scale-6". Change the credentials in the `.env` file. Install the APOC plugin for the DBMS.
 
 #### Janusgraph
 Run the image in a Docker container. Once launched, run

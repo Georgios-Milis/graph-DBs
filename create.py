@@ -1,15 +1,13 @@
 """
-Executes UPDATE queries, stores the durations in csv files.
+Executes CREATE queries, stores the durations in csv files.
 """
 import os
 import re
-import random
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
 from os.path import join as pjoin
 
-import data
 from connection import Neo4jConnection, JanusGraphConnection, transact_and_time
 
 
@@ -20,10 +18,11 @@ path = os.path.dirname(os.path.realpath(__file__))
 LOCAL = True
 load_dotenv()
 
+
 # Dataset files
 datafiles = sorted([
     pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-    if re.search("^scale[1-4].*\.txt", f)
+    if re.search("^scale[1-2].*\.txt", f)
 ])
 
 # Databases - SUT
@@ -58,24 +57,37 @@ for db in DBs:
 
         # Measurements
         N_TRIALS = 10
-        N_QUERIES = 2
+        N_QUERIES = 4
         trials = np.empty((N_TRIALS, N_QUERIES))
 
-        # Node data
-        papers = data.get_papers_data(datafile)
-        authors = data.get_authors_data(datafile)
-        paper_ids = random.choices([paper['id'] for paper in papers], k=N_TRIALS)
-        author_ids = random.choices([author['id'] for author in authors], k=N_TRIALS)
-        
 
-        for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
-            if db == 'janus':
-                paper_id = str(paper_id)
-                author_id = str(author_id)
-            
-            durations.update(transact_and_time(connection.rename_paper, paper_id, "New Title"))
-            durations.update(transact_and_time(connection.change_org, author_id, "New Organization"))
-            trials[i] = list(durations.values())
+        for t in range(N_TRIALS):
+            if db == 'neo4j':
+                paper_id = t
+                author_id = t + 1
+            else:
+                paper_id = str(t)
+                author_id = str(t + 1)
+
+            dummy_paper = {
+                'id': paper_id,
+                'title': 'Title',
+                'year': 2154,
+                'n_citation': 0
+            }
+            dummy_author = {'name': "Name", 'id': author_id, 'org': "Organization"}
+
+            # Log CREATE durations
+            if db == 'neo4j':
+                durations.update(transact_and_time(connection.create_paper, dummy_paper))
+                durations.update(transact_and_time(connection.create_author, dummy_author))
+            else:
+                durations.update(transact_and_time(connection.create_paper, *dummy_paper.values()))
+                durations.update(transact_and_time(connection.create_author, *dummy_author.values()))
+
+            durations.update(transact_and_time(connection.create_reference, paper_id, paper_id))
+            durations.update(transact_and_time(connection.create_authorship, author_id, paper_id))
+            trials[t] = list(durations.values())
 
         # Aggregate results
         result = np.vstack((
@@ -85,7 +97,7 @@ for db in DBs:
         ))
 
         df = pd.DataFrame(result, columns=durations.keys(), index=['min', 'max', 'mean'])
-        df.to_csv(pjoin(path, 'results', f'{db}_update_scale{scale}.csv'))
+        df.to_csv(pjoin(path, 'results', f'{db}_create_scale{scale}.csv'))
         print(df)
 
         # Close connection

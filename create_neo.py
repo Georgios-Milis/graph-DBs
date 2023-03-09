@@ -8,7 +8,6 @@ import pandas as pd
 from dotenv import load_dotenv
 from os.path import join as pjoin
 
-import data
 from connection import Neo4jConnection, transact_and_time
 
 
@@ -48,11 +47,6 @@ for scale, datafile in enumerate(datafiles, 1):
     N_QUERIES = 4
     trials = np.empty((N_TRIALS, N_QUERIES))
 
-    # Load data one at a time, execute transaction and then delete it
-    papers = data.get_papers_data(datafile)
-    authors = data.get_authors_data(datafile)
-    citations = data.get_citations_data(datafile)
-    authorships = data.get_authorships_data(datafile)
 
     for i in range(N_TRIALS):
         dummy_paper = {

@@ -6,7 +6,6 @@ from time import time
 from dotenv import load_dotenv
 from os.path import join as pjoin
 
-import data
 from connection import JanusGraphConnection, transact_and_time
 
 

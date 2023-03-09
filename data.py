@@ -4,8 +4,14 @@ to be inserted into the databases, read from a dataset (text file)
 written by process_DBLP_dataset.py
 """
 import os
+import re
 import json
+import pickle
 from os.path import join as pjoin
+
+
+# This file path
+path = os.path.dirname(os.path.realpath(__file__))
 
 
 def get_paper_IDs(datafile):
@@ -106,24 +112,33 @@ def get_authorships_data(datafile):
     return authorships
 
 
+def get_dataset(scale):
+    data = pickle.load(open(pjoin(path, 'data', f'dataset_{scale}.pkl'), 'rb'))
+    papers = data['papers']
+    authors = data['authors']
+    authorships = data['authorships']
+    citations = data['citations']
+    return papers, authors, authorships, citations
+
+
 if __name__ == "__main__":
-    path = os.path.dirname(os.path.realpath(__file__))
+    # Dataset files
+    datafiles = sorted([
+        pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
+        if re.search("^scale[1-6].*\.txt", f)
+    ])
 
-    # Dataset
-    datafile = pjoin(path, 'data', 'scale2_Aeroacoustics.txt')
+    for datafile in datafiles:
+        # Get scale number
+        scale = re.findall('\d+', datafile.split(os.sep)[-1])[0]
 
-    # Data info
-    papers = get_papers_data(datafile)
-    print("Papers:", len(papers))
+        # Data
+        papers, authors, authorships, citations = get_dataset(scale)
 
-    authors = get_authors_data(datafile)
-    print("Authors:", len(authors))
-
-    authorships = get_authorships_data(datafile)
-    print("Authorships:", len(authorships))
-    
-    citations = get_citations_data(datafile)
-    print("Citations:", len(citations))
-
-    paper_ids = [int(paper['id']) for paper in papers]
-    print("In-data citations:", len([cite for cite in citations if cite['to'] in paper_ids]))
+        # Info
+        print("Dataset in scale:", scale)
+        print("Papers:", len(papers))
+        print("Authors:", len(authors))
+        print("Authorships:", len(authorships))
+        print("Citations:", len(citations))
+        print()

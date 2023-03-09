@@ -38,10 +38,7 @@ for scale, datafile in enumerate(datafiles, 1):
     trials = [[] for _ in range(N_TRIALS)]
 
     # Data
-    papers = data.get_papers_data(datafile)
-    authors = data.get_authors_data(datafile)
-    citations = data.get_citations_data(datafile)
-    authorships = data.get_authorships_data(datafile)
+    papers, authors, authorships, citations = data.get_dataset(scale)
 
     for t in range(N_TRIALS):
         print(f"Trial {t+1}/{N_TRIALS}")

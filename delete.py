@@ -63,8 +63,7 @@ for db in DBs:
         trials = np.empty((N_TRIALS, N_QUERIES))
 
         # Node data
-        papers = data.get_papers_data(datafile)
-        authors = data.get_authors_data(datafile)
+        papers, authors, _, _ = data.get_dataset(scale)
         paper_ids = random.choices([paper['id'] for paper in papers], k=N_TRIALS)
         author_ids = random.choices([author['id'] for author in authors], k=N_TRIALS)
         

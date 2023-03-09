@@ -3,4 +3,6 @@ data/dblp_papers_v11.txt
 data/dblp_processed.txt
 data/scale5_Statistics.txt
 data/scale6_Machine_learning.txt
+data/*5.pkl
+data/*6.pkl
 results/

@@ -45,8 +45,6 @@ for scale, datafile in enumerate(datafiles, 1):
     # Initialize connection to database
     connection = Neo4jConnection(URI, USERNAME, PASSWORD, INSTANCE)
 
-    # Write results in a dictionary
-    durations = {}
 
     # Measurements
     N_TRIALS = 10
@@ -55,7 +53,8 @@ for scale, datafile in enumerate(datafiles, 1):
     elif scale > 5:
         N_TRIALS = 3
     N_QUERIES = 6
-    trials = [[] for _ in range(N_TRIALS)]
+
+    trials = np.empty((N_TRIALS, N_QUERIES))
 
     # Data
     papers, authors, authorships, citations = data.get_dataset(scale)
@@ -63,6 +62,9 @@ for scale, datafile in enumerate(datafiles, 1):
 
     for i in range(N_TRIALS):
         print(f"Trial {i+1}/{N_TRIALS}")
+
+        # Write results in a dictionary
+        durations = {}
 
         durations.update(transact_and_time(connection.clear_database))
 

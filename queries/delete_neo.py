@@ -77,7 +77,7 @@ def clear_database(self):
     def clear_database_tx(tx):
         tx.run(
             """
-            MATCH (n) DETACH DELETE n
+            CALL apoc.periodic.iterate("MATCH (n) RETURN n", "DETACH DELETE n", {batchSize:1000})
             """
         )
         

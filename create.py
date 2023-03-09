@@ -22,11 +22,13 @@ load_dotenv()
 # Dataset files
 datafiles = sorted([
     pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-    if re.search("^scale[1-2].*\.txt", f)
+    if re.search("^scale[1-6].*\.txt", f)
 ])
 
 # Databases - SUT
 DBs = ['neo4j', 'janus']
+
+DBs = ['neo4j'] # TODO: remove this line to run for both dbs
 
 
 for db in DBs:
@@ -62,12 +64,17 @@ for db in DBs:
 
 
         for t in range(N_TRIALS):
-            if db == 'neo4j':
-                paper_id = t
-                author_id = t + 1
-            else:
-                paper_id = str(t)
-                author_id = str(t + 1)
+            paper_id = 0
+            author_id = 0
+
+            while connection.find_paper(paper_id) != []:
+                paper_id = np.random.randint(0, 9999999)
+            while connection.find_author(author_id) != []:
+                author_id = np.random.randint(0, 9999999)
+
+            if db == 'janus':
+                paper_id = str(paper_id)
+                author_id = str(author_id)
 
             dummy_paper = {
                 'id': paper_id,

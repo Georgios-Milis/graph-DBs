@@ -45,7 +45,7 @@ class Neo4jConnection:
     create_reference = create_neo.create_reference
     create_authorship = create_neo.create_authorship
 
-    create_people = create_neo.create_people
+    #create_people = create_neo.create_people
 
     # Batch
     create_papers = create_neo.create_papers

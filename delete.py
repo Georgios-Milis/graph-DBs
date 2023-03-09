@@ -24,11 +24,13 @@ load_dotenv()
 # Dataset files
 datafiles = sorted([
     pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-    if re.search("^scale[1-2].*\.txt", f)
+    if re.search("^scale[1-6].*\.txt", f)
 ])
 
 # Databases - SUT
-DBs = ['janus']#'neo4j', 'janus']
+DBs = ['neo4j', 'janus']
+
+DBs = ['neo4j'] # TODO: remove this line to run for both dbs
 
 
 for db in DBs:
@@ -58,7 +60,7 @@ for db in DBs:
         durations = {}
 
         # Measurements
-        N_TRIALS = 1
+        N_TRIALS = 10
         N_QUERIES = 3
         trials = np.empty((N_TRIALS, N_QUERIES))
 
@@ -85,8 +87,10 @@ for db in DBs:
             dummy_author = {'name': "Name", 'id': author_id, 'org': "Organization"}
 
             if db == 'neo4j':
-                connection.create_paper(dummy_paper)
-                connection.create_author(dummy_author)
+                if connection.find_paper(paper_id) == []:
+                    connection.create_paper(dummy_paper)
+                if connection.find_author(author_id) == []:
+                    connection.create_author(dummy_author)
             else:
                 connection.create_paper(*dummy_paper.values())
                 connection.create_author(*dummy_author.values())

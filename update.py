@@ -23,11 +23,13 @@ load_dotenv()
 # Dataset files
 datafiles = sorted([
     pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-    if re.search("^scale[1-4].*\.txt", f)
+    if re.search("^scale[1-6].*\.txt", f)
 ])
 
 # Databases - SUT
 DBs = ['neo4j', 'janus']
+
+DBs = ['neo4j'] # TODO: remove this line to run for both dbs
 
 
 for db in DBs:

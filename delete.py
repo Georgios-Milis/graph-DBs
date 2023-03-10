@@ -100,7 +100,7 @@ for db in DBs:
             if db == 'neo4j':
                 durations.update(transact_and_time(
                     connection.delete_authorship, 
-                    (connection.authors_of(paper_id)[0], paper_id)
+                    [connection.authors_of(paper_id)[0], paper_id]
                 ))
             else:
                 durations.update(transact_and_time(

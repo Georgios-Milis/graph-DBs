@@ -10,7 +10,7 @@ pip install -r requirements.txt
 ``` 
 
 #### Neo4j
-[Download](https://neo4j.com/download/) Noe4j Desktop and create a DBMS with 6 databases, named "scale-1" to "scale-6". Change the credentials in the `.env` file. Install the APOC plugin for the DBMS. \
+[Download](https://neo4j.com/download/) Noe4j Desktop and create a DBMS with 6 databases, named "scale-1" to "scale-6". Change the credentials in the `.env` file. Install the APOC plugin for the DBMS. 
 
 You can start the DBMS from the UI.
 
@@ -27,9 +27,9 @@ Use `:remote connect tinkerpop.server conf/remote.yaml` and `:remote console` to
 
 
 ### Usage
-Run `fill_neo.py` or `fill_janus.py` to fill each database. By default, the script empties and fills the databses a few times to measure the transaction time. Then, run `create.py`, `read.py`, `update.py` or `delete.py` to test any of the CRUD operations. The CRUD scripts also test each operation a few times to exctract the desired metrics. You can easily change that by changing the `N_TRIALS` parameter (set it to 1 for one iteration). \
+Run `fill_neo.py` or `fill_janus.py` to fill each database. By default, the script empties and fills the databses a few times to measure the transaction time. Then, run `create.py`, `read.py`, `update.py` or `delete.py` to test any of the CRUD operations. The CRUD scripts also test each operation a few times to exctract the desired metrics. You can easily change that by changing the `N_TRIALS` parameter (set it to 1 for one iteration). 
 
-We test sequentially for all datasets, from scales 1 to 6. You can change the `START` and `END` variables, or explicitly modify the itarable for the scale code.\
+We test sequentially for all datasets, from scales 1 to 6. You can change the `START` and `END` variables, or explicitly modify the itarable for the scale code.
 
 We also implemeted the same API for the two systems under test, so that the CRUD scripts can run for either database, interchangeably.
 

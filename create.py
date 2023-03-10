@@ -12,7 +12,7 @@ from connection import Neo4jConnection, JanusGraphConnection, transact_and_time
 
 # Config
 START = 1
-END = 6
+END = 2
 LOCAL = True
 load_dotenv()
 
@@ -23,7 +23,7 @@ path = os.path.dirname(os.path.realpath(__file__))
 # Databases - SUT
 DBs = ['neo4j', 'janus']
 
-DBs = ['neo4j']
+DBs = ['janus']
 
 
 for db in DBs:

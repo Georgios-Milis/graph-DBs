@@ -10,7 +10,7 @@ from connection import JanusGraphConnection, transact_and_time
 
 
 # Config
-START = 1
+START = 3
 END = 4
 load_dotenv()
 
@@ -47,6 +47,7 @@ for scale in range(START, END + 1):
             #paper['id'] = str(i)
             paper['title'] = paper['title'].replace('\'', '')
             connection.create_paper(paper['id'], paper['title'], paper['year'], paper['n_citation'])
+        print("Papers inserted.")
 
         for i, author in enumerate(authors):
             author['id'] = str(author['id'])
@@ -57,16 +58,19 @@ for scale in range(START, END + 1):
             else:
                 author['org'] = ' '
             connection.create_author(author['id'], author['name'], author['org'])
+        print("Authors inserted.")
 
         for ref in citations:
             ref['from'] = str(ref['from'])
             ref['to'] = str(ref['to'])
             connection.create_reference(ref['from'], ref['to'])
+        print("Citations inserted.")
 
         for auth in authorships:
             auth['author'] = str(auth['author'])
             auth['paper'] = str(auth['paper'])
             connection.create_authorship(auth['author'], auth['paper'])
+        print("Authorships inserted.")
 
         durations['fill_database'] = time() - start_time
 

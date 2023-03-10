@@ -17,7 +17,7 @@ path = os.path.dirname(os.path.realpath(__file__))
 # DBMS names
 DBMSs = ['neo4j']#, 'janus']
 # Data scales
-scales = [i+1 for i in range(4)]
+scales = [i+1 for i in range(6)]
 
 # Horizontal axis for plots
 x = [10**scale for scale in scales]
@@ -48,7 +48,7 @@ def generic_plot(op, title, savename):
         # Plot
         colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
         ax.plot(x, mean_, colors[0], linewidth=2)
-        ax.fill_between(x, min_, max_, color=colors[0], alpha=0.2)
+        ax.fill_between(x, min_, max_, color=colors[0], alpha=0.1)
     plt.xscale('log')
     plt.title(title)
     plt.xlabel('Dataset node scale')
@@ -81,9 +81,9 @@ for dbms in DBMSs:
     # Plot
     colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
     plt.plot(x, mean_fill, colors[0], label='Fill', linewidth=2)
-    plt.fill_between(x, min_fill, max_fill, color=colors[0], alpha=0.2)
+    plt.fill_between(x, min_fill, max_fill, color=colors[0], alpha=0.1)
     plt.plot(x, mean_empty, colors[1] + '--', label='Empty', linewidth=2)
-    plt.fill_between(x, min_empty, max_empty, color=colors[1], linestyle='--', alpha=0.2)
+    plt.fill_between(x, min_empty, max_empty, color=colors[1], linestyle='--', alpha=0.1)
 plt.xscale('log')
 plt.yscale('log')
 plt.title('Duration of filling and emptying a database')
@@ -117,9 +117,9 @@ for dbms in DBMSs:
     # Plot
     colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
     plt.plot(x, mean_node, colors[0], label='Nodes', linewidth=2)
-    plt.fill_between(x, min_node, max_node, color=colors[0], alpha=0.2)
+    plt.fill_between(x, min_node, max_node, color=colors[0], alpha=0.1)
     plt.plot(x, mean_edge, colors[1] + '--', label='Edges', linewidth=2)
-    plt.fill_between(x, min_edge, max_edge, color=colors[1], linestyle='--', alpha=0.2)
+    plt.fill_between(x, min_edge, max_edge, color=colors[1], linestyle='--', alpha=0.1)
 plt.xscale('log')
 plt.title('Transaction duration of CREATE')
 plt.xlabel('Dataset node scale')
@@ -152,9 +152,9 @@ for dbms in DBMSs:
     # Plot
     colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
     plt.plot(x, mean_simple, colors[0], label='Simple', linewidth=2)
-    plt.fill_between(x, min_simple, max_simple, color=colors[0], alpha=0.2)
+    plt.fill_between(x, min_simple, max_simple, color=colors[0], alpha=0.1)
     plt.plot(x, mean_fancier, colors[1] + '--', label='Fancy', linewidth=2)
-    plt.fill_between(x, min_fancier, max_fancier, color=colors[1], linestyle='--', alpha=0.2)
+    plt.fill_between(x, min_fancier, max_fancier, color=colors[1], linestyle='--', alpha=0.1)
 plt.xscale('log')
 plt.title('Transaction duration of READ')
 plt.xlabel('Dataset node scale')

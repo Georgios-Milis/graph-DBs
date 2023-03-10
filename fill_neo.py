@@ -2,7 +2,6 @@
 Fills and empties the database, stores the durations in csv files.
 """
 import os
-import re
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
@@ -12,31 +11,27 @@ import data
 from connection import Neo4jConnection, transact_and_time
 
 
-# This file path
-path = os.path.dirname(os.path.realpath(__file__))
-
 # Config
+START = 6
+END = 6
 LOCAL = True
-
 load_dotenv()
+
 suffix = 'LOCAL' if LOCAL else 'REMOTE'
 URI = os.getenv(f'NEO4J_URI_{suffix}')
 USERNAME = os.getenv(f'NEO4J_USERNAME_{suffix}')
 PASSWORD = os.getenv(f'NEO4J_PASSWORD_{suffix}')
 
 
-# Dataset files
-datafiles = sorted([
-    pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-    if re.search("^scale[1-6].*\.txt", f)
-])
+# This file path
+path = os.path.dirname(os.path.realpath(__file__))
 
 def minibatches(list, minibatch_size=1000):
     for i in range(0, len(list), minibatch_size):
         yield list[i:i + minibatch_size]
 
 
-for scale, datafile in enumerate(datafiles, 1):
+for scale in range(START, END + 1):
     if not LOCAL:
         INSTANCE = os.getenv('NEO4J_INSTANCENAME_REMOTE')
     else:
@@ -48,10 +43,8 @@ for scale, datafile in enumerate(datafiles, 1):
 
     # Measurements
     N_TRIALS = 10
-    if scale == 5:
+    if scale >= 5:
         N_TRIALS = 5
-    elif scale > 5:
-        N_TRIALS = 3
     N_QUERIES = 6
 
     trials = np.empty((N_TRIALS, N_QUERIES))

@@ -1,5 +1,4 @@
 import os
-import re
 import random
 import numpy as np
 import pandas as pd
@@ -10,30 +9,26 @@ import data
 from connection import Neo4jConnection, JanusGraphConnection, transact_and_time
 
 
-# This file path
-path = os.path.dirname(os.path.realpath(__file__))
-
 # Config
+START = 1
+END = 6
 LOCAL = True
 load_dotenv()
 
 
-# Dataset files
-datafiles = sorted([
-    pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-    if re.search("^scale[1-4].*\.txt", f)
-])
+# This file path
+path = os.path.dirname(os.path.realpath(__file__))
 
 # Databases - SUT
 DBs = ['neo4j', 'janus']
 
-DBs = ['neo4j'] # TODO: remove this line to run for both dbs
+DBs = ['neo4j']
 
 
 for db in DBs:
     print(db)
     
-    for scale, datafile in enumerate(datafiles, 1):
+    for scale in range(START, END + 1):
         # Connect to the right database
         if db == 'neo4j':
             suffix = 'LOCAL' if LOCAL else 'REMOTE'

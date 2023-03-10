@@ -1,5 +1,4 @@
 import os
-import re
 import numpy as np
 import pandas as pd
 from time import time
@@ -10,21 +9,18 @@ import data
 from connection import JanusGraphConnection, transact_and_time
 
 
-# This file path
-path = os.path.dirname(os.path.realpath(__file__))
-
 # Config
+START = 1
+END = 4
 load_dotenv()
+
 URI = os.getenv('JANUSGRAPH_URI')
 
 
-# Dataset files
-datafiles = sorted([
-    pjoin(path, 'data', f) for f in os.listdir(pjoin(path, 'data'))
-    if re.search("^scale[1-2].*\.txt", f)
-])
+# This file path
+path = os.path.dirname(os.path.realpath(__file__))
 
-for scale, datafile in enumerate(datafiles, 1):
+for scale in range(START, END + 1):
     INSTANCE = 'scale-' + str(scale)
     # Initialize connection to database
     connection = JanusGraphConnection(URI, instance=INSTANCE)
@@ -50,7 +46,7 @@ for scale, datafile in enumerate(datafiles, 1):
             paper['id'] = str(paper['id'])
             #paper['id'] = str(i)
             paper['title'] = paper['title'].replace('\'', '')
-            print(connection.create_paper(paper['id'], paper['title'], paper['year'], paper['n_citation']))
+            connection.create_paper(paper['id'], paper['title'], paper['year'], paper['n_citation'])
 
         for i, author in enumerate(authors):
             author['id'] = str(author['id'])
@@ -60,17 +56,17 @@ for scale, datafile in enumerate(datafiles, 1):
                 author['org'] = author['org'].replace('\'', '')
             else:
                 author['org'] = ' '
-            print(connection.create_author(author['id'], author['name'], author['org']))
+            connection.create_author(author['id'], author['name'], author['org'])
 
         for ref in citations:
             ref['from'] = str(ref['from'])
             ref['to'] = str(ref['to'])
-            print(connection.create_reference(ref['from'], ref['to']))
+            connection.create_reference(ref['from'], ref['to'])
 
         for auth in authorships:
             auth['author'] = str(auth['author'])
             auth['paper'] = str(auth['paper'])
-            print(connection.create_authorship(auth['author'], auth['paper']))
+            connection.create_authorship(auth['author'], auth['paper'])
 
         durations['fill_database'] = time() - start_time
 

@@ -146,7 +146,7 @@ def test_delete_reference():
     connection.create_paper({'id': 1, 'title': "Title", 'year': 2154, 'n_citation': 0})
     connection.create_paper({'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
     connection.create_reference(1, 2)
-    connection.delete_reference((1, 2))
+    connection.delete_reference([1, 2])
     tests.append(connection.references_of(1) == [])
     tests.append(connection.references_of(2) == [])
     tests.append(connection.references_to(1) == [])
@@ -162,7 +162,7 @@ def test_create_authorship():
     connection.create_author({'name': "Name", 'id': 1, 'org': "Organization"})
     connection.create_paper({'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
     connection.create_authorship(1, 2)
-    connection.delete_authorship((1, 2))
+    connection.delete_authorship([1, 2])
     tests.append(connection.papers_of(1) == [])
     tests.append(connection.authors_of(2) == [])
 

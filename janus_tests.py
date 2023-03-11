@@ -1,7 +1,8 @@
 import os
+from time import sleep
 from dotenv import load_dotenv
 from connection import JanusGraphConnection
-from time import sleep
+
 
 def run_test(test):
     print(test.__name__, '\u2713' if test() else '\u2717')
@@ -9,9 +10,6 @@ def run_test(test):
 
 def test_create_paper():
     tests = []
-
-    connection.clear_database()
-    sleep(2)
 
     tests.append(connection.find_paper(17) == [])
 
@@ -24,9 +22,6 @@ def test_create_paper():
 def test_create_author():
     tests = []
 
-    connection.clear_database()
-    sleep(2)
-
     tests.append(connection.find_author(42) == [])
 
     connection.create_author(42, "Name", "Organization")
@@ -38,9 +33,6 @@ def test_create_author():
 
 def test_create_reference():
     tests = []
-    
-    connection.clear_database()
-    sleep(2)
 
     connection.create_paper(1, "Title", 2154, 0)
     connection.create_paper(2, "Title", 2154, 0)
@@ -60,9 +52,6 @@ def test_create_reference():
 def test_create_authorship():
     tests = []
     
-    connection.clear_database()
-    sleep(2)
-
     connection.create_author(1, "Name", "Organization")
     connection.create_paper(2, "Title", 2154, 0)
     tests.append(connection.papers_of(1) == [])
@@ -79,8 +68,13 @@ if __name__ == "__main__":
     load_dotenv()
     URI = os.getenv('JANUSGRAPH_URI')
     # Initialize connection to database
-    connection = JanusGraphConnection(URI)
+    connection = JanusGraphConnection(URI, 4)
+    
+    # The tests can run on either a full or empty database
+    # connection.load_graph()
 
+    connection.clear_database()
+    sleep(15)
 
     tests = [
         test_create_paper,

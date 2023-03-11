@@ -84,5 +84,5 @@ def are_collaborators(self, id1, id2):
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
-        response = f"No collaborations between authors with id1, id2: {id1}, {id2}"
+        response = []
     return response

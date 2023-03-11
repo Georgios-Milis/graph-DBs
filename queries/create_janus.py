@@ -1,5 +1,5 @@
-def create_paper(self, id, Title, year, n_citation):
-    query = f"g.addV('paper').property('id', '{id}').property('title', '{Title}').property('year', {year}).property('n_citation', {n_citation})"
+def create_paper(self, id, title, year, n_citation):
+    query = f"g.addV('paper').property('id', '{id}').property('title', '{title}').property('year', {year}).property('n_citation', {n_citation})"
     try:
         response = self.gremlin_conn.submit(query).next()
     except Exception as e:

@@ -25,7 +25,7 @@ def test_create_author():
     connection.clear_database()
     tests.append(connection.find_author(42) == [])
 
-    connection.create_author({'name': "Name", 'id': 42, 'org': "Organization"})
+    connection.create_author({'id': 42, 'name': "Name", 'org': "Organization"})
     tests.append(connection.find_author(42) == [42])
 
     return all(tests)
@@ -53,7 +53,7 @@ def test_create_authorship():
     tests = []
     
     connection.clear_database()
-    connection.create_author({'name': "Name", 'id': 1, 'org': "Organization"})
+    connection.create_author({'id': 1, 'name': "Name", 'org': "Organization"})
     connection.create_paper({'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
     tests.append(connection.papers_of(1) == [])
     tests.append(connection.authors_of(2) == [])
@@ -69,8 +69,8 @@ def test_coauthorship():
     tests = []
     
     connection.clear_database()
-    connection.create_author({'name': "Name", 'id': 1, 'org': "Organization"})
-    connection.create_author({'name': "Name", 'id': 2, 'org': "Organization"})
+    connection.create_author({'id': 1, 'name': "Name", 'org': "Organization"})
+    connection.create_author({'id': 2, 'name': "Name", 'org': "Organization"})
     connection.create_paper({'id': 3, 'title': "Title", 'year': 2154, 'n_citation': 0})
     connection.create_authorship(1, 3)
 
@@ -86,10 +86,10 @@ def test_mean_authors_per_paper():
     tests = []
     
     connection.clear_database()
-    connection.create_author({'name': "Name", 'id': 1, 'org': "Organization"})
-    connection.create_author({'name': "Name", 'id': 2, 'org': "Organization"})
-    connection.create_author({'name': "Name", 'id': 3, 'org': "Organization"})
-    connection.create_author({'name': "Name", 'id': 4, 'org': "Organization"})
+    connection.create_author({'id': 1, 'name': "Name", 'org': "Organization"})
+    connection.create_author({'id': 2, 'name': "Name", 'org': "Organization"})
+    connection.create_author({'id': 3, 'name': "Name", 'org': "Organization"})
+    connection.create_author({'id': 4, 'name': "Name", 'org': "Organization"})
 
     connection.create_paper({'id': 1, 'title': "Title", 'year': 2154, 'n_citation': 0})
     connection.create_paper({'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
@@ -132,7 +132,7 @@ def test_delete_author():
     tests = []
 
     connection.clear_database()
-    connection.create_author({'name': "Name", 'id': 42, 'org': "Organization"})
+    connection.create_author({'id': 42, 'name': "Name", 'org': "Organization"})
     connection.delete_author(42)
     tests.append(connection.find_author(42) == [])
 
@@ -146,6 +146,11 @@ def test_delete_reference():
     connection.create_paper({'id': 1, 'title': "Title", 'year': 2154, 'n_citation': 0})
     connection.create_paper({'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
     connection.create_reference(1, 2)
+    tests.append(connection.references_of(1) == [2])
+    tests.append(connection.references_of(2) == [])
+    tests.append(connection.references_to(1) == [])
+    tests.append(connection.references_to(2) == [1])
+    
     connection.delete_reference([1, 2])
     tests.append(connection.references_of(1) == [])
     tests.append(connection.references_of(2) == [])
@@ -155,13 +160,16 @@ def test_delete_reference():
     return all(tests)
 
 
-def test_create_authorship():
+def test_delete_authorship():
     tests = []
     
     connection.clear_database()
-    connection.create_author({'name': "Name", 'id': 1, 'org': "Organization"})
+    connection.create_author({'id': 1, 'name': "Name", 'org': "Organization"})
     connection.create_paper({'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
     connection.create_authorship(1, 2)
+    tests.append(connection.papers_of(1) == [2])
+    tests.append(connection.authors_of(2) == [1])
+
     connection.delete_authorship([1, 2])
     tests.append(connection.papers_of(1) == [])
     tests.append(connection.authors_of(2) == [])
@@ -186,7 +194,7 @@ def test_change_org():
     tests = []
     
     connection.clear_database()
-    connection.create_author({'name': "Name", 'id': 1, 'org': "Organization"})
+    connection.create_author({'id': 1, 'name': "Name", 'org': "Organization"})
     tests.append(connection.org_of_author(1) == ["Organization"])
 
     connection.change_org(1, "New Organization")
@@ -226,7 +234,7 @@ if __name__ == "__main__":
         test_delete_paper,
         test_delete_author,
         test_delete_reference,
-        test_create_authorship,
+        test_delete_authorship,
         test_rename_paper,
         test_change_org,
     ]

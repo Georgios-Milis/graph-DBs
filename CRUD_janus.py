@@ -9,7 +9,7 @@ import data
 from connection import JanusGraphConnection, transact_and_time
 
 
-scale = 4
+scale = 5
 
 
 # Config

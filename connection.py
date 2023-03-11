@@ -97,22 +97,29 @@ class JanusGraphConnection:
     """
     Handles connection to JanusGraph and contains methods for transactions.
     """
-    def __init__(self, uri):
+    def __init__(self, uri, scale):
+        self.scale = scale
         ws_conn = httpclient.HTTPRequest(uri)
         self.gremlin_conn = client.Client(ws_conn, "g")
         self.gremlin_conn.submit("graph = TinkerGraph.open()")
         self.gremlin_conn.submit("g = graph.traversal()")
 
-    def load_graph(self, scale):
+    def load_graph(self):
         # Load a GraphSON file, if it exists
         try:
-            self.gremlin_conn.submit(f"graph.io(graphson()).readGraph('/mnt/dataset_{scale}.json')").next()
+            self.gremlin_conn.submit(f"graph.io(graphson()).readGraph('/home/dataset_{self.scale}.json')").next()
         except Exception as e:
             print(e)
 
+    def query(self, q):
+        # For debugging
+        try:
+            res = self.gremlin_conn.submit(q).next()
+        except Exception as e:
+            res = e
+        return res
+
     def close(self):
-        # Save the in-memory graph
-        # self.gremlin_conn.submit(f'g.io("{self.scale}.json").write().iterate()')
         pass
 
     # CREATE ========================================================

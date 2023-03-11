@@ -46,12 +46,11 @@ for db in DBs:
             connection = Neo4jConnection(URI, USERNAME, PASSWORD, INSTANCE)
         else:
             URI = os.getenv('JANUSGRAPH_URI')
-            INSTANCE = 'scale-' + str(scale)
             # Initialize connection to database
-            connection = JanusGraphConnection(URI, INSTANCE)
+            connection = JanusGraphConnection(URI)
             connection.clear_database()
             connection.load_graph(scale)
-            
+
 
         # Durations dictionary
         durations = {}

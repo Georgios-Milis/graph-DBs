@@ -17,9 +17,9 @@ You can start the DBMS from the UI.
 #### Janusgraph
 Run the [image](https://hub.docker.com/r/janusgraph/janusgraph) in a Docker container. Once launched, run
 ```bash
-docker run -it -p 8182:8182 janusgraph/janusgraph
+docker run --name container-name -it -p 8182:8182 janusgraph/janusgraph
 ``` 
-in some terminal to forward the port. If you want a Gremlin client console, run
+in some terminal to create a container for the specific database, with name container-name (optional), which forwards the port 8182. If you also want a Gremlin client console, run
 ```bash
 docker run --rm --link janusgraph-default:janusgraph -e GREMLIN_REMOTE_HOSTS=janusgraph -it janusgraph/janusgraph:latest ./bin/gremlin.sh
 ```

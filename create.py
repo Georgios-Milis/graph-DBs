@@ -12,7 +12,7 @@ from connection import Neo4jConnection, JanusGraphConnection, transact_and_time
 
 # Config
 START = 1
-END = 2
+END = 4
 LOCAL = True
 load_dotenv()
 
@@ -44,9 +44,10 @@ for db in DBs:
             connection = Neo4jConnection(URI, USERNAME, PASSWORD, INSTANCE)
         else:
             URI = os.getenv('JANUSGRAPH_URI')
-            INSTANCE = 'scale-' + str(scale)
             # Initialize connection to database
-            connection = JanusGraphConnection(URI, INSTANCE)
+            connection = JanusGraphConnection(URI)
+            connection.clear_database()
+            connection.load_graph(scale)
 
 
         # Durations dictionary
@@ -62,14 +63,19 @@ for db in DBs:
             paper_id = 0
             author_id = 0
 
-            while connection.find_paper(paper_id) != []:
-                paper_id = np.random.randint(0, 9999999)
-            while connection.find_author(author_id) != []:
-                author_id = np.random.randint(0, 9999999)
-
             if db == 'janus':
                 paper_id = str(paper_id)
                 author_id = str(author_id)
+
+            while connection.find_paper(paper_id) != []:
+                paper_id = np.random.randint(0, 9999999)
+                if db == 'janus':
+                    paper_id = str(paper_id)
+            while connection.find_author(author_id) != []:
+                author_id = np.random.randint(0, 9999999)
+                if db == 'janus':
+                    author_id = str(author_id)
+
 
             dummy_paper = {
                 'id': paper_id,
@@ -77,7 +83,7 @@ for db in DBs:
                 'year': 2154,
                 'n_citation': 0
             }
-            dummy_author = {'name': "Name", 'id': author_id, 'org': "Organization"}
+            dummy_author = {'id': author_id, 'name': "Name", 'org': "Organization"}
 
             # Log CREATE durations
             if db == 'neo4j':

@@ -14,7 +14,7 @@ from connection import Neo4jConnection, JanusGraphConnection, transact_and_time
 
 # Config
 START = 1
-END = 2
+END = 4
 LOCAL = True
 load_dotenv()
 
@@ -49,7 +49,9 @@ for db in DBs:
             INSTANCE = 'scale-' + str(scale)
             # Initialize connection to database
             connection = JanusGraphConnection(URI, INSTANCE)
-
+            connection.clear_database()
+            connection.load_graph(scale)
+            
 
         # Durations dictionary
         durations = {}

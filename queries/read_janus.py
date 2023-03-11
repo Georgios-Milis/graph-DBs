@@ -3,7 +3,7 @@ def find_paper(self, id):
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
-        response = f"No paper with id: {id}"
+        response = []
     return response
 
 
@@ -30,7 +30,7 @@ def find_author(self, id):
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
-        response = f"No author with id: {id}"
+        response = []
     return response
 
 

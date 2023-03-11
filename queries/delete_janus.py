@@ -14,8 +14,6 @@ def delete_paper(self, id):
         self.gremlin_conn.submit(query)
     except Exception as e:
         print(e)
-    else:
-        print("Paper deleted.")
 
 
 def delete_author(self, id):
@@ -24,8 +22,6 @@ def delete_author(self, id):
         self.gremlin_conn.submit(query)
     except Exception as e:
         print(e)
-    else:
-        print("Author deleted.")
 
 
 def delete_reference(self, id1, id2):
@@ -34,8 +30,6 @@ def delete_reference(self, id1, id2):
         self.gremlin_conn.submit(query)
     except Exception as e:
         print(e)
-    else:
-        print("Reference deleted.")
 
 
 def delete_authorship(self, id1, id2):
@@ -44,5 +38,3 @@ def delete_authorship(self, id1, id2):
         self.gremlin_conn.submit(query)
     except Exception as e:
         print(e)
-    else:
-        print("Authorship deleted.")

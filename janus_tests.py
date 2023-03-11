@@ -113,18 +113,27 @@ def test_mean_authors_per_paper():
     connection.create_authorship(2, 1)
     connection.create_authorship(3, 1)
     connection.create_authorship(4, 1)
+
+    print("t1: ", connection.mean_authors_per_paper())
     tests.append(connection.mean_authors_per_paper() == 1)
 
     connection.create_authorship(1, 2)
     connection.create_authorship(2, 2)
     connection.create_authorship(3, 2)
+
+
+    print("t2: ", connection.mean_authors_per_paper())
     tests.append(connection.mean_authors_per_paper() == 1.75)
 
     connection.create_authorship(1, 3)
     connection.create_authorship(2, 3)
+
+    print("t3: ", connection.mean_authors_per_paper())
     tests.append(connection.mean_authors_per_paper() == 2.25)
 
     connection.create_authorship(1, 4)
+
+    print("t4: ", connection.mean_authors_per_paper())
     tests.append(connection.mean_authors_per_paper() == 2.5)
 
     return all(tests)

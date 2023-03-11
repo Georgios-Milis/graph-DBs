@@ -107,7 +107,10 @@ class JanusGraphConnection:
     def load_graph(self):
         # Load a GraphSON file, if it exists
         try:
-            self.gremlin_conn.submit(f"graph.io(graphson()).readGraph('/home/dataset_{self.scale}.json')").next()
+            self.gremlin_conn.submit(
+                f"graph.io(graphson()).readGraph('/home/dataset_{self.scale}.json')", 
+                result_options={'evaluationTimeout': 0}
+            )
         except Exception as e:
             print(e)
 

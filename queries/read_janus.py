@@ -98,7 +98,7 @@ def are_collaborators(self, id1, id2):
 def mean_authors_per_paper(self):
     try:
         from numpy import mean
-        response = mean([len(authors_of(paper_id)) for paper_id in self.papers()])
+        response = mean([len(authors_of(paper_id)) for paper_id in self.get_papers()])
     except Exception as e:
         response = e
     return response

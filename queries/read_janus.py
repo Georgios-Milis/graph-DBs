@@ -80,7 +80,7 @@ def authors_of(self, id):
 
 
 def are_collaborators(self, id1, id2):
-    query = f"g.V().and(inE('authorship').where(otherV().has('author', 'id', {id1})), inE('authorship').where(otherV().has('author', 'id', {id2}))).values('id')"
+    query = f"g.V().and(inE('authorship').where(otherV().has('author', 'id', '{id1}')), inE('authorship').where(otherV().has('author', 'id', '{id2}'))).values('id')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:

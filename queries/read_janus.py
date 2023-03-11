@@ -1,5 +1,23 @@
+def get_vertices(self):
+    query = f"g.V().values('id')"
+    try:
+        response = self.gremlin_conn.submit(query).next()
+    except StopIteration:
+        response = []
+    return response
+
+
 def find_paper(self, id):
     query = f"g.V().has('paper', 'id', {id}).values('id')"
+    try:
+        response = self.gremlin_conn.submit(query).next()
+    except StopIteration:
+        response = []
+    return response
+
+
+def find_author(self, id):
+    query = f"g.V().has('author', 'id', {id}).values('id')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
@@ -25,21 +43,12 @@ def org_of_author(self, id):
     return response
 
 
-def find_author(self, id):
-    query = f"g.V().has('author', 'id', {id}).values('name')"
-    try:
-        response = self.gremlin_conn.submit(query).next()
-    except StopIteration:
-        response = []
-    return response
-
-
 def references_of(self, id):
     query = f"g.V().has('paper', 'id', {id}).out('reference').values('id')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
-        response = f"No references from paper with id: {id}"
+        response = []
     return response
 
 
@@ -48,7 +57,7 @@ def references_to(self, id):
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
-        response = f"No references to paper with id: {id}"
+        response = []
     return response
 
 
@@ -57,7 +66,7 @@ def papers_of(self, id):
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
-        response = f"No author with id: {id}"
+        response = []
     return response
 
 
@@ -66,7 +75,7 @@ def authors_of(self, id):
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
-        response = f"No paper with id: {id}"
+        response = []
     return response
 
 

@@ -93,6 +93,43 @@ def test_coauthorship():
     return all(tests)
 
 
+def test_mean_authors_per_paper():
+    tests = []
+    
+    connection.clear_database()
+    sleep(2)
+
+    connection.create_author(**{'id': 1, 'name': "Name", 'org': "Organization"})
+    connection.create_author(**{'id': 2, 'name': "Name", 'org': "Organization"})
+    connection.create_author(**{'id': 3, 'name': "Name", 'org': "Organization"})
+    connection.create_author(**{'id': 4, 'name': "Name", 'org': "Organization"})
+
+    connection.create_paper(**{'id': 1, 'title': "Title", 'year': 2154, 'n_citation': 0})
+    connection.create_paper(**{'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
+    connection.create_paper(**{'id': 3, 'title': "Title", 'year': 2154, 'n_citation': 0})
+    connection.create_paper(**{'id': 4, 'title': "Title", 'year': 2154, 'n_citation': 0})
+
+    connection.create_authorship(1, 1)
+    connection.create_authorship(2, 1)
+    connection.create_authorship(3, 1)
+    connection.create_authorship(4, 1)
+    tests.append(connection.mean_authors_per_paper() == 1)
+
+    connection.create_authorship(1, 2)
+    connection.create_authorship(2, 2)
+    connection.create_authorship(3, 2)
+    tests.append(connection.mean_authors_per_paper() == 1.75)
+
+    connection.create_authorship(1, 3)
+    connection.create_authorship(2, 3)
+    tests.append(connection.mean_authors_per_paper() == 2.25)
+
+    connection.create_authorship(1, 4)
+    tests.append(connection.mean_authors_per_paper() == 2.5)
+
+    return all(tests)
+
+
 def test_delete_paper():
     tests = []
 
@@ -218,6 +255,7 @@ if __name__ == "__main__":
         test_create_reference,
         test_create_authorship,
         test_coauthorship,
+        test_mean_authors_per_paper,
         test_delete_paper,
         test_delete_author,
         test_delete_reference,

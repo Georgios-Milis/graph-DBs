@@ -6,6 +6,14 @@ def get_vertices(self):
         response = []
     return response
 
+def get_papers(self):
+    query = f"g.V().hasLabel('paper').values('id')"
+    try:
+        response = self.gremlin_conn.submit(query).next()
+    except StopIteration:
+        response = []
+    return response
+
 
 def find_paper(self, id):
     query = f"g.V().has('paper', 'id', {id}).values('id')"
@@ -85,4 +93,12 @@ def are_collaborators(self, id1, id2):
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
         response = []
+    return response
+
+def mean_authors_per_paper(self):
+    try:
+        from numpy import mean
+        response = mean([len(authors_of(paper_id)) for paper_id in self.papers()])
+    except Exception as e:
+        response = e
     return response

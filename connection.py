@@ -149,6 +149,7 @@ class JanusGraphConnection:
     find_author = read_janus.find_author
     title_of_paper = read_janus.title_of_paper
     org_of_author = read_janus.org_of_author
+    get_papers = read_janus.get_papers
 
     # Adjacency Queries
     references_of = read_janus.references_of
@@ -160,8 +161,7 @@ class JanusGraphConnection:
     are_collaborators = read_janus.are_collaborators
 
     # Analytical Queries
-    # TODO atsorvat:
-    # mean_authors_per_paper = read_janus.mean_authors_per_paper
+    mean_authors_per_paper = read_janus.mean_authors_per_paper
 
     # UPDATE ========================================================
     rename_paper = update_janus.rename_paper

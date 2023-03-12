@@ -18,15 +18,14 @@ path = os.path.dirname(os.path.realpath(__file__))
 DBMSs = ['neo4j', 'janus']
 DBMS_names = ['Neo4j', 'JanusGraph']
 # Data scales
-scales = [i+1 for i in range(4)]
+scales = [i+1 for i in range(5)]
 
 # Horizontal axis for plots
 x = [10**scale for scale in scales]
 
 
 def generic_plot(op, title, savename):
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+    plt.figure()
     for dbms in DBMSs:
         min_ = []
         max_ = []
@@ -44,8 +43,8 @@ def generic_plot(op, title, savename):
                 pass
         # Plot
         colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
-        ax.plot(x, mean_, colors[0], linewidth=2)
-        ax.fill_between(x, min_, max_, color=colors[0], alpha=0.1)
+        plt.plot(x, mean_, colors[0], linewidth=2)
+        plt.fill_between(x, min_, max_, color=colors[0], alpha=0.1)
     plt.xscale('log')
     plt.title(title)
     plt.xlabel('Dataset node scale')
@@ -174,4 +173,4 @@ generic_plot('update', 'Transaction duration of UPDATE', 'update.pdf')
 
 
 # DELETE plot =================================================================
-generic_plot('delete', 'Transaction duration of DELETE', 'delete.pdf')
+# generic_plot('delete', 'Transaction duration of DELETE', 'delete.pdf')

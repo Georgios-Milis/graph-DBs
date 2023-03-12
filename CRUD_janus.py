@@ -9,7 +9,7 @@ import data
 from connection import JanusGraphConnection, transact_and_time
 
 
-scale = 4
+scale = 5
 
 
 # Config
@@ -27,52 +27,52 @@ connection = JanusGraphConnection(URI, scale)
 durations = {}
 
 # Measurements
-N_TRIALS = 10
-N_QUERIES = 4
-trials = np.empty((N_TRIALS, N_QUERIES))
+N_TRIALS = 5
+# N_QUERIES = 4
+# trials = np.empty((N_TRIALS, N_QUERIES))
 
 
-for t in range(N_TRIALS):
-    paper_id = 0
-    author_id = 0
+# for t in range(N_TRIALS):
+#     paper_id = 0
+#     author_id = 0
 
-    paper_id = str(paper_id)
-    author_id = str(author_id)
+#     paper_id = str(paper_id)
+#     author_id = str(author_id)
 
-    while connection.find_paper(paper_id) != []:
-        paper_id = np.random.randint(0, 9999999)
-        paper_id = str(paper_id)
-    while connection.find_author(author_id) != []:
-        author_id = np.random.randint(0, 9999999)
-        author_id = str(author_id)
+#     while connection.find_paper(paper_id) != []:
+#         paper_id = np.random.randint(0, 9999999)
+#         paper_id = str(paper_id)
+#     while connection.find_author(author_id) != []:
+#         author_id = np.random.randint(0, 9999999)
+#         author_id = str(author_id)
 
 
-    dummy_paper = {
-        'id': paper_id,
-        'title': 'Title',
-        'year': 2154,
-        'n_citation': 0
-    }
-    dummy_author = {'id': author_id, 'name': "Name", 'org': "Organization"}
+#     dummy_paper = {
+#         'id': paper_id,
+#         'title': 'Title',
+#         'year': 2154,
+#         'n_citation': 0
+#     }
+#     dummy_author = {'id': author_id, 'name': "Name", 'org': "Organization"}
 
-    # Log CREATE durations
-    durations.update(transact_and_time(connection.create_paper, *dummy_paper.values()))
-    durations.update(transact_and_time(connection.create_author, *dummy_author.values()))
+#     # Log CREATE durations
+#     durations.update(transact_and_time(connection.create_paper, *dummy_paper.values()))
+#     durations.update(transact_and_time(connection.create_author, *dummy_author.values()))
 
-    durations.update(transact_and_time(connection.create_reference, paper_id, paper_id))
-    durations.update(transact_and_time(connection.create_authorship, author_id, paper_id))
-    trials[t] = list(durations.values())
+#     durations.update(transact_and_time(connection.create_reference, paper_id, paper_id))
+#     durations.update(transact_and_time(connection.create_authorship, author_id, paper_id))
+#     trials[t] = list(durations.values())
 
-# Aggregate results
-result = np.vstack((
-    np.min(trials, axis=0),
-    np.max(trials, axis=0),
-    np.mean(trials, axis=0)
-))
+# # Aggregate results
+# result = np.vstack((
+#     np.min(trials, axis=0),
+#     np.max(trials, axis=0),
+#     np.mean(trials, axis=0)
+# ))
 
-df = pd.DataFrame(result, columns=durations.keys(), index=['min', 'max', 'mean'])
-df.to_csv(pjoin(path, 'results', f'janus_create_scale{scale}.csv'))
-print(df)
+# df = pd.DataFrame(result, columns=durations.keys(), index=['min', 'max', 'mean'])
+# df.to_csv(pjoin(path, 'results', f'janus_create_scale{scale}.csv'))
+# print(df)
 
 
 # READ ========================================================================
@@ -80,7 +80,6 @@ print(df)
 durations = {}
 
 # Measurements
-N_TRIALS = 10
 N_QUERIES = 4
 trials = np.empty((N_TRIALS, N_QUERIES))
 
@@ -119,7 +118,6 @@ print(df)
 durations = {}
 
 # Measurements
-N_TRIALS = 10
 N_QUERIES = 2
 trials = np.empty((N_TRIALS, N_QUERIES))
 
@@ -154,7 +152,6 @@ print(df)
 durations = {}
 
 # Measurements
-N_TRIALS = 10
 N_QUERIES = 3
 trials = np.empty((N_TRIALS, N_QUERIES))
 

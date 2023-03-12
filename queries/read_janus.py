@@ -6,20 +6,12 @@ def get_vertices(self):
         response = []
     return response
 
+
 def get_papers(self, samples=None):
     if samples is None:
         query = f"g.V().hasLabel('paper').values('id')"
     else:
         query = f"g.V().hasLabel('paper').limit({samples}).values('id')"
-    try:
-        response = self.gremlin_conn.submit(query).next()
-    except StopIteration:
-        response = []
-    return response
-
-
-def get_papers(self):
-    query = f"g.V().hasLabel('paper').values('id')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
@@ -113,9 +105,9 @@ def mean_authors_per_paper(self, samples=None):
     try:
         from numpy import mean
         if samples is None:
-            response = mean([len(authors_of(paper_id)) for paper_id in self.get_papers(samples)])
+            response = mean([len(authors_of(paper_id)) for paper_id in self.get_papers()])
         else:
-            import random
+            response = mean([len(authors_of(paper_id)) for paper_id in self.get_papers(samples)])
     except Exception as e:
         response = e
     return response

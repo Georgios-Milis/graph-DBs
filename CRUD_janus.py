@@ -9,7 +9,7 @@ import data
 from connection import JanusGraphConnection, transact_and_time
 
 
-scale = 5
+scale = 4
 
 
 # Config
@@ -20,7 +20,7 @@ URI = os.getenv('JANUSGRAPH_URI')
 # Initialize connection to database
 connection = JanusGraphConnection(URI, scale)
 
-print(transact_and_time(connection.load_graph))
+# print(transact_and_time(connection.load_graph))
 
 # CREATE ======================================================================
 # Durations dictionary
@@ -81,7 +81,7 @@ durations = {}
 
 # Measurements
 N_TRIALS = 10
-N_QUERIES = 3
+N_QUERIES = 4
 trials = np.empty((N_TRIALS, N_QUERIES))
 
 # Node data
@@ -98,7 +98,7 @@ for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
     durations.update(transact_and_time(connection.title_of_paper, paper_id))
     durations.update(transact_and_time(connection.authors_of, paper_id))
     durations.update(transact_and_time(connection.are_collaborators, author_id, next_author_id))
-    #durations.update(transact_and_time(connection.mean_authors_per_paper))
+    durations.update(transact_and_time(connection.mean_authors_per_paper))
     trials[i] = list(durations.values())
 
 # Aggregate results

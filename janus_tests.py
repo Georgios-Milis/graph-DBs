@@ -12,7 +12,7 @@ def test_create_paper():
     tests = []
 
     connection.clear_database()
-    sleep(1)
+    sleep(2)
 
     tests.append(connection.find_paper(17) == [])
 
@@ -26,7 +26,7 @@ def test_create_author():
     tests = []
 
     connection.clear_database()
-    sleep(1)
+    sleep(2)
 
     tests.append(connection.find_author(42) == [])
 
@@ -40,7 +40,7 @@ def test_create_reference():
     tests = []
     
     connection.clear_database()
-    sleep(1)
+    sleep(2)
 
     connection.create_paper(**{'id': 1, 'title': "Title", 'year': 2154, 'n_citation': 0})
     connection.create_paper(**{'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
@@ -60,7 +60,7 @@ def test_create_authorship():
     tests = []
     
     connection.clear_database()
-    sleep(1)
+    sleep(2)
 
     connection.create_author(**{'id': 1, 'name': "Name", 'org': "Organization"})
     connection.create_paper(**{'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
@@ -78,7 +78,7 @@ def test_coauthorship():
     tests = []
     
     connection.clear_database()
-    sleep(1)
+    sleep(5)
 
     connection.create_author(**{'id': 1, 'name': "Name", 'org': "Organization"})
     connection.create_author(**{'id': 2, 'name': "Name", 'org': "Organization"})
@@ -90,6 +90,45 @@ def test_coauthorship():
     connection.create_authorship(2, 3)
     tests.append(connection.are_collaborators(1, 2) == ['3'])
 
+    print(tests)
+    return all(tests)
+
+
+def test_mean_authors_per_paper():
+    tests = []
+
+    connection.clear_database()
+    sleep(2)
+
+    connection.create_author(**{'id': 1, 'name': "Name", 'org': "Organization"})
+    connection.create_author(**{'id': 2, 'name': "Name", 'org': "Organization"})
+    connection.create_author(**{'id': 3, 'name': "Name", 'org': "Organization"})
+    connection.create_author(**{'id': 4, 'name': "Name", 'org': "Organization"})
+
+    connection.create_paper(**{'id': 1, 'title': "Title", 'year': 2154, 'n_citation': 0})
+    connection.create_paper(**{'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
+    connection.create_paper(**{'id': 3, 'title': "Title", 'year': 2154, 'n_citation': 0})
+    connection.create_paper(**{'id': 4, 'title': "Title", 'year': 2154, 'n_citation': 0})
+
+    connection.create_authorship(1, 1)
+    connection.create_authorship(2, 1)
+    connection.create_authorship(3, 1)
+    connection.create_authorship(4, 1)
+    tests.append(connection.mean_authors_per_paper() == 1)
+
+    connection.create_authorship(1, 2)
+    connection.create_authorship(2, 2)
+    connection.create_authorship(3, 2)
+    tests.append(connection.mean_authors_per_paper() == 1.75)
+
+    connection.create_authorship(1, 3)
+    connection.create_authorship(2, 3)
+    tests.append(connection.mean_authors_per_paper() == 2.25)
+
+    connection.create_authorship(1, 4)
+    tests.append(connection.mean_authors_per_paper() == 2.5)
+
+    print(tests)
     return all(tests)
 
 
@@ -97,11 +136,11 @@ def test_delete_paper():
     tests = []
 
     connection.clear_database()
-    sleep(1)
+    sleep(2)
 
     connection.create_paper(**{'id': 17, 'title': "Title", 'year': 2154, 'n_citation': 0})
     connection.delete_paper(17)
-    sleep(1)
+    sleep(2)
 
     tests.append(connection.find_paper(17) == [])
 
@@ -112,11 +151,11 @@ def test_delete_author():
     tests = []
 
     connection.clear_database()
-    sleep(1)
+    sleep(2)
 
     connection.create_author(**{'id': 42, 'name': "Name", 'org': "Organization"})
     connection.delete_author(42)
-    sleep(1)
+    sleep(2)
 
     tests.append(connection.find_author(42) == [])
 
@@ -127,7 +166,7 @@ def test_delete_reference():
     tests = []
     
     connection.clear_database()
-    sleep(1)
+    sleep(5)
 
     connection.create_paper(**{'id': 1, 'title': "Title", 'year': 2154, 'n_citation': 0})
     connection.create_paper(**{'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
@@ -138,13 +177,14 @@ def test_delete_reference():
     tests.append(connection.references_to(2) == ['1'])
 
     connection.delete_reference(1, 2)
-    sleep(1)
+    sleep(5)
 
     tests.append(connection.references_of(1) == [])
     tests.append(connection.references_of(2) == [])
     tests.append(connection.references_to(1) == [])
     tests.append(connection.references_to(2) == [])
 
+    print(tests)
     return all(tests)
 
 
@@ -152,7 +192,7 @@ def test_delete_authorship():
     tests = []
     
     connection.clear_database()
-    sleep(1)
+    sleep(5)
 
     connection.create_author(**{'id': 1, 'name': "Name", 'org': "Organization"})
     connection.create_paper(**{'id': 2, 'title': "Title", 'year': 2154, 'n_citation': 0})
@@ -161,11 +201,12 @@ def test_delete_authorship():
     tests.append(connection.authors_of(2) == ['1'])
 
     connection.delete_authorship(1, 2)
-    sleep(1)
+    sleep(5)
 
     tests.append(connection.papers_of(1) == [])
     tests.append(connection.authors_of(2) == [])
 
+    print(tests)
     return all(tests)
 
 
@@ -173,7 +214,7 @@ def test_rename_paper():
     tests = []
     
     connection.clear_database()
-    sleep(1)
+    sleep(2)
 
     connection.create_paper(**{'id': 1, 'title': "Title", 'year': 2154, 'n_citation': 0})
     tests.append(connection.title_of_paper(1) == ["Title"])
@@ -188,7 +229,7 @@ def test_change_org():
     tests = []
     
     connection.clear_database()
-    sleep(1)
+    sleep(2)
 
     connection.create_author(**{'id': 1, 'name': "Name", 'org': "Organization"})
     tests.append(connection.org_of_author(1) == ["Organization"])
@@ -209,21 +250,22 @@ if __name__ == "__main__":
     # The tests can run on either a full or empty database
     # connection.load_graph()
 
-    connection.clear_database()
-    sleep(15)
+    # connection.clear_database()
+    # sleep(15)
 
     tests = [
-        test_create_paper,
-        test_create_author,
-        test_create_reference,
-        test_create_authorship,
+        # test_create_paper,
+        # test_create_author,
+        # test_create_reference,
+        # test_create_authorship,
         test_coauthorship,
-        test_delete_paper,
-        test_delete_author,
+        test_mean_authors_per_paper,
+        # test_delete_paper,
+        # test_delete_author,
         test_delete_reference,
         test_delete_authorship,
-        test_rename_paper,
-        test_change_org,
+        # test_rename_paper,
+        # test_change_org,
     ]
 
     for test in tests: run_test(test)

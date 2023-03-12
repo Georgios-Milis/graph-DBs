@@ -109,7 +109,7 @@ class JanusGraphConnection:
         try:
             self.gremlin_conn.submit(
                 f"graph.io(graphson()).readGraph('/home/dataset_{self.scale}.json')", 
-                result_options={'evaluationTimeout': 0}
+                # result_options={'evaluationTimeout': 0}
             )
         except Exception as e:
             print(e)
@@ -132,16 +132,6 @@ class JanusGraphConnection:
     create_reference = create_janus.create_reference
     create_authorship = create_janus.create_authorship
 
-    # Batch
-    # create_papers = create_janus.create_papers
-    # create_authors = create_janus.create_authors
-    # create_references = create_janus.create_references
-    # create_authorships = create_janus.create_authorships
-
-    # TODO atsorvat:
-    # Constraints
-    # paper_constraints = create_janus.paper_constraints
-    # author_constraints = create_janus.author_constraints
     
     # READ ========================================================
     # Simple Queries
@@ -149,6 +139,7 @@ class JanusGraphConnection:
     find_author = read_janus.find_author
     title_of_paper = read_janus.title_of_paper
     org_of_author = read_janus.org_of_author
+    get_papers = read_janus.get_papers
 
     # Adjacency Queries
     references_of = read_janus.references_of
@@ -160,9 +151,8 @@ class JanusGraphConnection:
     are_collaborators = read_janus.are_collaborators
 
     # Analytical Queries
-    # TODO atsorvat:
-    # mean_authors_per_paper = read_janus.mean_authors_per_paper
-
+    mean_authors_per_paper = read_janus.mean_authors_per_paper
+    
     # UPDATE ========================================================
     rename_paper = update_janus.rename_paper
     change_org = update_janus.change_org
@@ -176,4 +166,3 @@ class JanusGraphConnection:
 
     # Clear
     clear_database = delete_janus.clear_database
-    # remove_constraints = delete_janus.remove_constraints

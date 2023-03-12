@@ -18,7 +18,7 @@ path = os.path.dirname(os.path.realpath(__file__))
 DBMSs = ['neo4j', 'janus']
 DBMS_names = ['Neo4j', 'JanusGraph']
 # Data scales
-scales = [i+1 for i in range(5)]
+scales = [i+1 for i in range(6)]
 
 # Horizontal axis for plots
 x = [10**scale for scale in scales]
@@ -57,39 +57,39 @@ def generic_plot(op, title, savename):
 
 
 # fill_and_empty plot =========================================================
-# plt.figure()
-# for dbms in DBMSs:
-#     min_fill = []
-#     max_fill= []
-#     mean_fill = []
-#     min_empty = []
-#     max_empty = []
-#     mean_empty = []
-#     for scale in scales:
-#         # Read results file
-#         datafile = pjoin(path, 'results', f'{dbms}_fill_empty_scale{scale}.csv')
-#         data = pd.read_csv(datafile)
-#         # Isolate metrics
-#         min_fill.append(data.loc[0, 'fill_database'])
-#         max_fill.append(data.loc[1, 'fill_database'])
-#         mean_fill.append(data.loc[2, 'fill_database'])
-#         min_empty.append(data.loc[0, 'clear_database'])
-#         max_empty.append(data.loc[1, 'clear_database'])
-#         mean_empty.append(data.loc[2, 'clear_database'])
-#     # Plot
-#     colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
-#     plt.plot(x, mean_fill, colors[0], label='Fill', linewidth=2)
-#     plt.fill_between(x, min_fill, max_fill, color=colors[0], alpha=0.1)
-#     plt.plot(x, mean_empty, colors[1] + '--', label='Empty', linewidth=2)
-#     plt.fill_between(x, min_empty, max_empty, color=colors[1], linestyle='--', alpha=0.1)
-# plt.xscale('log')
-# plt.yscale('log')
-# plt.title('Duration of filling and emptying a database')
-# plt.xlabel('Dataset node scale')
-# plt.ylabel('Time (sec)')
-# plt.legend()
-# plt.grid()
-# plt.savefig(pjoin(path, 'plots', 'fill_and_empty.pdf'))
+plt.figure()
+for dbms in DBMSs:
+    min_fill = []
+    max_fill= []
+    mean_fill = []
+    min_empty = []
+    max_empty = []
+    mean_empty = []
+    for scale in scales:
+        # Read results file
+        datafile = pjoin(path, 'results', f'{dbms}_fill_empty_scale{scale}.csv')
+        data = pd.read_csv(datafile)
+        # Isolate metrics
+        min_fill.append(data.loc[0, 'fill_database'])
+        max_fill.append(data.loc[1, 'fill_database'])
+        mean_fill.append(data.loc[2, 'fill_database'])
+        min_empty.append(data.loc[0, 'clear_database'])
+        max_empty.append(data.loc[1, 'clear_database'])
+        mean_empty.append(data.loc[2, 'clear_database'])
+    # Plot
+    colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
+    plt.plot(x, mean_fill, colors[0], label='Fill', linewidth=2)
+    plt.fill_between(x, min_fill, max_fill, color=colors[0], alpha=0.1)
+    plt.plot(x, mean_empty, colors[1] + '--', label='Empty', linewidth=2)
+    plt.fill_between(x, min_empty, max_empty, color=colors[1], linestyle='--', alpha=0.1)
+plt.xscale('log')
+plt.yscale('log')
+plt.title('Duration of filling and emptying a database')
+plt.xlabel('Dataset node scale')
+plt.ylabel('Time (sec)')
+plt.legend()
+plt.grid()
+plt.savefig(pjoin(path, 'plots', 'fill_and_empty.pdf'))
 
 
 # CREATE plot =================================================================
@@ -130,7 +130,7 @@ plt.grid()
 plt.savefig(pjoin(path, 'plots', 'create.pdf'))
 
 
-# READ plot ===================================================================
+# READ plots ==================================================================
 plt.figure()
 for i, dbms in enumerate(DBMSs):
     min_simple = []
@@ -145,27 +145,84 @@ for i, dbms in enumerate(DBMSs):
         try:
             data = pd.read_csv(datafile)
             # Isolate metrics
-            min_simple.append(data.loc[0, ['title_of_paper', 'authors_of']].min())
-            max_simple.append(data.loc[1, ['title_of_paper', 'authors_of']].max())
-            mean_simple.append(data.loc[2, ['title_of_paper', 'authors_of']].mean())
-            min_fancier.append(data.loc[0, ['are_collaborators']].min())#, 'mean_authors_per_paper']].min())
-            max_fancier.append(data.loc[1, ['are_collaborators']].max())#, 'mean_authors_per_paper']].max())
-            mean_fancier.append(data.loc[2, ['are_collaborators']].mean())#, 'mean_authors_per_paper']].mean())
+            min_simple.append(data.loc[0, ['title_of_paper']].min())
+            max_simple.append(data.loc[1, ['title_of_paper']].max())
+            mean_simple.append(data.loc[2, ['title_of_paper']].mean())
         except FileNotFoundError:
             pass
     # Plot
     colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
-    plt.plot(x, mean_simple, colors[0], label=f'{DBMS_names[i]}, Simple', linewidth=2)
+    plt.plot(x, mean_simple, colors[0], label=f'{DBMS_names[i]}', linewidth=2)
     plt.fill_between(x, min_simple, max_simple, color=colors[0], alpha=0.1)
-    plt.plot(x, mean_fancier, colors[1] + '--', label=f'{DBMS_names[i]}, Fancy', linewidth=2)
-    plt.fill_between(x, min_fancier, max_fancier, color=colors[1], linestyle='--', alpha=0.1)
 plt.xscale('log')
-plt.title('Transaction duration of READ')
+plt.title('Transaction duration of READ (simple query)')
 plt.xlabel('Dataset node scale')
 plt.ylabel('Time (sec)')
 plt.legend()
 plt.grid()
-plt.savefig(pjoin(path, 'plots', 'read.pdf'))
+plt.savefig(pjoin(path, 'plots', 'read_simple.pdf'))
+
+plt.figure()
+for i, dbms in enumerate(DBMSs):
+    min_simple = []
+    max_simple = []
+    mean_simple = []
+    min_fancier = []
+    max_fancier = []
+    mean_fancier = []
+    for scale in scales:
+        # Read results file
+        datafile = pjoin(path, 'results', f'{dbms}_read_scale{scale}.csv')
+        try:
+            data = pd.read_csv(datafile)
+            # Isolate metrics
+            min_simple.append(data.loc[0, ['authors_of']].min())
+            max_simple.append(data.loc[1, ['authors_of']].max())
+            mean_simple.append(data.loc[2, ['authors_of']].mean())
+        except FileNotFoundError:
+            pass
+    # Plot
+    colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
+    plt.plot(x, mean_simple, colors[0], label=f'{DBMS_names[i]}', linewidth=2)
+    plt.fill_between(x, min_simple, max_simple, color=colors[0], alpha=0.1)
+plt.xscale('log')
+plt.title('Transaction duration of READ (adjacency query)')
+plt.xlabel('Dataset node scale')
+plt.ylabel('Time (sec)')
+plt.legend()
+plt.grid()
+plt.savefig(pjoin(path, 'plots', 'read_adjacency.pdf'))
+
+plt.figure()
+for i, dbms in enumerate(DBMSs):
+    min_simple = []
+    max_simple = []
+    mean_simple = []
+    min_fancier = []
+    max_fancier = []
+    mean_fancier = []
+    for scale in scales:
+        # Read results file
+        datafile = pjoin(path, 'results', f'{dbms}_read_scale{scale}.csv')
+        try:
+            data = pd.read_csv(datafile)
+            # Isolate metrics
+            min_simple.append(data.loc[0, ['are_collaborators']].min())
+            max_simple.append(data.loc[1, ['are_collaborators']].max())
+            mean_simple.append(data.loc[2, ['are_collaborators']].mean())
+        except FileNotFoundError:
+            pass
+    # Plot
+    colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
+    plt.plot(x, mean_simple, colors[0], label=f'{DBMS_names[i]}', linewidth=2)
+    plt.fill_between(x, min_simple, max_simple, color=colors[0], alpha=0.1)
+plt.xscale('log')
+plt.title('Transaction duration of READ (reachability query)')
+plt.xlabel('Dataset node scale')
+plt.ylabel('Time (sec)')
+plt.legend()
+plt.grid()
+plt.savefig(pjoin(path, 'plots', 'read_reachability.pdf'))
 
 
 # UPDATE plot =================================================================
@@ -173,4 +230,4 @@ generic_plot('update', 'Transaction duration of UPDATE', 'update.pdf')
 
 
 # DELETE plot =================================================================
-# generic_plot('delete', 'Transaction duration of DELETE', 'delete.pdf')
+generic_plot('delete', 'Transaction duration of DELETE', 'delete.pdf')

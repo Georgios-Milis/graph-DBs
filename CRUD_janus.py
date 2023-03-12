@@ -98,7 +98,8 @@ for i, (paper_id, author_id) in enumerate(zip(paper_ids, author_ids)):
     durations.update(transact_and_time(connection.title_of_paper, paper_id))
     durations.update(transact_and_time(connection.authors_of, paper_id))
     durations.update(transact_and_time(connection.are_collaborators, author_id, next_author_id))
-    durations.update(transact_and_time(connection.mean_authors_per_paper))
+    # Run mean_authors_per_paper 5 times
+    durations.update(transact_and_time(connection.mean_authors_per_paper, 5))
     trials[i] = list(durations.values())
 
 # Aggregate results

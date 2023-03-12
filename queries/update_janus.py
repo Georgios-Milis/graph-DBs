@@ -1,5 +1,5 @@
 def rename_paper(self, id, new_title):
-    query = f"g.V().has('paper', 'id', {id}).property('title', '{new_title}')"
+    query = f"g.V().has('paper', 'id', '{id}').property('title', '{new_title}')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except Exception as e:
@@ -8,7 +8,7 @@ def rename_paper(self, id, new_title):
 
 
 def change_org(self, id, new_org):
-    query = f"g.V().has('author', 'id', {id}).property('org', '{new_org}')"
+    query = f"g.V().has('author', 'id', '{id}').property('org', '{new_org}')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except Exception as e:

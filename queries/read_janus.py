@@ -16,7 +16,7 @@ def get_papers(self):
 
 
 def find_paper(self, id):
-    query = f"g.V().has('paper', 'id', {id}).values('id')"
+    query = f"g.V().has('paper', 'id', '{id}').values('id')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
@@ -25,7 +25,7 @@ def find_paper(self, id):
 
 
 def find_author(self, id):
-    query = f"g.V().has('author', 'id', {id}).values('id')"
+    query = f"g.V().has('author', 'id', '{id}').values('id')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
@@ -34,7 +34,7 @@ def find_author(self, id):
 
 
 def title_of_paper(self, id):
-    query = f"g.V().has('paper', 'id', {id}).values('title')"
+    query = f"g.V().has('paper', 'id', '{id}').values('title')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
@@ -43,7 +43,7 @@ def title_of_paper(self, id):
 
 
 def org_of_author(self, id):
-    query = f"g.V().has('author', 'id', {id}).values('org')"
+    query = f"g.V().has('author', 'id', '{id}').values('org')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
@@ -52,7 +52,7 @@ def org_of_author(self, id):
 
 
 def references_of(self, id):
-    query = f"g.V().has('paper', 'id', {id}).out('reference').values('id')"
+    query = f"g.V().has('paper', 'id', '{id}').out('reference').values('id')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
@@ -61,7 +61,7 @@ def references_of(self, id):
 
 
 def references_to(self, id):
-    query = f"g.V().has('paper', 'id', {id}).in('reference').values('id')"
+    query = f"g.V().has('paper', 'id', '{id}').in('reference').values('id')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
@@ -70,7 +70,7 @@ def references_to(self, id):
 
 
 def papers_of(self, id):
-    query = f"g.V().has('author', 'id', {id}).out('authorship').values('id')"
+    query = f"g.V().has('author', 'id', '{id}').out('authorship').values('id')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:
@@ -79,7 +79,7 @@ def papers_of(self, id):
 
 
 def authors_of(self, id):
-    query = f"g.V().has('paper', 'id', {id}).in('authorship').values('id')"
+    query = f"g.V().has('paper', 'id', '{id}').in('authorship').values('id')"
     try:
         response = self.gremlin_conn.submit(query).next()
     except StopIteration:

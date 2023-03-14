@@ -11,7 +11,7 @@ from connection import Neo4jConnection, JanusGraphConnection, transact_and_time
 
 # Config
 START = 1
-END = 4
+END = 6
 LOCAL = True
 load_dotenv()
 
@@ -52,7 +52,7 @@ for db in DBs:
 
         # Measurements
         N_TRIALS = 10
-        N_QUERIES = 3
+        N_QUERIES = 4
         trials = np.empty((N_TRIALS, N_QUERIES))
 
         # Node data
@@ -72,7 +72,7 @@ for db in DBs:
             durations.update(transact_and_time(connection.title_of_paper, paper_id))
             durations.update(transact_and_time(connection.authors_of, paper_id))
             durations.update(transact_and_time(connection.are_collaborators, author_id, next_author_id))
-            #durations.update(transact_and_time(connection.mean_authors_per_paper))
+            durations.update(transact_and_time(connection.mean_authors_per_paper))
             trials[i] = list(durations.values())
 
         # Aggregate results

@@ -19,7 +19,7 @@ Run the [image](https://hub.docker.com/r/janusgraph/janusgraph) in a Docker cont
 ```bash
 docker run --name container-name -it -p 8182:8182 janusgraph/janusgraph
 ``` 
-in some terminal to create a container for the specific database, with name container-name (optional), which forwards the port 8182. If you also want a Gremlin client console, run
+in some terminal to create a container for the specific database, with name container-name (optional), which forwards the port 8182. We created 6 containers, one for each database, but organizing them differently doesn't matter, since the connection is established through port 8182 (whichever container is using it). If you also want a Gremlin client console, run
 ```bash
 docker run --rm --link janusgraph-default:janusgraph -e GREMLIN_REMOTE_HOSTS=janusgraph -it janusgraph/janusgraph:latest ./bin/gremlin.sh
 ```
@@ -35,7 +35,7 @@ Use `fill_janus.py` to fill JanusGraph or `fill_janus_batch.py` to load a GraphS
 We implemented testing for each database. Run `(database)_tests.py` to verify the correctness of queries. You can easily add more tests.
 
 ### Data
-We have synced the dataset `txt` files and corresponding `pkl` pickles (made for fast loading during experimentation) up to scale 4. To construct other subsets of data, use the script `data/process_dataset.py` that contains utility functions to process the DBLP V11 dataset. The full processed dataset can be found [here](https://drive.google.com/file/d/1FyYhJMTntnDpKKBXBev8cOCE2PkIDjBf).
+We have synced the dataset `txt` files, the corresponding `pkl` pickles (made for fast loading during experimentation) and the GraphSON files for the datasets up to scale 3. To construct other subsets of data, use the script `data/process_dataset.py` that contains utility functions to process the DBLP V11 dataset. The full processed dataset can be found [here](https://drive.google.com/file/d/1FyYhJMTntnDpKKBXBev8cOCE2PkIDjBf).
 
 ### Contributors (alphabetically)
 - Gkrinias Georgios

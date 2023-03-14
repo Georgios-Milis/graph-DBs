@@ -12,7 +12,7 @@ from connection import Neo4jConnection, JanusGraphConnection, transact_and_time
 
 # Config
 START = 1
-END = 4
+END = 6
 LOCAL = True
 load_dotenv()
 

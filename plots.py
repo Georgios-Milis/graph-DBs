@@ -224,6 +224,39 @@ plt.legend()
 plt.grid()
 plt.savefig(pjoin(path, 'plots', 'read_reachability.pdf'))
 
+plt.figure()
+for i, dbms in enumerate(DBMSs):
+    if dbms == 'janus':
+        continue
+    min_simple = []
+    max_simple = []
+    mean_simple = []
+    min_fancier = []
+    max_fancier = []
+    mean_fancier = []
+    for scale in scales:
+        # Read results file
+        datafile = pjoin(path, 'results', f'{dbms}_read_scale{scale}.csv')
+        try:
+            data = pd.read_csv(datafile)
+            # Isolate metrics
+            min_simple.append(data.loc[0, ['mean_authors_per_paper']].min())
+            max_simple.append(data.loc[1, ['mean_authors_per_paper']].max())
+            mean_simple.append(data.loc[2, ['mean_authors_per_paper']].mean())
+        except FileNotFoundError:
+            pass
+    # Plot
+    colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
+    plt.plot(x, mean_simple, colors[0], label=f'{DBMS_names[i]}', linewidth=2)
+    plt.fill_between(x, min_simple, max_simple, color=colors[0], alpha=0.1)
+plt.xscale('log')
+plt.title('Transaction duration of READ (aggregate query)')
+plt.xlabel('Dataset node scale')
+plt.ylabel('Time (sec)')
+plt.legend()
+plt.grid()
+plt.savefig(pjoin(path, 'plots', 'read_aggregate.pdf'))
+
 
 # UPDATE plot =================================================================
 generic_plot('update', 'Transaction duration of UPDATE', 'update.pdf')

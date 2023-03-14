@@ -1,0 +1,3 @@
+CALL apoc.schema.assert({}, {});
+CREATE CONSTRAINT FOR (n:Paper) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT FOR (n:Author) REQUIRE n.id IS UNIQUE;

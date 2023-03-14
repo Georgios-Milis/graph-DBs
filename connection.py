@@ -45,14 +45,11 @@ class Neo4jConnection:
     create_reference = create_neo.create_reference
     create_authorship = create_neo.create_authorship
 
-    #create_people = create_neo.create_people
-
     # Batch
     create_papers = create_neo.create_papers
     create_authors = create_neo.create_authors
     create_references = create_neo.create_references
     create_authorships = create_neo.create_authorships
-
 
     # Constraints
     paper_constraints = create_neo.paper_constraints
@@ -108,8 +105,7 @@ class JanusGraphConnection:
         # Load a GraphSON file, if it exists
         try:
             self.gremlin_conn.submit(
-                f"graph.io(graphson()).readGraph('/home/dataset_{self.scale}.json')", 
-                # result_options={'evaluationTimeout': 0}
+                f"graph.io(graphson()).readGraph('/home/dataset_{self.scale}.json')"
             )
         except Exception as e:
             print(e)
@@ -131,7 +127,6 @@ class JanusGraphConnection:
     create_author = create_janus.create_author
     create_reference = create_janus.create_reference
     create_authorship = create_janus.create_authorship
-
     
     # READ ========================================================
     # Simple Queries

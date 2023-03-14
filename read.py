@@ -20,9 +20,7 @@ load_dotenv()
 path = os.path.dirname(os.path.realpath(__file__))
 
 # Databases - SUT
-DBs = ['neo4j', 'janus']
-
-DBs = ['janus']
+DBs = ['neo4j']
 
 
 for db in DBs:

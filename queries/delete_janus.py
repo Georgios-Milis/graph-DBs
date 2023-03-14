@@ -4,8 +4,6 @@ def clear_database(self):
         self.gremlin_conn.submit(query)
     except Exception as e:
         print(e)
-    else:
-        print("Graph deleted.")
 
 
 def delete_paper(self, id):

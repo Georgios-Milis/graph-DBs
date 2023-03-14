@@ -58,7 +58,7 @@ def generic_plot(op, title, savename):
 
 # fill_and_empty plot =========================================================
 plt.figure()
-for dbms in DBMSs:
+for i, dbms in enumerate(DBMSs):
     min_fill = []
     max_fill= []
     mean_fill = []
@@ -78,9 +78,9 @@ for dbms in DBMSs:
         mean_empty.append(data.loc[2, 'clear_database'])
     # Plot
     colors = ('b', 'g') if dbms == 'neo4j' else ('r', 'm')
-    plt.plot(x, mean_fill, colors[0], label='Fill', linewidth=2)
+    plt.plot(x, mean_fill, colors[0], label=f'{DBMS_names[i]}, Fill', linewidth=2)
     plt.fill_between(x, min_fill, max_fill, color=colors[0], alpha=0.1)
-    plt.plot(x, mean_empty, colors[1] + '--', label='Empty', linewidth=2)
+    plt.plot(x, mean_empty, colors[1] + '--', label=f'{DBMS_names[i]}, Empty', linewidth=2)
     plt.fill_between(x, min_empty, max_empty, color=colors[1], linestyle='--', alpha=0.1)
 plt.xscale('log')
 plt.yscale('log')

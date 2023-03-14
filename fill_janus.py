@@ -1,3 +1,4 @@
+"""This script can fill JanusGraph, sending data one-by-one."""
 import os
 import numpy as np
 import pandas as pd

@@ -105,9 +105,9 @@ def mean_authors_per_paper(self, samples=None):
     try:
         from numpy import mean
         if samples is None:
-            response = mean([len(authors_of(paper_id)) for paper_id in self.get_papers()])
+            response = mean([len(self.authors_of(paper_id)) for paper_id in self.get_papers()])
         else:
-            response = mean([len(authors_of(paper_id)) for paper_id in self.get_papers(samples)])
+            response = mean([len(self.authors_of(paper_id)) for paper_id in self.get_papers(samples)])
     except Exception as e:
         response = e
     return response

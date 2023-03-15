@@ -282,7 +282,7 @@ if __name__ == "__main__":
     load_dotenv()
     URI = os.getenv('JANUSGRAPH_URI')
     # Initialize connection to database
-    connection = JanusGraphConnection(URI, 4)
+    connection = JanusGraphConnection(URI, 2)
     
     connection.clear_database()
     sleep(10)

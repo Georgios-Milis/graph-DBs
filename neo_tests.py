@@ -206,7 +206,7 @@ def test_change_org():
 
 if __name__ == "__main__":
     # Config
-    LOCAL = False
+    LOCAL = True
     scale = 2
 
     load_dotenv()

@@ -14,7 +14,7 @@ connection = JanusGraphConnection(URI, scale)
 
 # connection.clear_database()
 
-# connection.load_graph()
+connection.load_graph()
 
 # print(connection.find_paper("1229652591"))
 # print(connection.title_of_paper("1229652591"))

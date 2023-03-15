@@ -7,7 +7,6 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 from os.path import join as pjoin
-from matplotlib.lines import Line2D
 import matplotlib.patches as mpatches
 
 
